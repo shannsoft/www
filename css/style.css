@@ -1,0 +1,148 @@
+/*===================font-family: 'Roboto', sans-serif;========================*/
+
+/*******************************************************************************/
+/*****************************Application Style*********************************/
+/*******************************************************************************/
+select{
+  width: 100%;
+  height: 34px;
+  border: none;
+}
+.gsg-popup .popup {
+  background-color: rgba(255, 255, 255, 1.00);
+  border-radius: 5px 5px 5px 5px ;
+  display: flex;
+  flex-direction: column;
+  max-height: 90%;
+  max-width: 100%;
+  width: 250px;
+}
+popup-body{
+  text-align: center;
+}
+.bar.bar-stable{
+  background-color: transparent;
+}
+.bar-stable .button.button-icon{
+  background: #fff;
+  width: 35px;
+  color: #d2d1da;
+}
+.gsg-popup .popup-head {
+  border-bottom: 1px solid #eee;
+  border-radius: 5px 5px 0 0;
+  padding: 15px 10px;
+  text-align: center;
+}
+.gsg-popup .popup-buttons{
+  padding:0;
+  min-height: 20px !important;
+}
+.popup-buttons button {
+  background-color: #AB3137 !important;
+  border: medium none !important;
+  color: white !important;
+  display: flex;
+  flex-direction: row;
+  padding: 0 !important;
+  margin-top:0px !important;
+  margin-bottom:0px !important;
+}
+
+.gsg-popup .popup-title {
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  color: black;
+}
+.gsg-popup .popup-body {
+  overflow: auto;
+  padding: 10px;
+  text-align: center;
+}
+.gsg_main_container{
+  background:url(../img/bg.png) no-repeat;
+  background-size: 100% 100%;
+  height: 100%;
+  text-align: center
+}
+.item-input{
+  border: 1px solid gray;
+  border-radius: 10px;
+  margin: 10px 0 20px;
+  padding: 3px 13px;
+}
+.button{
+  border-radius: 10px;
+  min-height: 0;
+  font-size: 18px;
+  line-height: 40px;
+}
+.item-label{
+  background: transparent;
+  border: none;
+ 
+}
+.item-label-already-registered{
+  margin-top: 200px;
+}
+.button.button-positive,.button.button-positive.activated{
+  border-color: transparent;
+  background-color: #73b711;
+  color: #fff;
+}
+/*******************************************************************************/
+/*******************************Home Page Style*********************************/
+/*******************************************************************************/
+.home_container{
+  background:url(../img/background.png) no-repeat;
+  background-size: 100% 100%;
+  height: 100%;
+  text-align: center
+}
+.home_container img{
+  margin-top:50%
+}
+.scroll{
+  height: 100%;
+}
+/*******************************************************************************/
+/*******************************Login Page Style********************************/
+/*******************************************************************************/
+.gsg_login{
+  padding: 25px;
+}
+.item-social{
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+}
+.item-social .button{
+  width: 46%;
+}
+.button-facebook,.button-facebook.activated{
+  background: #29487d;
+  color: #FFF;
+  border: none;
+}
+.item-label .forgot{
+  color: #FFF;
+  font-size: 20px;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+/*******************************************************************************/
+/*******************************OTP Page Style********************************/
+/*******************************************************************************/
+.otp-resend{
+  color: #fafafa;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  float: right;
+  margin-top: -12px;
+  margin-bottom: 17px;
+}
+.not-your-no{
+  float: left !important;
+}
