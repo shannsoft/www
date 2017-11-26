@@ -78,5 +78,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/home');
 });
 app.constant('CONFIG', {
-  'HTTP_HOST_APP':'http://192.168.0.116:8090/'
+  'HTTP_HOST_APP':'http://localhost:8090/'
 });
