@@ -1,0 +1,31 @@
+<ion-modal-view cache-view="false">
+    <ion-content class="has-header" scroll="false" ng-init="mapCtrl.mapInit()">
+        <div id="map"></div>
+        <div class="list map-search">
+            <label class="item item-location" location-suggestion location="location" on-select="changeLocation(latlang)">
+                <span><i class="icon ion-record icon-pickup"></i>Pick up Location</span><br>
+                <span>{{location.formatted_address}}</span>
+                <!-- <input type="text" placeholder="Location" location-suggestion location="location" ng-model="location.formatted_address"> -->
+            </label>
+            <!-- <label class="item item-location inactive">
+                    <span><i class="icon ion-record icon-drop"></i>Enter Drop Location</span><br>
+                    <span>264 saheed nagar, Bhubaneswar</span>
+            </label> -->
+        </div>
+        <div class="footer-option">
+            <ul class="service-list">
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+            </ul> 
+        </div>
+    </ion-content>
+    <ion-footer-bar class="map-footer" >
+        <button class="button button-block button-map" type="submit">RIDE NOW</button>        
+    </ion-footer-bar>
+</ion-modal-view>
+  

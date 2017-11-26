@@ -131,7 +131,7 @@ popup-body{
   text-decoration: none;
 }
 /*******************************************************************************/
-/*******************************OTP Page Style********************************/
+/*******************************OTP Page Style**********************************/
 /*******************************************************************************/
 .otp-resend{
   color: #fafafa;
@@ -144,4 +144,105 @@ popup-body{
 }
 .not-your-no{
   float: left !important;
+}
+/*******************************************************************************/
+/*******************************Map Page Style**********************************/
+/*******************************************************************************/
+#map{
+  height: 100%;
+  width:100%;
+}
+.map-footer{
+  height: 50px;
+  padding: 0;
+}
+.map-footer .button{
+  margin: 0;
+  font-size: 18px;
+  background: rgb(49, 47, 47) ;
+  border-radius:0; 
+  color: yellow;
+  letter-spacing: 1px;
+}
+.map-search{
+  position: absolute;
+  top: 0;
+  right: 15px;
+  left: 15px;
+  margin-top: 10px;
+}
+.map-search .item-input{
+  margin: 0;
+  border-radius: 0;
+}
+/* .map-search:after {
+  border-top: 10px solid rgb(211, 28, 28);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  content: "";
+  display: inline-block;
+  right: 95px;
+  position: absolute;
+  top: 0;;
+  z-index: 9
+} */
+.gmnoprint{
+  display: none;
+}
+.item-location{
+  padding:8px 12px;
+}
+.item-location .icon{
+  font-size: 10px;
+  margin-right: 5px;
+}
+.icon-pickup{
+  color:green;
+}
+.icon-drop{
+  color:red;
+} 
+.inactive{
+  margin: 0 8px;
+  padding: 6px;
+  background: #e8e6e6;
+}
+.footer-option{
+  background: #fff;
+  width: 100%;
+  height: 65px;
+  z-index: 99999999;
+  position: absolute;
+  bottom: 7px;
+  overflow: hidden;
+  overflow-x:scroll; 
+}
+.service-list{
+  height: 100%;
+  white-space:nowrap;
+}
+.service-list li{
+  display: inline-block;
+  width: 65px;
+  height: 100%;
+  text-align: center;
+  padding: 18px;
+  font-size: 30px;
+}
+.choose-location{
+  position: absolute;
+  top: 0; 
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: #fff;
+}
+.power-by{
+  text-align: center;
+  margin-top: 20px;
+}
+.google-close{
+  background: transparent;
+  border: none;
+  margin-left: 10px;
 }

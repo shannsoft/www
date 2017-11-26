@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils']);
+var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -60,6 +60,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
     views: {
       'menuContent': {
         templateUrl: 'templates/search.html'
+      }
+    }
+  })
+  .state('app.mapView', {
+    url: '/mapView',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/mapView.html',
+        controller:'MapController',
+        controllerAs:'mapCtrl',
       }
     }
   })
