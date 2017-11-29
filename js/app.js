@@ -44,10 +44,34 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/register.html'
   })
   .state('otp', {
-    url: '/otp',
+    url: '/otp/:number',
     controller:'LoginController',
     controllerAs:'loginCtrl',
-    templateUrl: 'templates/otp_verification.html'
+    templateUrl: 'templates/otp_verification.html',
+    params:{
+      number:null 
+    }
+  })
+  .state('basicInfo', {
+    url: '/basicInfo/:number',
+    controller:'LoginController',
+    controllerAs:'loginCtrl',
+    templateUrl: 'templates/basic_info.html',
+    params:{
+      number:null 
+    }
+  })
+  .state('password', {
+    url: '/pwd',
+    controller:'LoginController',
+    controllerAs:'loginCtrl',
+    templateUrl: 'templates/set_password.html'
+  })
+  .state('add-vehicle', {
+    url: '/add-vehicle',
+    controller:'LoginController',
+    controllerAs:'loginCtrl',
+    templateUrl: 'templates/add-vehicle.html'
   })
   .state('app', {
     url: '/app',
@@ -78,5 +102,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/home');
 });
 app.constant('CONFIG', {
-  'HTTP_HOST_APP':'http://localhost:8090/'
+  'HTTP_HOST_APP':'http://localhost:8100/api'
+  // 'HTTP_HOST_APP':'http://192.168.0.114:8090'
 });

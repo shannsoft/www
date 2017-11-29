@@ -1,4 +1,4 @@
-<ion-modal-view cache-view="false">
+<ion-view cache-view="false" view-title="GoSpeedyGo">
     <ion-content class="has-header" scroll="false" ng-init="mapCtrl.mapInit()">
         <div id="map"></div>
         <div class="list map-search">
@@ -11,13 +11,14 @@
                     <span><i class="icon ion-record icon-drop"></i>Enter Drop Location</span><br>
                     <span>264 saheed nagar, Bhubaneswar</span>
             </label> -->
+            <button class="current-location" type="submit" ng-click="mapCtrl.mapInit()"><i class="icon ion-android-locate"></i></button>  
         </div>
         <div class="footer-option">
             <ul class="service-list">
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
+                <li><h6>Breakdown<br>Services</h6></li>
+                <li><h6>Regular<br>Services</h6></li>
+                <li><h6>Home<br>pickup</h6></li>
+                <li><h6>Insurance<br>Services</h6></li>
                 <li><i class="icon ion-android-bus"></i></li>
                 <li><i class="icon ion-android-bus"></i></li>
                 <li><i class="icon ion-android-bus"></i></li>
@@ -25,7 +26,7 @@
         </div>
     </ion-content>
     <ion-footer-bar class="map-footer" >
-        <button class="button button-block button-map" type="submit">RIDE NOW</button>        
+        <button class="button button-block button-map" type="submit">REQUEST A SERVICE</button>        
     </ion-footer-bar>
-</ion-modal-view>
+</ion-view>
   

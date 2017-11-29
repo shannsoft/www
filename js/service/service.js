@@ -17,10 +17,30 @@ angular.module('serviceModule', ['ngResource'])
               save:{method:'POST'}
             })
         },
-        delete: function () {
-            return $resource( CONFIG.HTTP_HOST_APP +'employee/delete/11',{
-              get:{method:'GET'}
+        saveEmployee: function () {
+            return $resource( CONFIG.HTTP_HOST_APP +'/employee/addEmp',{
+              save:{method:'POST'}
             })
         },
+    }
+})
+.factory('registrationService', function ($resource,CONFIG) {
+    return{
+        getOtp: function (contact_no) {
+            return $resource( CONFIG.HTTP_HOST_APP +'/user/sendOtp/' + contact_no,{
+              save:{method:'POST'}
+            })
+        },
+        verifyOtp:function(contact_no,otp){
+            return $resource(CONFIG.HTTP_HOST_APP +'/user/verifyOtp/' + contact_no + '/' + otp,{
+                save:{method:'POST'}
+            })
+        },
+        addUser: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/user/addUser',{
+                save:{method:'POST'}
+            })
+        }
+       
     }
 });

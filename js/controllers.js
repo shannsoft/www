@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $ionicModal, $timeout, $state, $ionicPopup) {
+app.controller('MainController', function($scope, $ionicModal, $timeout, $state, $ionicPopup,$cordovaNetwork) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -19,6 +19,15 @@ app.controller('MainController', function($scope, $ionicModal, $timeout, $state,
       }
     });
   }
+  $scope.isOnline = function(){
+    // if($cordovaNetwork.isOnline() == true){
+    //   return true;
+    // }
+    // else{
+    //   return false;
+    // }
+    return true;
+  }
 });
 app.controller('HomeController', function($ionicModal, $timeout,$state) {
   var vm = this;
@@ -26,10 +35,14 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
     $state.go('login');
   },5000);
 });
-app.controller('LoginController', function($ionicModal,loginService, $timeout,$state,$scope,$ionicLoading) {
+app.controller('LoginController', function($ionicModal,$stateParams, loginService,registrationService, $timeout,$state,$scope,$ionicLoading) {
   var vm = this;
   var map;
   var marker;
+  
+  if($stateParams.number){
+    vm.mobile_number = $stateParams.number;
+  }
   // vm.user = {username:'',password:'',mobile:''};
   vm.user = {email:'',code:''};
   vm.login = function() {
@@ -38,6 +51,7 @@ app.controller('LoginController', function($ionicModal,loginService, $timeout,$s
     };
    vm.user.status = 1;
    console.log(vm.user);
+   if($scope.isOnline()){
     loginService.saveEmployee().save(vm.user,function(response){
       console.log("response", response);
       $ionicLoading.hide();
@@ -46,19 +60,75 @@ app.controller('LoginController', function($ionicModal,loginService, $timeout,$s
       // }
     },function(err){
       $ionicLoading.hide();
-    })
+    });
+  }
+  else{
+
+  }
 
 
   }
-  vm.register = function(){
+  vm.getOtp = function(){
+    
+    console.log(vm.user.contact_no);
     $ionicLoading.show({
       template: 'Sending OTP...'
     });
-
-        $ionicLoading.hide();
-        $state.go('otp');
+    $ionicLoading.hide();
+       $state.go('otp',{"number":vm.user.contact_no});
+    // registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
+    //   console.log(response);
+    //   $ionicLoading.hide();
+    //    $state.go('otp',{"number":vm.user.contact_no});
+    // },function(error){
+    //   console.log(error);
+    //   $ionicLoading.hide();
+    //   $scope.alertPop('Something Wrong', 'OTP can not send.');
+    // });
           
   }
+  vm.verifyOtp = function(){
+    var obj = {};
+    obj.contact_no = $stateParams.number;
+    obj.otp = vm.otp;
+    $ionicLoading.hide();
+    $state.go('basicInfo',{"number":obj.contact_no});
+    // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
+    //   console.log(response);
+    //   if(response.type == "success"){
+    //     $ionicLoading.hide();
+    //     $state.go('basicInfo',{"number":obj.contact_no});
+    //   }
+    //   if(response.type == "error"){
+    //     $ionicLoading.hide();
+    //     $scope.alertPop('Error', 'OTP is wrong please try again.');
+    //   }
+    // },function(error){
+    //   console.log(error);
+    // });    
+  }
+  vm.register = function(){
+  vm.basicDetails.contactNo = vm.mobile_number;
+  vm.basicDetails.role = {
+    roleId:1
+  };
+  vm.basicDetails.status = 1;
+  $state.go('add-vehicle');
+  // registrationService.addUser().save(vm.basicDetails, function(response){
+  //   console.log(response);
+  //   $state.go('add-vehicle');
+  // },function(error){
+  //   console.log(error);
+  // });
+  }
+  vm.checkPassword = function(before,after){
+    vm.showPasswordMisMatch = false;
+    if(before !== after){
+      vm.showPasswordMisMatch = true;
+    }
+    return vm.showPasswordMisMatch;
+  }
+  
 });
 
 app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicLoading){
@@ -110,4 +180,4 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
         map: map
     });
   }
-})
+});

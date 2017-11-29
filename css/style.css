@@ -24,9 +24,9 @@ popup-body{
   background-color: transparent;
 }
 .bar-stable .button.button-icon{
-  background: #fff;
+  background: white;
   width: 35px;
-  color: #d2d1da;
+  color: #030302;
 }
 .gsg-popup .popup-head {
   border-bottom: 1px solid #eee;
@@ -70,6 +70,7 @@ popup-body{
   border-radius: 10px;
   margin: 10px 0 20px;
   padding: 3px 13px;
+  width:100%;
 }
 .button{
   border-radius: 10px;
@@ -90,6 +91,9 @@ popup-body{
   background-color: #73b711;
   color: #fff;
 }
+.center{
+    text-align:center;
+}
 /*******************************************************************************/
 /*******************************Home Page Style*********************************/
 /*******************************************************************************/
@@ -104,6 +108,25 @@ popup-body{
 }
 .scroll{
   height: 100%;
+}
+.side-menu{
+  background-color: #ffffff;
+  color: #111;
+  border-width: 0px;
+  font-size: 15px;
+  margin: 4px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+}
+.side-menu-header{
+  background-color: black !important;
+  height:136px;
+}
+.side-menu-header-bar{
+  color: white !important;
+  margin-left:110px !important;
+  font-size:14px !important;
+  /* margin-top:100px !important; */
 }
 /*******************************************************************************/
 /*******************************Login Page Style********************************/
@@ -126,7 +149,7 @@ popup-body{
 }
 .item-label .forgot{
   color: #FFF;
-  font-size: 20px;
+  font-size: 15px;
   letter-spacing: 1px;
   text-decoration: none;
 }
@@ -151,6 +174,17 @@ font-size:15px;
   float: left !important;
 }
 /*******************************************************************************/
+/*******************************Password Page Style**********************************/
+/*******************************************************************************/
+.row{
+  margin-bottom: 10px !important;
+  margin-top: -10px !important;
+}
+.vehicle{
+   margin-bottom: -15px !important;
+   margin-top: -20px !important;
+}
+/*******************************************************************************/
 /*******************************Map Page Style**********************************/
 /*******************************************************************************/
 #map{
@@ -164,9 +198,9 @@ font-size:15px;
 .map-footer .button{
   margin: 0;
   font-size: 18px;
-  background: rgb(49, 47, 47) ;
+  background: rgb(115, 183, 17) ;
   border-radius:0; 
-  color: yellow;
+  color: #ffffff;
   letter-spacing: 1px;
 }
 .map-search{
@@ -200,6 +234,18 @@ font-size:15px;
 .item-location .icon{
   font-size: 10px;
   margin-right: 5px;
+}
+.skip-button{
+  border-radius: 8px;
+  min-height: 0;
+  font-size: 14px;
+  line-height: 18px;
+  /* float:right; */
+  margin-left: 200px;
+  margin-top: 13px;
+  background-color: #030302;
+  color: white;
+  
 }
 .icon-pickup{
   color:green;
@@ -241,6 +287,13 @@ font-size:15px;
   right: 0;
   height: 200px;
   background: #fff;
+}
+.current-location{
+  margin-left: 248px;
+  margin-top: 293px;
+  border-width: 0px;
+  font-size: 30px;
+  color: black;
 }
 .power-by{
   text-align: center;
