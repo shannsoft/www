@@ -40,6 +40,11 @@ angular.module('serviceModule', ['ngResource'])
             return $resource(CONFIG.HTTP_HOST_APP + '/user/addUser',{
                 save:{method:'POST'}
             })
+        },
+        addVehicle: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/user/addVehicle',{
+                save:{method:'POST'}
+            })
         }
        
     }

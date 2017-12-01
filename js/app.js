@@ -68,10 +68,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/set_password.html'
   })
   .state('add-vehicle', {
-    url: '/add-vehicle',
+    url: '/add-vehicle/:user_id',
     controller:'LoginController',
     controllerAs:'loginCtrl',
-    templateUrl: 'templates/add-vehicle.html'
+    templateUrl: 'templates/add-vehicle.html',
+    params:{
+      user_id : null
+    }
   })
   .state('app', {
     url: '/app',
@@ -102,6 +105,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/home');
 });
 app.constant('CONFIG', {
-  'HTTP_HOST_APP':'http://localhost:8100/api'
-  // 'HTTP_HOST_APP':'http://192.168.0.114:8090'
+  // 'HTTP_HOST_APP':'http://localhost:8100/api'
+  'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });

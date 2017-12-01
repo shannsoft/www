@@ -43,6 +43,10 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
   if($stateParams.number){
     vm.mobile_number = $stateParams.number;
   }
+  if($stateParams.user_id){
+    console.log("yes it is");
+    vm.userId = $stateParams.user_id;
+  }
   // vm.user = {username:'',password:'',mobile:''};
   vm.user = {email:'',code:''};
   vm.login = function() {
@@ -74,52 +78,64 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     $ionicLoading.show({
       template: 'Sending OTP...'
     });
-    $ionicLoading.hide();
-       $state.go('otp',{"number":vm.user.contact_no});
-    // registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
-    //   console.log(response);
-    //   $ionicLoading.hide();
+    // $ionicLoading.hide();
     //    $state.go('otp',{"number":vm.user.contact_no});
-    // },function(error){
-    //   console.log(error);
-    //   $ionicLoading.hide();
-    //   $scope.alertPop('Something Wrong', 'OTP can not send.');
-    // });
+    registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
+      console.log(response);
+      $ionicLoading.hide();
+       $state.go('otp',{"number":vm.user.contact_no});
+    },function(error){
+      console.log(error);
+      $ionicLoading.hide();
+      $scope.alertPop('Something Wrong', 'OTP can not send.');
+    });
           
   }
   vm.verifyOtp = function(){
     var obj = {};
     obj.contact_no = $stateParams.number;
     obj.otp = vm.otp;
-    $ionicLoading.hide();
-    $state.go('basicInfo',{"number":obj.contact_no});
-    // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
-    //   console.log(response);
-    //   if(response.type == "success"){
-    //     $ionicLoading.hide();
-    //     $state.go('basicInfo',{"number":obj.contact_no});
-    //   }
-    //   if(response.type == "error"){
-    //     $ionicLoading.hide();
-    //     $scope.alertPop('Error', 'OTP is wrong please try again.');
-    //   }
-    // },function(error){
-    //   console.log(error);
-    // });    
+    $ionicLoading.show({
+      template: 'Verifying OTP...'
+    });
+    // $ionicLoading.hide();
+    // $state.go('basicInfo',{"number":obj.contact_no});
+    registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
+      console.log(response);
+      if(response.type == "success"){
+        $ionicLoading.hide();
+        $state.go('basicInfo',{"number":obj.contact_no});
+      }
+      if(response.type == "error"){
+        $ionicLoading.hide();
+        $scope.alertPop('Error', 'OTP is wrong please try again.');
+      }
+    },function(error){
+      console.log(error);
+    });    
   }
   vm.register = function(){
+    $ionicLoading.show({
+      template: 'Registering...'
+    });
   vm.basicDetails.contactNo = vm.mobile_number;
   vm.basicDetails.role = {
     roleId:1
   };
-  vm.basicDetails.status = 1;
-  $state.go('add-vehicle');
-  // registrationService.addUser().save(vm.basicDetails, function(response){
-  //   console.log(response);
-  //   $state.go('add-vehicle');
-  // },function(error){
-  //   console.log(error);
-  // });
+
+   vm.basicDetails.status = 1;
+  // $state.go('add-vehicle');
+  registrationService.addUser().save(vm.basicDetails, function(response){
+    $ionicLoading.hide();
+    console.log(response);
+    console.log(response.userId);
+    vm.Id = response.userId;
+    $state.go('add-vehicle',{"user_id":vm.Id});
+  },function(error){
+    $ionicLoading.hide();
+    console.log(error);
+    $scope.alertPop('Error', 'Error in registering user.');
+  });
   }
   vm.checkPassword = function(before,after){
     vm.showPasswordMisMatch = false;
@@ -127,6 +143,24 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
       vm.showPasswordMisMatch = true;
     }
     return vm.showPasswordMisMatch;
+  }
+  vm.addVehicle = function(){
+    $ionicLoading.show({
+      template: 'Saving Vehicle Details...'
+    });
+    vm.vehicle.user = {
+      userId : vm.userId
+    };
+    
+    console.log(vm.vehicle);
+    registrationService.addVehicle().save(vm.vehicle,function(response){
+      $ionicLoading.hide()
+      console.log(response);
+      $state.go('app.mapView');
+    },function(error){
+      $ionicLoading.hide();
+      $scope.alertPop('Error','Something wrong, Cannot add vehicle');
+    });
   }
   
 });

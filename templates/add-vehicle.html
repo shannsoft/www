@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-view>
     <ion-content  class="gsg_main_container">
           
         <div class="gsg_login">
@@ -9,7 +9,7 @@
                 <form name="addVehicle">
                     <div class="list">
                         <label class="item item-input col">
-                            <select class="" name="no_of_wheel" ng-model="loginCtrl.vehicle.wheel" required>
+                            <select class="" name="no_of_wheel" ng-model="loginCtrl.vehicle.wheels" required >
                                 <option value=""><i class="fa fa-sort-desc">No of Wheels</i></option>
                                 <option value="3">3 Wheelers</option>
                                 <option value="4">4 Wheelers</option>
@@ -18,7 +18,7 @@
                         </label>
                         <span class="plain-text row" ng-show="addVehicle.no_of_wheel.$error.required && addVehicle.no_of_wheel.$touched">Please choose an option</span>
                         <label class="item item-input col">
-                            <select class="" name="maker_of_vehicle" ng-model="loginCtrl.vehicle.maker" required>
+                            <select class="" name="maker_of_vehicle" ng-model="loginCtrl.vehicle.make" required>
                                 <option value=""><i class="fa fa-sort-desc">Maker Of the Vehicle</i></option>
                                 <option value="Honda">Honda</option>
                                 <option value="Maruti">Maruti</option>
@@ -27,38 +27,38 @@
                         </label>
                         <span class="plain-text row" ng-show="addVehicle.maker_of_vehicle.$error.required && addVehicle.maker_of_vehicle.$touched">Please choose a maker</span>
                         <label class="item item-input">
-                            <input type="text" name="vehicle_no" ng-model="loginCtrl.vehicle.no" placeholder="Vehicle No" required>
+                            <input type="text" name="vehicle_no" ng-model="loginCtrl.vehicle.registerationNumber" placeholder="Vehicle No" required>
                         </label> 
                         <span class="plain-text row" ng-show="addVehicle.vehicle_no.$error.required && addVehicle.vehicle_no.$touched">Please enter the vehicle no</span>
                         <div class="vehicle row" >
                             <label class="item item-input col col-50">
                                 <select class="" name="model" ng-model="loginCtrl.vehicle.model" required>
                                     <option value=""><i class="fa fa-sort-desc">Model</i></option>
-                                    <option value="Male">model 1</option>
-                                    <option value="Female">model 2</option>
-                                    <option value="Female">model 3</option>                             
+                                    <option value="model 1">model 1</option>
+                                    <option value="model 2">model 2</option>
+                                    <option value="model 3">model 3</option>                             
                                 </select>                 
                             </label>
                             <label class="item item-input col-50">
-                                <input type="text" class="" name="dob" placeholder="Varient" ng-model="loginCtrl.user.dob" datepicker-popup="dd MMM, yyyy" datepicker-options="dateOptions"  is-open="opened"  max-date="dt"  ng-click="open1($event)" close-text="Close"/>
+                                <input type="text" class="" name="dob" placeholder="Varient" ng-model="loginCtrl.vehicle.variant" datepicker-popup="dd MMM, yyyy" datepicker-options="dateOptions"  is-open="opened"  max-date="dt"  ng-click="open1($event)" close-text="Close"/>
                             </label>
                         </div>
                         <span class="plain-text" ng-show="addVehicle.model.$error.required && addVehicle.model.$touched">Please enter the vehicle model</span>
                         <div class="vehicle row" >
                             <label class="item item-input col col-50">
-                                <select class="" name="gender" ng-model="loginCtrl.user.gender" required>
+                                <select class="" name="version" ng-model="loginCtrl.vehicle.version" required>
                                     <option value=""><i class="fa fa-sort-desc">Version</i></option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Others</option>                             
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>                             
                                 </select>                 
                             </label>
                             <label class="item item-input col-50">
-                                <input type="text" class="" name="dob" placeholder="Cubic capacity" ng-model="loginCtrl.user.dob" datepicker-popup="dd MMM, yyyy" datepicker-options="dateOptions"  is-open="opened"  max-date="dt"  ng-click="open1($event)" close-text="Close"/>
+                                <input type="text" class="" name="dob" placeholder="Cubic capacity" ng-model="loginCtrl.vehicle.cubicCapacity" />
                             </label>
                         </div>
                         <label class="item item-input">
-                            <select class="" name="manufacturing_year" ng-model="loginCtrl.user.manufacturing_year" required>
+                            <select class="" name="manufacturing_year" ng-model="loginCtrl.vehicle.mfgYear">
                                 <option value=""><i class="fa fa-sort-desc">Manufacturing Year</i></option>
                                 <option value="2015">2015</option>
                                 <option value="2016">2016</option>
@@ -76,6 +76,6 @@
        
     </ion-content>
     <ion-footer-bar class="map-footer" >
-            <button class="button button-block button-map" type="submit">ADD VEHICLE</button>        
+            <button class="button button-block button-map" ng-click="loginCtrl.addVehicle()" type="submit">ADD VEHICLE</button>        
     </ion-footer-bar>
-</ion-modal-view>
+</ion-view>
