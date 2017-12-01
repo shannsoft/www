@@ -165,34 +165,61 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
   
 });
 
-app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicLoading){
+app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicLoading,$timeout,$state,$ionicHistory){
   var vm = this;
+  var diagnostic = cordova.plugins.diagnostic;
+  var locationAccuracy = cordova.plugins.locationAccuracy;
   vm.mapInit = function(){
+    diagnostic.isLocationAvailable(function(available){
+      if(!available){
+        locationAccuracy.canRequest(function(canRequest){
+          if(canRequest){
+              locationAccuracy.request(function (success){
+                  console.log("Successfully requested accuracy: "+success.message);
+                  $timeout(function(){
+                    vm.loadMap();
+                  })
+              }, function (error){
+                console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+                if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
+                  if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                    diagnostic.switchToLocationSettings();
+                  }
+                }
+                else{
+                  $ionicHistory.goBack();
+                }
+              },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+          }
+        });
+      }
+      console.log("Location is " + (available ? "available" : "not available"));
+    }, function(error){
+      console.error("The following error occurred: "+error);
+    });
+  }
+  vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
     $ionicLoading.show();
-    // $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition(function(position) {
-      $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-        $ionicLoading.hide();
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        var myLatlng = {lat: lat, lng: lng}
-        vm.loadMapLocation(myLatlng);
-        var latLng = lat + "," + lng;
-        config.getLocationName(latLng).then(function(response) {
-          vm.place = response.data.results[0];
-          $scope.location = vm.place;
-          console.log(vm.place.formatted_address);
-        },function(err) {
-        });
-      }, function(error) {
-        $ionicLoading.hide();
-        console.log('Could not get location: ', error);
-        $scope.alertPop('Warning', 'Something went wrong please try again.');
-        vm.location = 'Could not get location: ' + error + ' :: ' + JSON.stringify(error);
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+      $ionicLoading.hide();
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+      var myLatlng = {lat: lat, lng: lng}
+      vm.loadMapLocation(myLatlng);
+      var latLng = lat + "," + lng;
+      config.getLocationName(latLng).then(function(response) {
+        vm.place = response.data.results[0];
+        $scope.location = vm.place;
+        console.log(vm.place.formatted_address);
+      },function(err) {
       });
-    // }
+    }, function(error) {
+      $ionicLoading.hide();
+      console.log('Could not get location: ', error);
+      $scope.alertPop('Warning', 'Something went wrong please try again.');
+      vm.location = 'Could not get location: ' + error + ' :: ' + JSON.stringify(error);
+    });
   }
 
   $scope.changeLocation = function(latLng){
