@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $ionicModal, $timeout, $state, $ionicPopup,$cordovaNetwork) {
+app.controller('MainController', function($scope, $ionicModal, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -28,6 +28,11 @@ app.controller('MainController', function($scope, $ionicModal, $timeout, $state,
     // }
     return true;
   }
+  $scope.getConstant = function(){
+    //var deviceToken = $cordovaDevice.getUUID();
+    var deviceToken = "83E75D61-6B1B-45CA-AC51-632F24DCD192";
+    return deviceToken;
+  }
 });
 app.controller('HomeController', function($ionicModal, $timeout,$state) {
   var vm = this;
@@ -44,8 +49,10 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     vm.mobile_number = $stateParams.number;
   }
   if($stateParams.user_id){
-    console.log("yes it is");
     vm.userId = $stateParams.user_id;
+  }
+  if($stateParams.vehicle_id){
+    vm.vehicleId = $stateParams.vehicle_id;
   }
   // vm.user = {username:'',password:'',mobile:''};
   vm.user = {email:'',code:''};
@@ -78,17 +85,17 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     $ionicLoading.show({
       template: 'Sending OTP...'
     });
-    // $ionicLoading.hide();
-    //    $state.go('otp',{"number":vm.user.contact_no});
-    registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
-      console.log(response);
-      $ionicLoading.hide();
+    $ionicLoading.hide();
        $state.go('otp',{"number":vm.user.contact_no});
-    },function(error){
-      console.log(error);
-      $ionicLoading.hide();
-      $scope.alertPop('Something Wrong', 'OTP can not send.');
-    });
+    // registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
+    //   console.log(response);
+    //   $ionicLoading.hide();
+    //    $state.go('otp',{"number":vm.user.contact_no});
+    // },function(error){
+    //   console.log(error);
+    //   $ionicLoading.hide();
+    //   $scope.alertPop('Something Wrong', 'OTP can not send.');
+    // });
           
   }
   vm.verifyOtp = function(){
@@ -98,21 +105,21 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     $ionicLoading.show({
       template: 'Verifying OTP...'
     });
-    // $ionicLoading.hide();
-    // $state.go('basicInfo',{"number":obj.contact_no});
-    registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
-      console.log(response);
-      if(response.type == "success"){
-        $ionicLoading.hide();
-        $state.go('basicInfo',{"number":obj.contact_no});
-      }
-      if(response.type == "error"){
-        $ionicLoading.hide();
-        $scope.alertPop('Error', 'OTP is wrong please try again.');
-      }
-    },function(error){
-      console.log(error);
-    });    
+    $ionicLoading.hide();
+    $state.go('basicInfo',{"number":obj.contact_no});
+    // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
+    //   console.log(response);
+    //   if(response.type == "success"){
+    //     $ionicLoading.hide();
+    //     $state.go('basicInfo',{"number":obj.contact_no});
+    //   }
+    //   if(response.type == "error"){
+    //     $ionicLoading.hide();
+    //     $scope.alertPop('Error', 'OTP is wrong please try again.');
+    //   }
+    // },function(error){
+    //   console.log(error);
+    // });    
   }
   vm.register = function(){
     $ionicLoading.show({
@@ -120,22 +127,40 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     });
   vm.basicDetails.contactNo = vm.mobile_number;
   vm.basicDetails.role = {
-    roleId:1
-  };
-
+        roleId:1
+      };
    vm.basicDetails.status = 1;
-  // $state.go('add-vehicle');
   registrationService.addUser().save(vm.basicDetails, function(response){
     $ionicLoading.hide();
     console.log(response);
     console.log(response.userId);
     vm.Id = response.userId;
-    $state.go('add-vehicle',{"user_id":vm.Id});
+    $state.go('user-details',{"user_id":vm.Id});
+   
   },function(error){
     $ionicLoading.hide();
     console.log(error);
     $scope.alertPop('Error', 'Error in registering user.');
   });
+  }
+  vm.addUserDetails = function(){
+    $ionicLoading.show({
+      template: 'Saving User Details...'
+    });
+    vm.userDetails.user = {
+      userId : vm.userId
+    };
+    console.log(vm.userDetails);
+    registrationService.addUserDetails().save(vm.userDetails,function(response){
+      $ionicLoading.hide()
+      console.log(response);
+      $state.go('add-vehicle',{"user_id":vm.userId});
+        },function(error){
+          $ionicLoading.hide();
+          $scope.alertPop('Error','Something wrong, Cannot add user details');
+    });
+
+
   }
   vm.checkPassword = function(before,after){
     vm.showPasswordMisMatch = false;
@@ -151,26 +176,48 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     vm.vehicle.user = {
       userId : vm.userId
     };
-    
-    console.log(vm.vehicle);
     registrationService.addVehicle().save(vm.vehicle,function(response){
       $ionicLoading.hide()
-      console.log(response);
-      $state.go('app.mapView');
-    },function(error){
+      if(vm.vehicle.insurance == "1"){
+        $state.go('insurance',{"vehicle_id":response.vehicleId});
+      }
+      else{
+        $state.go('app.mapView');
+      }
+     },function(error){
       $ionicLoading.hide();
       $scope.alertPop('Error','Something wrong, Cannot add vehicle');
     });
   }
+  vm.addInsuranceDetails = function(){
+    $ionicLoading.show({
+      template: 'Saving Insurance Details...'
+    });
+    vm.insuranceDetails.vehicle = {
+      vehicleId : vm.vehicleId
+    };
+    registrationService.addInsuranceDetail().save(vm.insuranceDetails,function(response){
+      $ionicLoading.hide()
+      console.log(response);
+        $state.go('app.mapView');
+      
+     },function(error){
+      $ionicLoading.hide();
+      $scope.alertPop('Error','Something wrong, Cannot add Insurance');
+    });
+    $state.go('app.mapView');
+  }
   
 });
 
-app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicLoading,$timeout,$state,$ionicHistory){
+app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicHistory){
   var vm = this;
   var diagnostic = cordova.plugins.diagnostic;
   var locationAccuracy = cordova.plugins.locationAccuracy;
   vm.mapInit = function(){
-    diagnostic.isLocationAvailable(function(available){
+    $scope.location = '';
+    $ionicPlatform.ready(function() {
+    diagnostic.isLocationEnabled(function(available){
       if(!available){
         locationAccuracy.canRequest(function(canRequest){
           if(canRequest){
@@ -193,10 +240,16 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
           }
         });
       }
+      else{
+        $timeout(function(){
+          vm.loadMap();
+        })
+      }
       console.log("Location is " + (available ? "available" : "not available"));
     }, function(error){
       console.error("The following error occurred: "+error);
     });
+  })
   }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
@@ -210,7 +263,7 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
       var latLng = lat + "," + lng;
       config.getLocationName(latLng).then(function(response) {
         vm.place = response.data.results[0];
-        $scope.location = vm.place;
+        vm.location = vm.place;
         console.log(vm.place.formatted_address);
       },function(err) {
       });
@@ -218,7 +271,6 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
       $ionicLoading.hide();
       console.log('Could not get location: ', error);
       $scope.alertPop('Warning', 'Something went wrong please try again.');
-      vm.location = 'Could not get location: ' + error + ' :: ' + JSON.stringify(error);
     });
   }
 
@@ -226,6 +278,7 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
     var myLatlng = {lat: latLng.lat, lng: latLng.lng}
     //$scope.latLong =  $scope.location.geometry.location.lat + "," +  $scope.location.geometry.location.lng;
     //console.log($scope.latLong);
+    vm.location = latLng.location;
     vm.loadMapLocation(myLatlng);
     //map.setCenter(new google.maps.LatLng(myLatlng.lat,myLatlng.lng));
   }

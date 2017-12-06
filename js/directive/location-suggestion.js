@@ -32,7 +32,7 @@ app.service('LocationService', function($q){
     return {
       restrict: 'A',
       scope: {
-        location: '=',
+        //location: '=',
         callFunction: '&onSelect'
       },
       link: function($scope, element){
@@ -69,10 +69,11 @@ app.service('LocationService', function($q){
             LocationService.getDetails(place.place_id).then(function(location) {
               var obj  = {
                 lat:location.geometry.location.lat(),
-                lng:location.geometry.location.lng()
+                lng:location.geometry.location.lng(),
+                location:location
               }
               $scope.callFunction({latlang:obj});
-              $scope.location = location;
+             // $scope.location = location;
               $scope.close();
             });
           };

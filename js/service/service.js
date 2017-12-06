@@ -41,8 +41,18 @@ angular.module('serviceModule', ['ngResource'])
                 save:{method:'POST'}
             })
         },
+        addUserDetails: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/user/addUserDetail',{
+                save:{method:'POST'}
+            })
+        },
         addVehicle: function(){
             return $resource(CONFIG.HTTP_HOST_APP + '/user/addVehicle',{
+                save:{method:'POST'}
+            })
+        },
+        addInsuranceDetail:function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/user/addInsurance',{
                 save:{method:'POST'}
             })
         }

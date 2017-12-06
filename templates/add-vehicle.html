@@ -1,12 +1,12 @@
 <ion-view>
-    <ion-content  class="gsg_main_container">
-          
+    <form name="addVehicle">
+    <ion-content  class="gsg_main_container">         
         <div class="gsg_login">
             <div class="banner_logo">
                 <img src="img/logo3.png" alt="">
             </div>
             <div style="margin-top: -19px;">
-                <form name="addVehicle">
+              
                     <div class="list">
                         <label class="item item-input col">
                             <select class="" name="no_of_wheel" ng-model="loginCtrl.vehicle.wheels" required >
@@ -58,7 +58,7 @@
                             </label>
                         </div>
                         <label class="item item-input">
-                            <select class="" name="manufacturing_year" ng-model="loginCtrl.vehicle.mfgYear">
+                            <select class="" name="manufacturing_year" ng-model="loginCtrl.vehicle.mfgYear" required>
                                 <option value=""><i class="fa fa-sort-desc">Manufacturing Year</i></option>
                                 <option value="2015">2015</option>
                                 <option value="2016">2016</option>
@@ -66,9 +66,15 @@
                             </select>                 
                         </label>
                         <span class="plain-text row" ng-show="addVehicle.manufacturing_year.$error.required && addVehicle.manufacturing_year.$touched">Please enter the vehicle manufacturing year</span>
+                        <label class="item item-input">
+                            <select class="" name="insurance" ng-model="loginCtrl.vehicle.insurance" required>
+                                <option value=""><i class="fa fa-sort-desc">Vehicle Insurance</i></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                                                           
+                            </select>                 
+                        </label>
                     </div>
-                   
-                </form>
             </div>
             <button class="skip-button" type="submit" ui-sref="app.mapView">Skip  <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i>
             </button>
@@ -76,6 +82,7 @@
        
     </ion-content>
     <ion-footer-bar class="map-footer" >
-            <button class="button button-block button-map" ng-click="loginCtrl.addVehicle()" type="submit">ADD VEHICLE</button>        
+            <button class="button button-block button-map" ng-disabled="addVehicle.$invalid" ng-click="loginCtrl.addVehicle()" type="submit">ADD VEHICLE</button>        
     </ion-footer-bar>
+</form>
 </ion-view>

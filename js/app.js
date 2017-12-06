@@ -12,7 +12,7 @@ app.run(function($ionicPlatform) {
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+      cordova.plugins.Keyboard.disableScroll(false);
 
     }
     if (window.StatusBar) {
@@ -61,11 +61,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
       number:null 
     }
   })
-  .state('password', {
-    url: '/pwd',
+  .state('user-details', {
+    url: '/user-details/:user_id',
     controller:'LoginController',
-    controllerAs:'loginCtrl',
-    templateUrl: 'templates/set_password.html'
+    controllerAs:'userCtrl',
+    templateUrl: 'templates/user_details.html',
+    params:{
+    user_id:null 
+    }
   })
   .state('add-vehicle', {
     url: '/add-vehicle/:user_id',
@@ -74,6 +77,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/add-vehicle.html',
     params:{
       user_id : null
+    }
+  })
+  .state('insurance', {
+    url: '/insurance/:vehicle_id',
+    controller:'LoginController',
+    controllerAs:'loginCtrl',
+    templateUrl: 'templates/insurance.html',
+    params:{
+      vehicle_id : null
     }
   })
   .state('app', {
@@ -100,11 +112,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     }
   })
-
+  // .state('profile', {
+  //   url: '/profile',
+  //   controller:'userController',
+  //   controllerAs:'UserCtrl',
+  //   templateUrl: 'templates/profile.html',
+  //   // params:{
+  //   //   user_id : null
+  //   // }
+  // })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/home');
 });
 app.constant('CONFIG', {
-  // 'HTTP_HOST_APP':'http://localhost:8100/api'
+  // 'HTTP_HOST_APP':'http://localhost:8090',
   'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });
