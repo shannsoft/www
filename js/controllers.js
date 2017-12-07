@@ -33,6 +33,18 @@ app.controller('MainController', function($scope, $ionicModal, $timeout, $state,
     var deviceToken = "83E75D61-6B1B-45CA-AC51-632F24DCD192";
     return deviceToken;
   }
+  $ionicModal.fromTemplateUrl('templates/modal/change_location.html', {
+    scope: $scope,
+    animation: 'slide-in-right'
+  }).then(function(modal) {
+    vm.modal = modal;
+  });
+  vm.openChangeLocation = function(){
+    vm.modal.show();
+  }
+  vm.closeModal = function() {
+    vm.modal.hide();
+  }
 });
 app.controller('HomeController', function($ionicModal, $timeout,$state) {
   var vm = this;
@@ -212,44 +224,45 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
 
 app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicHistory){
   var vm = this;
-  var diagnostic = cordova.plugins.diagnostic;
-  var locationAccuracy = cordova.plugins.locationAccuracy;
+  //var diagnostic = cordova.plugins.diagnostic;
+ // var locationAccuracy = cordova.plugins.locationAccuracy;
   vm.mapInit = function(){
-    $scope.location = '';
-    $ionicPlatform.ready(function() {
-    diagnostic.isLocationEnabled(function(available){
-      if(!available){
-        locationAccuracy.canRequest(function(canRequest){
-          if(canRequest){
-              locationAccuracy.request(function (success){
-                  console.log("Successfully requested accuracy: "+success.message);
-                  $timeout(function(){
-                    vm.loadMap();
-                  })
-              }, function (error){
-                console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-                if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
-                  if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                    diagnostic.switchToLocationSettings();
-                  }
-                }
-                else{
-                  $ionicHistory.goBack();
-                }
-              },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-          }
-        });
-      }
-      else{
-        $timeout(function(){
-          vm.loadMap();
-        })
-      }
-      console.log("Location is " + (available ? "available" : "not available"));
-    }, function(error){
-      console.error("The following error occurred: "+error);
-    });
-  })
+  //   $scope.location = '';
+  //   $ionicPlatform.ready(function() {
+  //   diagnostic.isLocationEnabled(function(available){
+  //     if(!available){
+  //       locationAccuracy.canRequest(function(canRequest){
+  //         if(canRequest){
+  //             locationAccuracy.request(function (success){
+  //                 console.log("Successfully requested accuracy: "+success.message);
+  //                 $timeout(function(){
+  //                   vm.loadMap();
+  //                 })
+  //             }, function (error){
+  //               console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+  //               if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
+  //                 if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+  //                   diagnostic.switchToLocationSettings();
+  //                 }
+  //               }
+  //               else{
+  //                 $ionicHistory.goBack();
+  //               }
+  //             },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+  //         }
+  //       });
+  //     }
+  //     else{
+  //       $timeout(function(){
+  //         vm.loadMap();
+  //       })
+  //     }
+  //     console.log("Location is " + (available ? "available" : "not available"));
+  //   }, function(error){
+  //     console.error("The following error occurred: "+error);
+  //   });
+  // })
+  vm.loadMap();
   }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
@@ -261,12 +274,7 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
       var myLatlng = {lat: lat, lng: lng}
       vm.loadMapLocation(myLatlng);
       var latLng = lat + "," + lng;
-      config.getLocationName(latLng).then(function(response) {
-        vm.place = response.data.results[0];
-        vm.location = vm.place;
-        console.log(vm.place.formatted_address);
-      },function(err) {
-      });
+      vm.getLocationName(latLng);
     }, function(error) {
       $ionicLoading.hide();
       console.log('Could not get location: ', error);
@@ -276,11 +284,8 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
 
   $scope.changeLocation = function(latLng){
     var myLatlng = {lat: latLng.lat, lng: latLng.lng}
-    //$scope.latLong =  $scope.location.geometry.location.lat + "," +  $scope.location.geometry.location.lng;
-    //console.log($scope.latLong);
     vm.location = latLng.location;
     vm.loadMapLocation(myLatlng);
-    //map.setCenter(new google.maps.LatLng(myLatlng.lat,myLatlng.lng));
   }
   vm.loadMapLocation = function(latLng){
     var mapOptions = {
@@ -289,9 +294,26 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
       zoom: 13
     };
     map = new google.maps.Map(document.getElementById('map'),mapOptions);
-    marker = new google.maps.Marker({
-        position: latLng,
-        map: map
+    var myElements = angular.element(document.querySelector('#map'));
+    var div = angular.element("<div class='centerMarker'></div>");
+    myElements.append(div);
+    // marker = new google.maps.Marker({
+    //     position: latLng,
+    //     map: map
+    // });
+    google.maps.event.addListener(map, 'center_changed', function() {
+      window.setTimeout(function() {
+        var center = map.getCenter();
+        var latlng = center.lat()+','+center.lng();
+        vm.getLocationName(latlng);
+      }, 100);
+    });
+  }
+  vm.getLocationName = function(latLng){
+    config.getLocationName(latLng).then(function(response) {
+      vm.place = response.data.results[0];
+      vm.location = vm.place;
+    },function(err) {
     });
   }
 });

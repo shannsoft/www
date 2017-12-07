@@ -128,9 +128,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     }
   })
-  .state('edit-profile', {
+  .state('app.edit-profile', {
     url: '/edit-profile',
-    templateUrl: 'templates/profile-edit.html',
+    views:{
+      'menuContent':{
+        templateUrl:'templates/profile-edit.html'
+      }
+    }
+    //templateUrl: 'templates/profile-edit.html',
     // params:{
     //   user_id : null
     // }
