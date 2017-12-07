@@ -112,15 +112,29 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     }
   })
-  // .state('profile', {
-  //   url: '/profile',
-  //   controller:'userController',
-  //   controllerAs:'UserCtrl',
-  //   templateUrl: 'templates/profile.html',
-  //   // params:{
-  //   //   user_id : null
-  //   // }
-  // })
+  .state('app.profile', {
+    url: '/profile',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/profile.html'
+      }
+    }
+  })
+  .state('app.change-location',{
+    url:'/change-location',
+    views:{
+      'menuContent':{
+        templateUrl:'templates/changeLocation.html'
+      }
+    }
+  })
+  .state('edit-profile', {
+    url: '/edit-profile',
+    templateUrl: 'templates/profile-edit.html',
+    // params:{
+    //   user_id : null
+    // }
+  })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/home');
 });

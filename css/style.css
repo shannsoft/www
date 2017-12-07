@@ -94,6 +94,10 @@ popup-body{
 .center{
     text-align:center;
 }
+.side-menu a{
+  text-decoration: none;
+  color: #000;
+}
 /*******************************************************************************/
 /*******************************Home Page Style*********************************/
 /*******************************************************************************/
@@ -172,6 +176,106 @@ font-size:15px;
 }
 .not-your-no{
   float: left !important;
+}
+/*******************************************************************************/
+/*******************************Profile Page Style**********************************/
+/*******************************************************************************/
+.profile_head{
+	background:url(../img/profile_background.jpg) top center no-repeat;
+	padding:6%;
+	text-align:center;
+	background-size:cover;
+	}
+.myprofile {
+    height: 40%;
+    margin: auto;
+    position: relative;
+    width: 40%;
+}
+.myprofile img {
+    border: 3px solid #fff;
+    border-radius: 50%;
+    height: auto;
+    width: 100%;
+}
+.profile_head h1 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 400;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+.profile_head p {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+.change-pwd-btn{
+margin-left: 49px;
+width: 69%;
+margin-top: 55px;
+}
+.camera_profile{
+	color:#fff;
+	font-size:30px;
+	position:absolute;
+	bottom:0;
+	right:-10px;
+}
+.list-head{
+  margin-right: 77px;
+  font-size: 17px;
+  float : left;
+}
+.item.profile_list > span {
+  float: left;
+  width: 100%;
+}
+.item.profile_list > span i {
+  float: left;
+  font-size: 21px;
+  padding: 0 10px 0 0;
+}
+.edit-profile .profile_list {
+  padding:5px 16px !important;
+}
+.edit-profile .profile_list > span {
+  float: left;
+}
+.edit-profile .profile_list .title {
+  line-height: 2;
+  width:40%;
+}
+.edit-profile .form-input {
+  width:60%;
+}
+.edit-profile .item-select select{
+  right:auto !important;
+  padding: 0 48px 0 7px!important;
+  direction: ltr!important;
+}
+.multi-select{
+  padding:0 16px 0 0!important;
+  border: none
+}
+.multi-select-list .list:after{
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  color: #999;
+  content: "";
+  pointer-events: none;
+  z-index: 2
 }
 /*******************************************************************************/
 /*******************************User Details Page Style**********************************/

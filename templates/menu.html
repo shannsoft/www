@@ -1,4 +1,4 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="true" cache-view="false">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-stable" align-title="center">
       <ion-nav-back-button>
@@ -21,43 +21,44 @@
     </ion-header-bar>
     <ion-content class="side-menu" style="margin-top:86px;">
       <ion-list >
-          <ion-item menu-close ng-click="login()" class="">
-              <i class="icon ion-android-home m-r-10"></i>
-            Home
-          </ion-item>
-        <ion-item menu-close class="side-menu">
-            <i class="icon ion-person m-r-10"></i>
-          My Profile
+        <ion-item menu-close ng-click="login()" class="">
+          <a href=""><i class="icon ion-android-home m-r-10"></i>
+            Home</a>
         </ion-item>
         <ion-item menu-close class="side-menu">
-          <i class="icon ion-navigate m-r-10"></i>
-          Change City/Location
+          <a href="" ui-sref="app.profile"><i class="icon ion-person m-r-10"></i>
+          My Profile</a>
+        </ion-item>
+        <ion-item menu-close class="side-menu">
+          <a href="" location-suggestion ><i class="icon ion-navigate m-r-10"></i>
+          Change City/Location</a>
         </ion-item >
          <ion-item menu-close class="side-menu" >
-            <i class="icon ion-model-s m-r-10"></i>
-         My Vehicles
+          <a href=""><i class="icon ion-model-s m-r-10"></i>
+         My Vehicles</a>
         </ion-item>
         <ion-item menu-close class="side-menu" >
-          <i class="icon ion-pricetags m-r-10"></i>
-          Tarrif Plan
+          <a href=""><i class="icon ion-pricetags m-r-10"></i>
+          Tarrif Plan</a>
         </ion-item>
         <ion-item menu-close class="side-menu">
-          <i class="icon ion-arrow-return-right m-r-10"></i>
-          My Request
+          <a href=""><i class="icon ion-arrow-return-right m-r-10"></i>
+          My Request</a>
+        </ion-item>
+        <ion-item menu-close class="side-menu">
+          <a href=""><i class="icon ion-android-archive m-r-10"></i>
+          History</a>
+        </ion-item>
+        <ion-item menu-close class="side-menu">
+          <a href=""><i class="icon ion-android-call m-r-10"></i>
+          Contact us</a>
+        </ion-item>
+        <ion-item menu-close class="side-menu">
+          <a href=""><i class="icon ion-power m-r-10"></i>
+          Logout</a>
         </ion-item>
       </ion-list>
-      <ion-item menu-close class="side-menu">
-        <i class="icon ion-android-archive m-r-10"></i>
-        History
-      </ion-item>
-      <ion-item menu-close class="side-menu">
-        <i class="icon ion-android-call m-r-10"></i>
-        Contact us
-      </ion-item>
-      <ion-item menu-close class="side-menu">
-        <i class="icon ion-power m-r-10"></i>
-        Logout
-      </ion-item>
+      
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
