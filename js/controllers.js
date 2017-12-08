@@ -224,8 +224,8 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
 
 app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicHistory){
   var vm = this;
-  //var diagnostic = cordova.plugins.diagnostic;
- // var locationAccuracy = cordova.plugins.locationAccuracy;
+//   var diagnostic = cordova.plugins.diagnostic;
+//  var locationAccuracy = cordova.plugins.locationAccuracy;
   vm.mapInit = function(){
   //   $scope.location = '';
   //   $ionicPlatform.ready(function() {

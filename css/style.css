@@ -130,9 +130,16 @@ popup-body{
   padding-bottom: 15px;
 }
 .side-menu-header{
-  background-color: black !important;
-  height:136px;
+  /* background-color: black !important; */
+  height:187px;
 }
+/* .side-menu-profile{
+  color: black !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  margin-top: -12px !important;
+  width: 100% !important;
+} */
 .side-menu-header-bar{
   color: white !important;
   margin-left:110px !important;
@@ -191,7 +198,8 @@ font-size:15px;
 	background:url(../img/profile_background.jpg) top center no-repeat;
 	padding:6%;
 	text-align:center;
-	background-size:cover;
+  background-size:cover;
+  margin: -6px;
 	}
 .myprofile {
     height: 40%;
@@ -221,6 +229,7 @@ font-size:15px;
     text-align: center;
     width: 100%;
 }
+
 .change-pwd-btn{
 margin-left: 49px;
 width: 69%;
@@ -298,6 +307,105 @@ margin-top: 55px;
 .item-checkbox{
   background: transparent;
   border: none;
+}
+/*******************************************************************************/
+/*******************************Change location Page Style**********************/
+/*******************************************************************************/
+.gsg-colour{
+  background: #73b711 !important
+}
+.whitesmoke{
+  background: whitesmoke;
+}
+.search-box{
+  margin-top:0px;
+  border-radius: 10px !important;
+}
+.popular-city{  
+  text-transform: uppercase;
+  text-align: left;
+  margin-left: 19px;
+  font-size: 15px;
+  font-family: serif;
+  font-weight: 540;
+}
+
+/* .component-city-picker .city-popular {
+  font-size: 12px;
+  color: rgba(0,0,0,.54);
+  border: 1px solid #d8d8d8;
+  border-top: none;
+  border-left: none;
+  position: relative;
+  top: -1px;
+}
+
+.component-city-picker .citi-list {
+  text-transform: uppercase;
+  font-size: 14px;
+  color: rgba(0,0,0,.38);
+}
+
+.ta-c {
+  text-align: center;
+}
+
+.fw-w {
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.d-f {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.component-city-picker .city-popular .item {
+  padding: 13px 5px 5px 6px;
+  max-width: 25%;
+  min-width: 25%;
+  border: 1px solid #d8d8d8;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.component-city-picker .citi-list .item {
+  padding: 16px 15px;
+  background: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.cur-p {
+  cursor: pointer;
+}
+.component-city-picker .city-popular .item .img {
+  max-width: 60px;
+  margin: auto;
+  margin-bottom: 7px;
+}
+.box{
+  max-width: 25% !important;
+  min-width: 25% !important;
+  padding: 5px
+} */
+.city-list{
+  text-align: left;
+  background-color: transparent;
+  font-size: 14px;
+  border-width: 0px;
+  display: block;
+  margin: -1px;
+  padding-bottom: 21px;
+  padding-left: 25px;
 }
 /*******************************************************************************/
 /*******************************Map Page Style**********************************/
