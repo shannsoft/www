@@ -1,30 +1,35 @@
-// Ionic Starter App
+var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova','ngStorage']);
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova']);
-
-app.run(function($ionicPlatform) {
+app.run(function($ionicPlatform,$ionicPopup) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(false);
-
+      //cordova.plugins.Keyboard.disableScroll(false);
     }
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    /*******************************************************************************/
+    /**************************This function is for exist app***********************/
+    /*******************************************************************************/
+    $ionicPlatform.registerBackButtonAction(function() {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Alert',
+        template: 'Do you want to exit from the App',
+        okType: 'button-assertive'
+      });
+      confirmPopup.then(function(res) {
+        if (res) {
+          navigator.app.exitApp();
+        } else {}
+      });
+    },100);
   });
 })
 
 app.config(function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/register');
   $stateProvider
-
   .state('home', {
     url: '/home',
     controller:'HomeController',
@@ -35,13 +40,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/login',
     controller:'LoginController',
     controllerAs:'loginCtrl',
-    templateUrl: 'templates/login.html'
+    templateUrl: 'templates/login.html',
+    resolve: {
+      logout: checkLoggedin
+    }
   })
   .state('register', {
     url: '/register',
     controller:'LoginController',
     controllerAs:'loginCtrl',
-    templateUrl: 'templates/register.html'
+    templateUrl: 'templates/register.html',
+    resolve: {
+      logout: checkLoggedin
+    }
   })
   .state('otp', {
     url: '/otp/:number',
@@ -50,6 +61,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/otp_verification.html',
     params:{
       number:null 
+    },
+    resolve: {
+      logout: checkLoggedin
     }
   })
   .state('basicInfo', {
@@ -67,7 +81,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     controllerAs:'userCtrl',
     templateUrl: 'templates/user_details.html',
     params:{
-    user_id:null 
+      user_id:null 
     }
   })
   .state('add-vehicle', {
@@ -141,7 +155,21 @@ app.config(function($stateProvider, $urlRouterProvider) {
     // }
   })
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/home');
+  function checkLoggedin($q, $localStorage, $state, $timeout) {
+    var deferred = $q.defer();
+    if($localStorage.user){
+      $timeout(function(){
+        deferred.resolve();
+        $state.go('app.mapView');
+      },100)
+    }
+    else{
+      $timeout(function(){
+        deferred.resolve();
+        $state.go('app.mapView');
+      },100)
+    }
+  }
 });
 app.constant('CONFIG', {
   // 'HTTP_HOST_APP':'http://localhost:8090',

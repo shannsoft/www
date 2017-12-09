@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $ionicModal, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
+app.controller('MainController', function($scope, $ionicModal, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -45,6 +45,7 @@ app.controller('MainController', function($scope, $ionicModal, $timeout, $state,
   vm.closeModal = function() {
     vm.modal.hide();
   }
+  
 });
 app.controller('HomeController', function($ionicModal, $timeout,$state) {
   var vm = this;
