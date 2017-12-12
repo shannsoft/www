@@ -1,0 +1,33 @@
+<ion-view cache-view="false" view-title="Tarrif Plan">
+    <ion-nav-buttons side="left">
+        <button class="back-button" ui-sref="app.mapView">
+          <i class="icon ion-chevron-left"></i> 
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+            <div class="plan_head">
+                <div class="over-lay">
+                    <h1>CHOOSE YOUR PLAN</h1>
+                </div>
+            </div>
+            <div class="plan_list">
+                <div class="plan_item" ng-click="planCtrl.specialPlanListModal()">
+                    <span class="plan">Go Special</span>
+                    <i class="fa fa-rupee"></i><span class="plan_price">550</span>
+                </div>
+                <div class="plan_item" ng-click="planCtrl.silverPlanListModal()">
+                    <span class="plan">Go Silver</span>
+                    <i class="fa fa-rupee"></i> <span class="plan_price">2550</span>
+                </div>
+                <div class="plan_item" ng-click="planCtrl.goldPlanListModal()">
+                    <span class="plan">Go Gold</span>
+                    <i class="fa fa-rupee"></i><span class="plan_price">5000</span>
+                </div>
+                <div class="plan_item" ng-click="planCtrl.platinumPlanListModal()">
+                    <span class="plan">Go Platinum</span>
+                    <i class="fa fa-rupee"></i><span class="plan_price">10000</span>
+                </div>
+            </div> 
+    </ion-content>
+</ion-view>
+  

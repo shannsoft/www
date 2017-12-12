@@ -27,7 +27,8 @@ app.run(function($ionicPlatform,$ionicPopup) {
   });
 })
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('top');
   $urlRouterProvider.otherwise('/register');
   $stateProvider
   .state('home', {
@@ -134,14 +135,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     }
   })
-  .state('app.change-location',{
-    url:'/change-location',
-    views:{
-      'menuContent':{
-        templateUrl:'templates/changeLocation.html'
-      }
-    }
-  })
   .state('app.edit-profile', {
     url: '/edit-profile',
     views:{
@@ -149,10 +142,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl:'templates/profile-edit.html'
       }
     }
-    //templateUrl: 'templates/profile-edit.html',
-    // params:{
-    //   user_id : null
-    // }
+  })
+  .state('app.tarrif-plan', {
+    url: '/tarrif-plan',
+    views: {
+      'menuContent': {
+        controller:'PlanController',
+        controllerAs:'planCtrl',
+        templateUrl: 'templates/tarrif-plan/tarrif-plan.html'
+      }
+    }
   })
   // if none of the above states are matched, use this as the fallback
   function checkLoggedin($q, $localStorage, $state, $timeout) {
