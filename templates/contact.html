@@ -1,0 +1,60 @@
+<ion-view cache-view="false" view-title="Help & Support">
+        <ion-nav-buttons side="left">
+            <button class="back-button" ui-sref="app.mapView">
+              <i class="icon ion-chevron-left"></i> 
+            </button>
+        </ion-nav-buttons>
+        <ion-content>
+            <hr>
+            <div class="support_wrapper">
+                <div class="support_list">
+                <ul class="">
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/joining+zoomcar.png">
+                            <p class="tab_name">Joining <br>GSG</p>
+                        </a>
+                    </li>
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/booking+a+zoomcar.png">
+                            <p class="tab_name">Booking a Zoomcar</p>
+                        </a>
+                    </li>
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/billing+n+charges.png">
+                            <p class="tab_name">Payments and Charges</p>
+                        </a>
+                    </li>
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/wallet+n+refund.png">
+                            <p class="tab_name">Wallet &amp; Refunds</p>
+                        </a>
+                    </li>
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/deals+&amp;+discount.png">
+                            <p class="tab_name">Deals &amp; Discounts</p>
+                        </a>
+                    </li>
+                    <li class="support-item">
+                        <a class="">
+                            <img class="support_icons" src="https://s3-ap-southeast-1.amazonaws.com/zoomcar-dev-b/pictures/original/Fill+1523.png">
+                            <p class="tab_name">Live Assistance</p>
+                        </a>
+                    </li>
+                </ul>
+                </div>
+                <div class="popular-query">
+                <h3 class="popular-city">Popular Queries</h3>
+                </div>
+            </div>
+            
+        </ion-content>
+        <ion-footer-bar class="map-footer" >
+                <button class="button button-block button-map" ng-disabled="addVehicle.$invalid" ng-click="loginCtrl.addVehicle()" type="submit"><i class="icon ion-ios-telephone"></i>Contact Us now</button>        
+        </ion-footer-bar>
+    </ion-view>
+      

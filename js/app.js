@@ -153,6 +153,26 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }
     }
   })
+  .state('app.requests', {
+    url: '/myRequests',
+    views: {
+      'menuContent': {
+        controller:'RequestController',
+        controllerAs:'reqCtrl',
+        templateUrl: 'templates/requests.html'
+      }
+    }
+  })
+  .state('app.contactUs', {
+    url: '/contactUs',
+    views: {
+      'menuContent': {
+        controller:'MainController',
+        controllerAs:'contactCtrl',
+        templateUrl: 'templates/contact.html'
+      }
+    }
+  })
   // if none of the above states are matched, use this as the fallback
   function checkLoggedin($q, $localStorage, $state, $timeout) {
     var deferred = $q.defer();
