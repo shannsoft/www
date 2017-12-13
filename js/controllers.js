@@ -318,3 +318,27 @@ app.controller('MapController',function($cordovaGeolocation,config,$scope,$ionic
     });
   }
 });
+app.controller("HelpController",function($scope){
+  var vm = this;
+  vm.queryList = [
+    {
+      'question':"What type of driver's licence is required",
+      'answer':"GSG Requires a valid Indian driver's licence. It's critical that licence is an original. The Licence must be for a light motor vehicle(car). Members do NOT need a specific cab licence that is associated with a yellow board plate"
+    },
+    {
+      'question':"What type of driver's licence is required",
+      'answer':"GSG Requires a valid Indian driver's licence. It's critical that licence is an original. The Licence must be for a light motor vehicle(car). Members do NOT need a specific cab licence that is associated with a yellow board plate"
+    }
+  ];
+  console.log(vm.queryList)
+  vm.toggleGroup = function(list) {
+    if (vm.isGroupShown(list)) {
+      vm.shownGroup = null;
+    } else {
+      vm.shownGroup = list;
+    }
+  };
+  vm.isGroupShown = function(list) {
+    return vm.shownGroup === list;
+  };
+})

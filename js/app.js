@@ -167,8 +167,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     url: '/contactUs',
     views: {
       'menuContent': {
-        controller:'MainController',
-        controllerAs:'contactCtrl',
+        controller:'HelpController',
+        controllerAs:'helpCtrl',
         templateUrl: 'templates/contact.html'
       }
     }
