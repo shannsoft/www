@@ -101,7 +101,8 @@ app.controller("ProfileController",function($scope,$state,$ionicModal,$cordovaCa
             canvas.height = this.height;
             canvas.width = this.width;
             ctx.drawImage(this, 0, 0);
-            $scope.profileImage = canvas.toDataURL('image/png');
+            vm.profile_image = canvas.toDataURL('image/png');
+            $localStorage.profile = vm.profile_image;
           }
           img.src = results[i];
         }

@@ -6,3 +6,7 @@ cordova plugin add cordova-plugin-request-location-accuracy     --- (Update Goog
 
 cordova plugin add cordova-open-native-settings
 
+cordova plugin add https://github.com/wymsee/cordova-imagePicker.git
+
+cordova plugin add cordova-plugin-camera
+

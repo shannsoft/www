@@ -111,6 +111,32 @@ popup-body{
   text-decoration: none;
   color: #000;
 }
+.platform-android .action-sheet{
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.platform-android .action-sheet-group{
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+.platform-android .action-sheet .action-sheet-title, .platform-android .action-sheet .button{
+  padding: 16px;
+  color: #8f8f8f;
+  text-align: center;
+  font-size: 13px;
+}
+.platform-android .action-sheet .button{
+  display: block;
+  padding: 1px;
+  width: 100%;
+  border-radius: 0;
+  border-color: #d1d3d6;
+  background-color: transparent;
+  color: #007aff;
+  font-size: 21px;
+}
+.platform-android .action-sheet-cancel {
+  display: block; }
 /*******************************************************************************/
 /*******************************Home Page Style*********************************/
 /*******************************************************************************/
