@@ -4,15 +4,22 @@
               <i class="icon ion-chevron-left"></i> 
             </button>
         </ion-nav-buttons>
-        <ion-content>
-                <div class="plan_head">
-                    <div class="over-lay">
-                        <h1>MY REQUEST</h1>
-                    </div>
-                </div>
-                <div class="plan_list">
-                    
-                </div> 
-        </ion-content>
-    </ion-view>
+    <ion-content>
+        <ion-slide-box show-pager="false" ion-slide-tabs>
+                <ion-slide ion-slide-tab-label="LIVE">
+                    <h1>No LIVE requests</h1>
+                </ion-slide>
+                <ion-slide ion-slide-tab-label="FUTURE">
+                    <h1>No Future bookings</h1>
+                </ion-slide>
+                <ion-slide ion-slide-tab-label="COMPLETED">
+                    <h1>No completed booking</h1>
+                </ion-slide>
+                <ion-slide ion-slide-tab-label="CANCELLED">
+                    <h1>No booking CANCELLED</h1>
+                </ion-slide>
+               
+        </ion-slide-box>   
+    </ion-content>
+</ion-view>
       

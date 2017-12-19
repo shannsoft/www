@@ -1,4 +1,4 @@
-<ion-view cache-view="false" hide-nav-bar="true">
+<ion-modal-view ng-init="userMobile()">
   <ion-content class="gsg_main_container">
     <div class="gsg_login">
       <div class="banner_logo">
@@ -8,20 +8,20 @@
         <form>
             <div class="list m-t-20">
             <span class="plain-text">
-                An OTP sent to your no {{loginCtrl.mobile_number}}
+                An OTP sent to your no {{}}
             </span>
             </div>
           <div class="list m-t-20">
               <label class="item item-input">
-                  <input type="text" ng-model="loginCtrl.otp" placeholder="INSERT OTP">
+                  <input type="text" ng-model="otpCtrl.otp" placeholder="INSERT OTP">
               </label>
             <a href="" class="otp-resend not-your-no" ui-sref="register">Not your Number</a>
             <a href="" class="otp-resend">Resend OTP</a>
-            <button class="button button-block button-positive" type="submit" ng-click="loginCtrl.verifyOtp()" >Submit</button>
+            <button class="button button-block button-positive" ng-click="otpCtrl.verifyOtp()" type="submit">Submit</button>
           </div>
         </form>
       </div>
     </div>
     
   </ion-content>
-</ion-view>
+</ion-modal-view>

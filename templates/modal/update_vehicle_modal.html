@@ -1,0 +1,91 @@
+<ion-modal-view>
+        <ion-header-bar class="bar-energized gsg-colour">
+            <button class="button button-clear" ng-click="vehicleCtrl.closeModal()">
+                <i class="icon ion-android-close"></i>
+            </button>
+            <h1 class="title">Update Vehicle</h1>
+        </ion-header-bar>
+        <form class="form-horizontal" name="updateVehicle">
+        <ion-content  class="gsg_main_container">
+                 <div class="list m-20">
+                        <label class="item item-input col">
+                            <select class="" name="no_of_wheel" ng-model="vehicleCtrl.updateVehicleData.wheels" required >
+                                <option value=""><i class="fa fa-sort-desc">No of Wheels</i></option>
+                                <option value="3">3 Wheelers</option>
+                                <option value="4">4 Wheelers</option>
+                                <option value="others">Others</option>                             
+                            </select>                 
+                        </label>
+                        <span class="plain-text row" ng-show="updateVehicle.no_of_wheel.$error.required && updateVehicle.no_of_wheel.$touched">Please choose an option</span>
+                        <label class="item item-input col">
+                            <select class="" name="maker_of_vehicle" ng-model="vehicleCtrl.updateVehicleData.make" required>
+                                <option value=""><i class="fa fa-sort-desc">Maker Of the Vehicle</i></option>
+                                <option value="Honda">Honda</option>
+                                <option value="Maruti">Maruti</option>
+                                <option value="Suzuki">Suzuki</option>                             
+                            </select>                 
+                        </label>
+                        <span class="plain-text row" ng-show="updateVehicle.maker_of_vehicle.$error.required && updateVehicle.maker_of_vehicle.$touched">Please choose a maker</span>
+                        <label class="item item-input">
+                            <input type="text" name="vehicle_no" ng-model="vehicleCtrl.updateVehicleData.registerationNumber" placeholder="Vehicle No" required>
+                        </label> 
+                        <span class="plain-text row" ng-show="updateVehicle.vehicle_no.$error.required && updateVehicle.vehicle_no.$touched">Please enter the vehicle no</span>
+                        <div class="vehicle row" >
+                            <label class="item item-input col col-50">
+                                <select class="" name="model" ng-model="vehicleCtrl.updateVehicleData.model" required>
+                                    <option value=""><i class="fa fa-sort-desc">Model</i></option>
+                                    <option value="model 1">model 1</option>
+                                    <option value="model 2">model 2</option>
+                                    <option value="model 3">model 3</option>                             
+                                </select>                 
+                            </label>
+                            <label class="item item-input col-50">
+                                <input type="text" class="" name="variant" placeholder="Variant" ng-model="vehicleCtrl.updateVehicleData.variant" />
+                            </label>
+                        </div>
+                        <span class="plain-text" ng-show="updateVehicle.model.$error.required && updateVehicle.model.$touched">Please enter the vehicle model</span>
+                        <div class="vehicle row" >
+                            <label class="item item-input col col-50">
+                                <select class="" name="version" ng-model="vehicleCtrl.updateVehicleData.version" required>
+                                    <option value=""><i class="fa fa-sort-desc">Version</i></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>                             
+                                </select>                 
+                            </label>
+                            <label class="item item-input col-50">
+                                <input type="text" class="" name="dob" placeholder="Cubic capacity" ng-model="vehicleCtrl.updateVehicleData.cubicCapacity" />
+                            </label>
+                        </div>
+                        <span class="plain-text" ng-show="updateVehicle.version.$error.required && updateVehicle.version.$touched">Please enter the version of the vehicle</span>
+                        <label class="item item-input">
+                            <select class="" name="manufacturing_year" ng-model="vehicleCtrl.updateVehicleData.mfgYear" required>
+                                <option value=""><i class="fa fa-sort-desc">Manufacturing Year</i></option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>                             
+                            </select>                 
+                        </label>
+                        <span class="plain-text row" ng-show="updateVehicle.manufacturing_year.$error.required && updateVehicle.manufacturing_year.$touched">Please enter the vehicle manufacturing year</span>
+                        <label class="item item-input">
+                            <select class="" name="insurance" ng-model="vehicleCtrl.updateVehicleData.status" required>
+                                <option value=""><i class="fa fa-sort-desc">Vehicle Insurance Status</i></option>
+                                <option value="1">Active</option>
+                                <option value="0">Expired</option>
+                                                           
+                            </select>                 
+                        </label>
+                        <label class="item item-input col" ng-if="vehicleCtrl.updateVehicleData.status == '1'">
+                            <input type="text" class="" name="expiry_date" placeholder="Expiry Date" ng-model="vehicleCtrl.updateVehicleData.expiry_date" ng-required="vehicleCtrl.updateVehicleData.status == '1'"/>
+                        </label> 
+                        <span class="plain-text row" ng-show="updateVehicle.expiry_date.$error.required && updateVehicle.expiry_date.$touched">Expiry date is required</span> 
+                        <label class="item item-input col">
+                            <input type="text" class="" name="insurance_type" placeholder="Insurance type" ng-model="vehicleCtrl.updateVehicleData.type"/>
+                        </label> 
+                    </div>
+        </ion-content>
+        <ion-footer-bar class="map-footer" >
+            <button class="button button-block button-map" ng-disabled="updateVehicle.$invalid" ng-click="vehicleCtrl.updateVehicleDetails()" type="submit">Update</button>        
+        </ion-footer-bar>
+        </form>
+    </ion-modal-view>

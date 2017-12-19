@@ -1,4 +1,4 @@
-var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova','ngStorage']);
+var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
 
 app.run(function($ionicPlatform,$ionicPopup) {
   $ionicPlatform.ready(function() {
@@ -28,54 +28,48 @@ app.run(function($ionicPlatform,$ionicPopup) {
 })
 
 app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-  $ionicConfigProvider.tabs.position('top');
-  $urlRouterProvider.otherwise('/register');
+  // $ionicConfigProvider.tabs.position('top');
+  $urlRouterProvider.otherwise('/login');
   $stateProvider
-  .state('home', {
-    url: '/home',
-    controller:'HomeController',
-    controllerAs:'homeCtrl',
-    templateUrl: 'templates/home.html'
-  })
   .state('login', {
     url: '/login',
     controller:'LoginController',
     controllerAs:'loginCtrl',
     templateUrl: 'templates/login.html',
-    resolve: {
-      logout: checkLoggedin
-    }
+    // resolve: {
+    //   logout: checkLoggedin
+    // }
   })
   .state('register', {
     url: '/register',
     controller:'LoginController',
-    controllerAs:'loginCtrl',
-    templateUrl: 'templates/register.html',
-    resolve: {
-      logout: checkLoggedin
-    }
+    controllerAs:'regstrCtrl',
+    templateUrl: 'templates/registration.html',
+    // resolve: {
+    //   logout: checkLoggedin
+    // }
   })
   .state('otp', {
     url: '/otp/:number',
     controller:'LoginController',
-    controllerAs:'loginCtrl',
+    controllerAs:'otpCtrl',
     templateUrl: 'templates/otp_verification.html',
     params:{
       number:null 
     },
-    resolve: {
-      logout: checkLoggedin
-    }
+    // resolve: {
+    //   logout: checkLoggedin
+    // }
   })
-  .state('basicInfo', {
-    url: '/basicInfo/:number',
-    controller:'LoginController',
-    controllerAs:'loginCtrl',
-    templateUrl: 'templates/basic_info.html',
-    params:{
-      number:null 
-    }
-  })
+  // .state('basicInfo', {
+  //   url: '/basicInfo/:number',
+  //   controller:'LoginController',
+  //   controllerAs:'loginCtrl',
+  //   templateUrl: 'templates/basic_info.html',
+  //   params:{
+  //     number:null 
+  //   }
+  // })
   .state('user-details', {
     url: '/user-details/:user_id',
     controller:'LoginController',
@@ -86,13 +80,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     }
   })
   .state('add-vehicle', {
-    url: '/add-vehicle/:user_id',
-    controller:'LoginController',
-    controllerAs:'loginCtrl',
-    templateUrl: 'templates/add-vehicle.html',
-    params:{
-      user_id : null
-    }
+    url: '/add-vehicle',
+    controller:'VehicleController',
+    controllerAs:'vehicleCtrl',
+    templateUrl: 'templates/vehicles/add-vehicle.html',
+    // params:{
+    //   user_id : null
+    // }
   })
   .state('insurance', {
     url: '/insurance/:vehicle_id',
@@ -103,6 +97,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       vehicle_id : null
     }
   })
+  // .state('change-password',{
+  //   url:'/change-password',
+  //   controller:'userController',
+  //   controllerAs:'chngPwdCtrl',
+  //   templateUrl:'templates/user/change_password.html'
+  // })
   .state('app', {
     url: '/app',
     abstract: true,
@@ -131,7 +131,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     url: '/profile',
     views: {
       'menuContent': {
-        templateUrl: 'templates/profile.html'
+        templateUrl: 'templates/user/profile.html',
+        controller:'ProfileController',
+        controllerAs:'profileCtrl',
       }
     }
   })
@@ -163,6 +165,16 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }
     }
   })
+  .state('app.history', {
+    url: '/history',
+    views: {
+      'menuContent': {
+        controller:'RequestController',
+        controllerAs:'historyCtrl',
+        templateUrl: 'templates/history.html'
+      }
+    }
+  })
   .state('app.contactUs', {
     url: '/contactUs',
     views: {
@@ -170,6 +182,16 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         controller:'HelpController',
         controllerAs:'helpCtrl',
         templateUrl: 'templates/contact.html'
+      }
+    }
+  })
+  .state('app.vehicles',{
+    url:'/vehicles',
+    views:{
+      'menuContent':{
+        controller:'VehicleController',
+        controllerAs:'vehicleCtrl',
+        templateUrl:'templates/vehicles/vehicleList.html'
       }
     }
   })
@@ -191,6 +213,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   }
 });
 app.constant('CONFIG', {
-  // 'HTTP_HOST_APP':'http://localhost:8090',
-  'HTTP_HOST_APP':'http://101.53.136.166:8090'
+  'HTTP_HOST_APP_OAUTH':'testjwtclientid=XY7kmzoNzl100@localhost:8090',
+   'HTTP_HOST_APP':'http://localhost:8090',
+  // 'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });

@@ -10,10 +10,11 @@ angular.module('serviceModule', ['ngResource'])
         }
     }
 })
-.factory('loginService', function ($resource,CONFIG) {
+.factory('loginService', function ($resource,CONFIG,$http) {
     return{
-        signin: function () {
-            return $resource( CONFIG.HTTP_HOST +'login',{
+
+        loginOAuth: function (contactNbr,password) {
+            return $resource( CONFIG.HTTP_HOST_APP_OAUTH +'/gsg/oauth/token?grant_type=password&username=' + contactNbr + '&password=' + password,{
               save:{method:'POST'}
             })
         },
@@ -36,8 +37,8 @@ angular.module('serviceModule', ['ngResource'])
                 save:{method:'POST'}
             })
         },
-        addUser: function(){
-            return $resource(CONFIG.HTTP_HOST_APP + '/user/addUser',{
+        register: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/register',{
                 save:{method:'POST'}
             })
         },

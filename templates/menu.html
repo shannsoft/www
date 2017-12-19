@@ -15,8 +15,8 @@
           <img src="img/logo3.png" alt="">
       </div> -->
       <div class="profile_head">
-        <div class="myprofile">         
-          <img src="img/placeholder.jpg" ng-click="openImage('img/placeholder.jpg')"/>
+        <div class="myprofile" ng-controller="ProfileController as profileCtrl">         
+          <img ng-src="{{profileCtrl.profile_image}}" ng-click="openImage('')"/>
         </div>      
         <div class="m-t-39">
             <h5>Subhra kant</h5>
@@ -39,13 +39,13 @@
             My Profile
           </ion-item>
         </a>
-        <a href="" ng-click="mainCtrl.openChangeLocation()">
+        <!-- <a href="" ng-click="mainCtrl.openChangeLocation()">
           <ion-item menu-close class="side-menu">
             <i class="icon ion-navigate m-r-10"></i>
             Change City/Location
           </ion-item>
-        </a>
-        <a href="">
+        </a> -->
+        <a href="" ui-sref="app.vehicles">
           <ion-item menu-close class="side-menu" >
             <i class="icon ion-model-s m-r-10"></i>
           My Vehicles
@@ -63,12 +63,12 @@
             My Request
           </ion-item>
         </a>
-        <a href=""  ui-sref="app.history">
+        <!-- <a href=""  ui-sref="app.history">
           <ion-item menu-close class="side-menu">
             <i class="icon ion-android-archive m-r-10"></i>
             History
           </ion-item>
-        </a>
+        </a> -->
         <a href="" ui-sref="app.contactUs">
           <ion-item menu-close class="side-menu">
             <i class="icon ion-android-call m-r-10"></i>

@@ -1,0 +1,41 @@
+<ion-view cache-view="false" view-title="My Vehicles">
+    <ion-nav-buttons side="left">
+        <button class="back-button" ui-sref="app.mapView">
+          <i class="icon ion-chevron-left"></i> 
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div class="popular-query">
+                <h3 class="popular-city">Added Vehicles</h3>
+            </div>
+        <ion-list>
+            <div ng-repeat="item in vehicleCtrl.vehicleList">
+                <ion-item class="item-stable query-list"
+                        ng-click="vehicleCtrl.toggleGroup(item)"
+                        ng-class="{active: vehicleCtrl.isGroupShown(item)}">
+                    <!-- <i class="icon" ng-class="vehicleCtrl.isGroupShown(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i> -->
+                &nbsp;
+                <div class="vehicle_list">
+                    <img class="vehicle_image" src="{{item.image}}">
+                    <p class="vehicle_name"> {{item.name}} </p>
+                </div>
+                </ion-item>
+                <ion-item class="item-accordion"
+                    ng-show="vehicleCtrl.isGroupShown(item)">
+                   <div class="vehicle_description">
+                        {{item.name}}  {{item.model}}
+
+                   </div>
+                   <button class="button button-positive vehicle_button" type="submit" ng-click="vehicleCtrl.deleteVehicle()">Delete</button>
+                   <button class="button button-positive vehicle_button float-right" type="submit" ng-click="vehicleCtrl.updateVehicle()">Update</button>
+                </ion-item>
+            </div>
+        </ion-list>
+        
+
+    </ion-content>
+    <ion-footer-bar class="map-footer" >
+        <button class="button button-block button-map" ui-sref="add-vehicle" type="submit">ADD NEW VEHICLE</button>        
+    </ion-footer-bar>
+</ion-view>
+  

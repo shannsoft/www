@@ -1,0 +1,110 @@
+<ion-view cache-view="false" view-title="My Profile">
+    <ion-nav-buttons side="right">
+      </ion-nav-buttons>
+      <ion-nav-buttons side="left">
+        <button class="back-button" ui-sref="app.mapView">
+          <i class="icon ion-chevron-left"></i> 
+        </button>
+      </ion-nav-buttons>
+    <ion-content class="profile_content">
+            <div class="profile_head">
+                <div class="myprofile">                    
+                    <img ng-src="{{profileCtrl.profile_image}}" ng-click="profileCtrl.openImage()"/>
+                    <a class="ion-ios-camera camera_profile" href="" ng-click="profileCtrl.showOptions()"></a>
+                </div>
+                 <h4>Subhra kant</h4>
+                 <h5>7540951096</h5>
+                 <h5>subzz4u14@gmail.com</h5>
+            
+            </div>
+            
+                  <hr>
+                  <div class="list">
+                    <form class="form-horizontal" name="updateProfile">
+                      <label class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.first_name.$touched && updateProfile.first_name.$invalid}">
+                        <span class="input-label col col-100">First Name*</span>
+                        <input type="text" name="first_name" placeholder="First Name" ng-model="profileCtrl.user.fname" required>
+                      </label>
+                      <label class="profile-form item-floating-label">
+                        <span class="input-label col col-100">Last Name*</span>
+                        <input type="text" placeholder="Last Name">
+                      </label>
+                      <label class="profile-form item-floating-label">
+                        <span class="input-label col col-100">Email*</span>
+                        <input type="text" placeholder="Email">
+                      </label>
+                      <label class="profile-form item-floating-label">
+                          <span class="input-label col col-100">Mobile*</span>
+                          <input type="text" placeholder="Mobile" ng-model="profileCtrl.user.mobile">
+                        </label>
+                        <label class="profile-form item-floating-label">
+                          <span class="input-label col col-100">Alternative No(Optional)</span>
+                          <input type="text" placeholder="Alternative No(Optional)">
+                        </label>
+                        <div class="row">
+                          <label class="profile-form item-floating-label col col-50">
+                            <span class="input-label">DOB</span>
+                            <input type="text" placeholder="DOB">
+                          </label>
+                          <label class="profile-form item-floating-label col col-50">
+                            <span class="input-label">GENDER*</span>
+                            <input type="text" placeholder="GENDER">
+                          </label>
+                        </div>
+                        <label class="profile-form item-floating-label">
+                            <span class="input-label col col-100">Mrital Status*</span>
+                            <select class="" name="marital_status" ng-model="profileCtrl.user.maritalStatus" required >
+                                <option value=""><i class="fa fa-sort-desc">MARITAL STATUS</i></option>
+                                <option value="1">Married</option>
+                                <option value="0">Unmarried</option>
+                            </select>                 
+                        </label>
+                        <span class="plain-text row" ng-show="updateProfile.marital_status.$error.required && updateProfile.marital_status.$touched">Please enter marital status</span>
+                        <label class="profile-form item-floating-label" ng-if="profileCtrl.user.maritalStatus =='1'">
+                            <span class="input-label col col-100">anniversary date</span>  
+                          <input type="text" name="anniversary" ng-model="profileCtrl.user.anniversaryDate" placeholder="ANNIVERSARY DATE" >
+                        </label>
+                        <div class="popular-query">
+                            <h3 class="popular-city">Address details</h3>
+                        </div>
+                        <label class="profile-form item-floating-label">
+                            <span class="input-label col col-100">House no., Building name*</span>
+                            <input type="text" class="col col-100" placeholder="House no., Building name">
+                        </label>
+                        <label class="profile-form item-floating-label">
+                            <span class="input-label col col-100">Locality,area or street*</span>
+                            <input type="text" class="col col-100" placeholder="Locality,area or street">
+                        </label>
+                        <div class="row">
+                            <label class="profile-form item-floating-label col col-50">
+                              <span class="input-label col col-100">District*</span>
+                              <input type="text" class="col col-100" placeholder="District">
+                            </label>
+                            <label class="profile-form item-floating-label col col-50">
+                              <span class="input-label col col-100">State*</span>
+                              <input type="text" class="col col-100" placeholder="State">
+                            </label>
+                          </div>
+                        <div class="row">
+                            <label class="profile-form item-floating-label col col-50">
+                              <span class="input-label col col-100">Country*</span>
+                              <input type="text" class="col col-100" placeholder="Country">
+                            </label>
+                            <label class="profile-form item-floating-label col col-50">
+                              <span class="input-label col col-100">Zip code*</span>
+                              <input type="text" class="col col-100" placeholder="Zip code">
+                            </label>
+                          </div>
+                       </form>
+
+                  </div>
+                  <button class="button button-positive change-pwd-btn" type="submit" ng-click="profileCtrl.changePassword()">Change Password</button>
+                  
+              
+    </ion-content>
+    <ion-footer-bar class="map-footer" >
+        <button class="button button-block button-map" ng-disabled="addVehicle.$invalid" ng-click="profileCtrl.addVehicle()" type="submit">UPDATE DETAILS</button>        
+    </ion-footer-bar>
+    
+</ion-view>
+  

@@ -5,29 +5,26 @@
             <label class="item item-location" location-suggestion on-select="changeLocation(latlang)">
                 <span><i class="icon ion-record icon-pickup"></i>Pick up Location</span><br>
                 <span>{{mapCtrl.location.formatted_address}}</span>
-                <!-- <input type="text" placeholder="Location" location-suggestion location="location" ng-model="location.formatted_address"> -->
             </label>
-            <!-- <label class="item item-location inactive">
-                    <span><i class="icon ion-record icon-drop"></i>Enter Drop Location</span><br>
-                    <span>264 saheed nagar, Bhubaneswar</span>
-            </label> -->
         </div>
 
-        <div class="footer-option">
-            <ul class="service-list">
-                <li><h6>Breakdown<br>Services</h6></li>
-                <li><h6>Regular<br>Services</h6></li>
-                <li><h6>Home<br>pickup</h6></li>
-                <li><h6>Insurance<br>Services</h6></li>
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
-            </ul> 
-        </div>
         <button class="current-location" type="submit" ng-click="mapCtrl.mapInit()"><i class="icon ion-android-locate"></i></button>
     </ion-content>
     <ion-footer-bar class="map-footer" >
-        <button class="button button-block button-map" type="submit">REQUEST A SERVICE</button>        
+        <!-- <button class="button button-block button-map" type="submit">REQUEST A SERVICE</button>     -->
+        <div class="footer-option">
+            <ul class="service-list">            
+                <li ng-click="mapCtrl.servicesLeft()"><h6>Breakdown<br>Assistance</h6></li>
+                <li ng-click="mapCtrl.servicesLeft()"><h6>Health<br>Checkup</h6></li>
+                <li ng-click="mapCtrl.servicesLeft()" ><h6>Car<br>Scanning</h6></li>
+                <li ng-click="mapCtrl.servicesLeft()" ><h6>Towing<br>             </h6></li>
+                <li ng-click="mapCtrl.servicesLeft()" ><h6>Oil &<br>Coolant</h6></li>
+                <li ng-click="mapCtrl.servicesLeft()" ><h6>Schedule<br>Servicing</h6></li>
+                <!-- <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li>
+                <li><i class="icon ion-android-bus"></i></li> -->
+            </ul> 
+        </div>    
     </ion-footer-bar>
 </ion-view>
   
