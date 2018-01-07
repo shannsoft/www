@@ -845,3 +845,10 @@ input:focus+ .has-input{
     line-height: 32px;
     color: initial;
 }
+.ionic_datepicker_popup .popup-buttons button{
+  background-color: #009688 !important;
+}
+.ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select{
+  height:auto;
+  border-radius: 0;  
+}

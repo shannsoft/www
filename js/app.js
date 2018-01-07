@@ -287,3 +287,23 @@ app.constant('CONFIG', {
   //  'HTTP_HOST_APP':'http://localhost:8090',
    'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });
+app.config(function (ionicDatePickerProvider) {
+  var datePickerObj = {
+    inputDate: new Date(),
+    titleLabel: 'Select a Date',
+    closeLabel: 'Close',
+    todayLabel: 'Today',
+    setLabel: 'Set',
+    mondayFirst: false,
+    weeksList: ["S", "M", "T", "W", "T", "F", "S"],
+    monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+    templateType: 'popup',
+    from: new Date(2012, 8, 1),
+    to: new Date(2018, 8, 1),
+    showTodayButton: true,
+    dateFormat: 'dd MMMM yyyy',
+    closeOnSelect: false,
+    disableWeekdays: []
+  };
+  ionicDatePickerProvider.configDatePicker(datePickerObj);
+})

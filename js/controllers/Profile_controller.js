@@ -1,4 +1,4 @@
-app.controller("ProfileController",function($scope,$rootScope,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
+app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
     var vm = this;
     vm.userUpdate = {};
     vm.profile_image = ($localStorage.profile) ? $localStorage.profile : "img/placeholder.jpg"
@@ -9,14 +9,29 @@ app.controller("ProfileController",function($scope,$rootScope,$state,$ionicModal
     vm.userUpdate.dob  = $localStorage.loggedin_user.dob;
     vm.userUpdate.anniversaryDate = $localStorage.loggedin_user.anniversaryDate;
     }
-    $scope.dobPickerCallback = function (val) {
-        if (!val) {	
-            console.log('Date not selected');
-        } else {
+    var ipObj1 = {
+        callback: function (val) {  //Mandatory 
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
             vm.userUpdate.dob = moment(val).format('DD-MM-YYYY');
-            console.log('Selected date is : ', vm.userUpdate.dob);
-        }
+        },
+        from: new Date(1905, 1, 1), //Optional 
+        to: new Date(), //Optional 
+        inputDate: new Date(),      //Optional 
+        mondayFirst: true,          //Optional 
+        closeOnSelect: false,       //Optional 
+        templateType: 'popup'       //Optional 
     };
+    vm.openDob = function(){
+        ionicDatePicker.openDatePicker(ipObj1);
+    }
+    // $scope.dobPickerCallback = function (val) {
+    //     if (!val) {	
+    //         console.log('Date not selected');
+    //     } else {
+    //         vm.userUpdate.dob = moment(val).format('DD-MM-YYYY');
+    //         console.log('Selected date is : ', vm.userUpdate.dob);
+    //     }
+    // };
     $scope.anniversaryPickerCallback = function (val) {
         if (!val) {	
             console.log('Date not selected');

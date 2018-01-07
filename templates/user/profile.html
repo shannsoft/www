@@ -57,11 +57,10 @@
                       <div class="row">               
                           <label class="profile-form item-floating-label  col col-50">
                               <span class="input-label col col-100">DOB</span>
-                              <!-- <input type="text" name="dob" placeholder="DOB" ng-model="profileCtrl.userUpdate.dob" > -->
-                              <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="dobPickerCallback">
-                                <!-- <button class="button button-block button-positive"> {{ currentDate | date:'MMMM/dd/yyyy' }} </button> -->
+                              <input type="text" name="dob" placeholder="DOB" ng-model="profileCtrl.userUpdate.dob" ng-click="profileCtrl.openDob()">
+                              <!-- <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="dobPickerCallback">
                                  <input type="text" name="dob" placeholder="DOB" ng-model="profileCtrl.userUpdate.dob" >
-                              </ionic-datepicker>
+                              </ionic-datepicker> -->
                           </label>
                           <label class="profile-form item-floating-label col col-50">
                             <span class="input-label col col-100">Gender*</span>
