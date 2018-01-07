@@ -5,38 +5,30 @@
             </button>
             <h1 class="title">Update Vehicle</h1>
         </ion-header-bar>
-        <form class="form-horizontal" name="updateVehicle">
+        <form class="form-horizontal" name="updateVehicle" ng-init="vehicleCtrl.getVehicledata()">
         <ion-content  class="gsg_main_container">
                  <div class="list m-20">
                         <label class="item item-input col">
-                            <select class="" name="no_of_wheel" ng-model="vehicleCtrl.updateVehicleData.wheels" required >
-                                <option value=""><i class="fa fa-sort-desc">No of Wheels</i></option>
-                                <option value="3">3 Wheelers</option>
-                                <option value="4">4 Wheelers</option>
-                                <option value="others">Others</option>                             
+                            <select class="" name="maker_of_vehicle" ng-model="vehicleCtrl.selectedMaker" ng-options="makers as makers.make for makers in vehicleCtrl.vehicleMakeList" ng-change="selectScheme(createTicket.vehicle.vehicle.subType)" required>
+                                <!-- <option value=""><i class="fa fa-sort-desc">Maker Of the Vehicle</i></option>
+                                <option ng-value="Honda">Honda</option>
+                                <option ng-value="MARUTI">Maruti</option>
+                                <option ng-value="Suzuki">Suzuki</option>                              -->
                             </select>                 
                         </label>
-                        <span class="plain-text row" ng-show="updateVehicle.no_of_wheel.$error.required && updateVehicle.no_of_wheel.$touched">Please choose an option</span>
-                        <label class="item item-input col">
-                            <select class="" name="maker_of_vehicle" ng-model="vehicleCtrl.updateVehicleData.make" required>
-                                <option value=""><i class="fa fa-sort-desc">Maker Of the Vehicle</i></option>
-                                <option value="Honda">Honda</option>
-                                <option value="Maruti">Maruti</option>
-                                <option value="Suzuki">Suzuki</option>                             
-                            </select>                 
-                        </label>
+                        <p>{{vehicleCtrl.updateVehicleData.vehicle.make}}</p>
                         <span class="plain-text row" ng-show="updateVehicle.maker_of_vehicle.$error.required && updateVehicle.maker_of_vehicle.$touched">Please choose a maker</span>
                         <label class="item item-input">
                             <input type="text" name="vehicle_no" ng-model="vehicleCtrl.updateVehicleData.registerationNumber" placeholder="Vehicle No" required>
                         </label> 
                         <span class="plain-text row" ng-show="updateVehicle.vehicle_no.$error.required && updateVehicle.vehicle_no.$touched">Please enter the vehicle no</span>
-                        <div class="vehicle row" >
+                        <div class="vehicle row">
                             <label class="item item-input col col-50">
-                                <select class="" name="model" ng-model="vehicleCtrl.updateVehicleData.model" required>
+                                <select class="" name="model" ng-model="vehicleCtrl.updateVehicleData.vehicle.models" required>
                                     <option value=""><i class="fa fa-sort-desc">Model</i></option>
-                                    <option value="model 1">model 1</option>
-                                    <option value="model 2">model 2</option>
-                                    <option value="model 3">model 3</option>                             
+                                    <option ng-value="1"></option>
+                                    <option ng-value="2">model 2</option>
+                                    <option ng-value="3">model 3</option>                             
                                 </select>                 
                             </label>
                             <label class="item item-input col-50">
@@ -61,17 +53,17 @@
                         <label class="item item-input">
                             <select class="" name="manufacturing_year" ng-model="vehicleCtrl.updateVehicleData.mfgYear" required>
                                 <option value=""><i class="fa fa-sort-desc">Manufacturing Year</i></option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>                             
+                                <option ng-value="2015">2015</option>
+                                <option ng-value="2016">2016</option>
+                                <option ng-valuevalue="2017">2017</option>                             
                             </select>                 
                         </label>
                         <span class="plain-text row" ng-show="updateVehicle.manufacturing_year.$error.required && updateVehicle.manufacturing_year.$touched">Please enter the vehicle manufacturing year</span>
                         <label class="item item-input">
                             <select class="" name="insurance" ng-model="vehicleCtrl.updateVehicleData.status" required>
                                 <option value=""><i class="fa fa-sort-desc">Vehicle Insurance Status</i></option>
-                                <option value="1">Active</option>
-                                <option value="0">Expired</option>
+                                <option ng-value="true">Active</option>
+                                <option ng-value="false">Expired</option>
                                                            
                             </select>                 
                         </label>

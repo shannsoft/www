@@ -19,15 +19,34 @@ app.controller('MainController', function($scope, $ionicModal, $ionicPlatform, $
       }
     });
   }
-  $scope.isOnline = function(){
-    // if($cordovaNetwork.isOnline() == true){
-    //   return true;
-    // }
-    // else{
-    //   return false;
-    // }
-    return true;
+  $scope.successPop = function(title,msg, state){
+    var successPopup = $ionicPopup.alert({
+      title: title || 'success',
+      template : msg,
+      cssClass : "gsg-success-popup",
+      buttons:[{
+        text: 'Ok',
+        type: 'button-positive',
+        onTap: function(){
+          successPopup.close();
+        }
+      }]
+    })
+    successPopup.then(function(res) {
+      if (state != undefined) {
+        $state.go(state);
+      }
+    });
   }
+  // $scope.isOnline = function(){
+  //   if($cordovaNetwork.isOnline() == true){
+  //     return true;
+  //   }
+  //   else{
+  //     return false;
+  //   }
+  //   return true;
+  // }
   $scope.getConstant = function(){
     //var deviceToken = $cordovaDevice.getUUID();
     var deviceToken = "83E75D61-6B1B-45CA-AC51-632F24DCD192";
@@ -53,183 +72,17 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
     $state.go('login');
   },5000);
 });
-// app.controller('LoginController', function($ionicModal,$stateParams, loginService,registrationService, $timeout,$state,$scope,$ionicLoading) {
-//   var vm = this;
-//   var map;
-//   var marker;
-  
-//   if($stateParams.number){
-//     vm.mobile_number = $stateParams.number;
-//   }
-//   if($stateParams.user_id){
-//     vm.userId = $stateParams.user_id;
-//   }
-//   if($stateParams.vehicle_id){
-//     vm.vehicleId = $stateParams.vehicle_id;
-//   }
-//   // vm.user = {username:'',password:'',mobile:''};
-//   vm.user = {email:'',code:''};
-//   vm.login = function() {
-//     vm.user.role = {
-//       roleId:1
-//     };
-//    vm.user.status = 1;
-//    console.log(vm.user);
-//    if($scope.isOnline()){
-//     loginService.saveEmployee().save(vm.user,function(response){
-//       console.log("response", response);
-//       $ionicLoading.hide();
-//       // if(response.data.statusCode == 200){
-//       //   $state.go('app.dashboard');
-//       // }
-//     },function(err){
-//       $ionicLoading.hide();
-//     });
-//   }
-//   else{
-
-//   }
 
 
-//   }
-//   vm.getOtp = function(){
-    
-//     console.log(vm.user.contact_no);
-//     $ionicLoading.show({
-//       template: 'Sending OTP...'
-//     });
-//     $ionicLoading.hide();
-//        $state.go('otp',{"number":vm.user.contact_no});
-//     // registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
-//     //   console.log(response);
-//     //   $ionicLoading.hide();
-//     //    $state.go('otp',{"number":vm.user.contact_no});
-//     // },function(error){
-//     //   console.log(error);
-//     //   $ionicLoading.hide();
-//     //   $scope.alertPop('Something Wrong', 'OTP can not send.');
-//     // });
-          
-//   }
-//   vm.verifyOtp = function(){
-//     var obj = {};
-//     obj.contact_no = $stateParams.number;
-//     obj.otp = vm.otp;
-//     $ionicLoading.show({
-//       template: 'Verifying OTP...'
-//     });
-//     $ionicLoading.hide();
-//     $state.go('basicInfo',{"number":obj.contact_no});
-//     // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
-//     //   console.log(response);
-//     //   if(response.type == "success"){
-//     //     $ionicLoading.hide();
-//     //     $state.go('basicInfo',{"number":obj.contact_no});
-//     //   }
-//     //   if(response.type == "error"){
-//     //     $ionicLoading.hide();
-//     //     $scope.alertPop('Error', 'OTP is wrong please try again.');
-//     //   }
-//     // },function(error){
-//     //   console.log(error);
-//     // });    
-//   }
-//   vm.register = function(){
-//     $ionicLoading.show({
-//       template: 'Registering...'
-//     });
-//   vm.basicDetails.contactNo = vm.mobile_number;
-//   vm.basicDetails.role = {
-//         roleId:1
-//       };
-//    vm.basicDetails.status = 1;
-//   registrationService.addUser().save(vm.basicDetails, function(response){
-//     $ionicLoading.hide();
-//     console.log(response);
-//     console.log(response.userId);
-//     vm.Id = response.userId;
-//     $state.go('user-details',{"user_id":vm.Id});
-   
-//   },function(error){
-//     $ionicLoading.hide();
-//     console.log(error);
-//     $scope.alertPop('Error', 'Error in registering user.');
-//   });
-//   }
-//   vm.addUserDetails = function(){
-//     $ionicLoading.show({
-//       template: 'Saving User Details...'
-//     });
-//     vm.userDetails.user = {
-//       userId : vm.userId
-//     };
-//     console.log(vm.userDetails);
-//     registrationService.addUserDetails().save(vm.userDetails,function(response){
-//       $ionicLoading.hide()
-//       console.log(response);
-//       $state.go('add-vehicle',{"user_id":vm.userId});
-//         },function(error){
-//           $ionicLoading.hide();
-//           $scope.alertPop('Error','Something wrong, Cannot add user details');
-//     });
-
-
-//   }
-//   vm.checkPassword = function(before,after){
-//     vm.showPasswordMisMatch = false;
-//     if(before !== after){
-//       vm.showPasswordMisMatch = true;
-//     }
-//     return vm.showPasswordMisMatch;
-//   }
-//   vm.addVehicle = function(){
-//     $ionicLoading.show({
-//       template: 'Saving Vehicle Details...'
-//     });
-//     vm.vehicle.user = {
-//       userId : vm.userId
-//     };
-//     registrationService.addVehicle().save(vm.vehicle,function(response){
-//       $ionicLoading.hide()
-//       if(vm.vehicle.insurance == "1"){
-//         $state.go('insurance',{"vehicle_id":response.vehicleId});
-//       }
-//       else{
-//         $state.go('app.mapView');
-//       }
-//      },function(error){
-//       $ionicLoading.hide();
-//       $scope.alertPop('Error','Something wrong, Cannot add vehicle');
-//     });
-//   }
-//   vm.addInsuranceDetails = function(){
-//     $ionicLoading.show({
-//       template: 'Saving Insurance Details...'
-//     });
-//     vm.insuranceDetails.vehicle = {
-//       vehicleId : vm.vehicleId
-//     };
-//     registrationService.addInsuranceDetail().save(vm.insuranceDetails,function(response){
-//       $ionicLoading.hide()
-//       console.log(response);
-//         $state.go('app.mapView');
-      
-//      },function(error){
-//       $ionicLoading.hide();
-//       $scope.alertPop('Error','Something wrong, Cannot add Insurance');
-//     });
-//     $state.go('app.mapView');
-//   }
-  
-// });
-
-app.controller('MapController',function($cordovaGeolocation,$ionicModal,config,$scope,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicHistory){
+app.controller('MapController',function($cordovaGeolocation,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
   var vm = this;
-//   var diagnostic = cordova.plugins.diagnostic;
-//  var locationAccuracy = cordova.plugins.locationAccuracy;
+  // var diagnostic;
+  // var locationAccuracy;
   vm.mapInit = function(){
   //   $scope.location = '';
   //   $ionicPlatform.ready(function() {
+  //    diagnostic = cordova.plugins.diagnostic;
+  //    locationAccuracy = cordova.plugins.locationAccuracy;
   //   diagnostic.isLocationEnabled(function(available){
   //     if(!available){
   //       locationAccuracy.canRequest(function(canRequest){
@@ -273,9 +126,10 @@ app.controller('MapController',function($cordovaGeolocation,$ionicModal,config,$
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       var myLatlng = {lat: lat, lng: lng}
+      // LocationModel.setCurrentLocation(myLatlng);
       vm.loadMapLocation(myLatlng);
       var latLng = lat + "," + lng;
-      vm.getLocationName(latLng);
+      vm.getLocationName(myLatlng);
     }, function(error) {
       $ionicLoading.hide();
       console.log('Could not get location: ', error);
@@ -305,30 +159,66 @@ app.controller('MapController',function($cordovaGeolocation,$ionicModal,config,$
     google.maps.event.addListener(map, 'center_changed', function() {
       window.setTimeout(function() {
         var center = map.getCenter();
-        var latlng = center.lat()+','+center.lng();
-        vm.getLocationName(latlng);
+        var myLatlng = {lat: center.lat(), lng: center.lng()}
+        vm.getLocationName(myLatlng);
       }, 100);
     });
   }
   vm.getLocationName = function(latLng){
-    config.getLocationName(latLng).then(function(response) {
+      LocationModel.setCurrentLocation(latLng);
+      var latlong = latLng.lat+','+latLng.lng;
+    config.getLocationName(latlong).then(function(response) {
       vm.place = response.data.results[0];
       vm.location = vm.place;
     },function(err) {
     });
   }
-  vm.servicesLeft = function(){
-    $ionicModal.fromTemplateUrl('templates/modal/service_left_modal.html',{
-      scope : $scope,
-      animation : 'slide-in-up',
-      controller : 'ServiceController'
-    }).then(function(modal) {
-      vm.modal = modal;
-      vm.modal.show();
-  });
-}
-vm.closeModal = function() {
-  vm.modal.hide();
+  vm.emergencyTicket = {};
+  vm.confirmEmegReq = function(){
+    console.log("coming");
+    var confirmPopup = $ionicPopup.alert({
+      title: 'Confirm',
+      template: 'Are you sure ? An emergency ticket will be created',
+      cssClass:"gsg-popup",
+      buttons: [{
+        text: 'Cancel',
+        type: 'button',
+        onTap: function(){
+          confirmPopup.close();
+        }
+      },
+      {
+        text: 'Ok',
+        type: 'button',
+        onTap: function(){
+          var latlngObj = LocationModel.getCurrentLocation();
+          vm.emergencyTicket.location=[latlngObj.lat,latlngObj.lng];
+          vm.emergencyTicket.userId = $localStorage.loggedin_user.userId;
+          vm.emergencyTicket.serviceType = "EMERGENCY"; 
+          TicketService.createTicket().save(vm.emergencyTicket,function(response){
+            console.log(response);
+            $scope.successPop('Success', `Your request has been captured successfully.  Our support team will get back to you shortly.`);
+          },function(error){
+            console.log(error);
+          });
+        }
+      }
+    ]
+    })
+    // confirmPopup.then(function(res) {
+    //   var latlngObj = LocationModel.getCurrentLocation();
+    //   vm.emergencyTicket.location=[latlngObj.lat,latlngObj.lng];
+    //   vm.emergencyTicket.userId = $localStorage.loggedin_user.userId;
+    //   vm.emergencyTicket.serviceType = "EMERGENCY"; 
+    //   TicketService.createTicket().save(vm.emergencyTicket,function(response){
+    //     console.log(response);
+    //     $scope.successPop('Success', `Your request has been captured successfully.  Our support team will get back to you shortly.`);
+    //   },function(error){
+    //     console.log(error);
+    //   });
+    // },function(err){
+    //   confirmPopup.close();
+    // });
 }
   
 });
@@ -346,6 +236,7 @@ app.controller("HelpController",function($scope){
   ];
   console.log(vm.queryList)
   vm.toggleGroup = function(list) {
+    console.log(list);
     if (vm.isGroupShown(list)) {
       vm.shownGroup = null;
     } else {

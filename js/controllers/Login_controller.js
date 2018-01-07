@@ -1,4 +1,4 @@
-app.controller('LoginController', function($ionicModal,$stateParams, loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies) {
+app.controller('LoginController', function($ionicModal,$stateParams, loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
     var vm = this;
     var map;
     var marker;
@@ -15,201 +15,192 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     
     vm.user = {contactNbr:'',password:''};
     
-    $scope.data = {
-        grant_type:"password",
-        username: vm.user.contactNbr,
-        password: vm.user.password,
-        client_id: "testjwtclientid"
-    };
-    console.log($scope.data);
-    $scope.encoded = btoa("testjwtclientid:XY7kmzoNzl100");
+    
     vm.login = function() {
+        $ionicLoading.show({
+            template:'Signing in...'
+        });
         $scope.data = {
             grant_type:"password",
             username: vm.user.contactNbr,
-            password: vm.user.password,
-            client_id: "testjwtclientid"
+            password: vm.user.password
         };
-        console.log($scope.data);
-        console.log(vm.user);
-     if($scope.isOnline()){
-    //   loginService.loginOAuth(vm.user.contactNbr,vm.user.password).save(vm.user,function(response){
-    //     console.log("response", response);
-    //     $ionicLoading.hide();
-    //    $state.go('app.mapView');
-    //   },function(err){
-    //     $ionicLoading.hide();
-    //     console.log(err);
-    //   });
-        var req = {
-            method: 'POST',
-            url: "http://localhost:8090/gsg/oauth/token",
-            headers: {
-                "Authorization": "Basic " + $scope.encoded,
-                "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
-                },
-            data: $httpParamSerializer($scope.data)
-            }
-        $http(req).then(function(data){
-            $http.defaults.headers.common.Authorization = 'Bearer ' + data.data.access_token;
-            $cookies.put("access_token", data.data.access_token);
-            window.location.href="index";
-        });
-    }
-    else{
+         $scope.encoded = btoa("android-client:anrdroid-XY7kmzoNzl100");
+        // if($scope.isOnline()){
+            var req = {
+                method: 'POST',
+                url: "http://101.53.136.166:8090/gsg/oauth/token",
+                headers: {
+                    "Authorization": "Basic " + $scope.encoded,
+                    "Content-type": "application/x-www-form-urlencoded"
+                    } ,
+                data: $httpParamSerializer($scope.data)
+                }
+            $http(req).then(function(data){                   
+                console.log(data);
+                $localStorage.user_token = data.data.access_token;
+                $rootScope.is_loggedin = true;  
+                UserService.getUserByCntctNo(vm.user.contactNbr).get(function(response){
+                    $localStorage.loggedin_user = response.data;
+                    UserModel.setUser(response.data);
+                    $timeout(function(){
+                        $ionicLoading.hide();
+                        console.log(1);
+                        $scope.$emit("LOGIN_SUCCESS");
+                        $state.go('app.mapView');
+                    });
+                   
+                },function(error){
+                   console.log(error);
+                });
+                               
+            },function(error){
+                $ionicLoading.hide();
+                console.log(error);
+                if(error.status == 400){
+                    $scope.alertPop('Error', 'Invalid username or password.'); 
+                }
+            });
+          
+
+    //     }
+    // else{
+    //     // $ionicLoading.show({
+    //     //     template: 'No Internet connection....'
+    //     // })
   
-    }
+    // }
   }
-    // vm.getOtp = function(){
-      
-    //   console.log(vm.user.contact_no);
-    //   $ionicLoading.show({
-    //     template: 'Sending OTP...'
-    //   });
-    //   $ionicLoading.hide();
-    //      $state.go('otp',{"number":vm.user.contact_no});
-    //   // registrationService.getOtp(vm.user.contact_no).save(vm.user.contact_no, function(response){
-    //   //   console.log(response);
-    //   //   $ionicLoading.hide();
-    //   //    $state.go('otp',{"number":vm.user.contact_no});
-    //   // },function(error){
-    //   //   console.log(error);
-    //   //   $ionicLoading.hide();
-    //   //   $scope.alertPop('Something Wrong', 'OTP can not send.');
-    //   // });
-            
-    // }
-    // vm.verifyOtp = function(){
-    //   var obj = {};
-    //   obj.contact_no = $stateParams.number;
-    //   obj.otp = vm.otp;
-    //   $ionicLoading.show({
-    //     template: 'Verifying OTP...'
-    //   });
-    //   $ionicLoading.hide();
-    //   $state.go('basicInfo',{"number":obj.contact_no});
-    //   // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
-    //   //   console.log(response);
-    //   //   if(response.type == "success"){
-    //   //     $ionicLoading.hide();
-    //   //     $state.go('basicInfo',{"number":obj.contact_no});
-    //   //   }
-    //   //   if(response.type == "error"){
-    //   //     $ionicLoading.hide();
-    //   //     $scope.alertPop('Error', 'OTP is wrong please try again.');
-    //   //   }
-    //   // },function(error){
-    //   //   console.log(error);
-    //   // });    
-    // }
-    // vm.register = function(){
-    //   $ionicLoading.show({
-    //     template: 'Registering...'
-    //   });
-    // vm.basicDetails.contactNo = vm.mobile_number;
-    // vm.basicDetails.role = {
-    //       roleId:1
-    //     };
-    //  vm.basicDetails.status = 1;
-    // registrationService.addUser().save(vm.basicDetails, function(response){
-    //   $ionicLoading.hide();
-    //   console.log(response);
-    //   console.log(response.userId);
-    //   vm.Id = response.userId;
-    //   $state.go('user-details',{"user_id":vm.Id});
-     
-    // },function(error){
-    //   $ionicLoading.hide();
-    //   console.log(error);
-    //   $scope.alertPop('Error', 'Error in registering user.');
-    // });
-    // }
-    // vm.addUserDetails = function(){
-    //   $ionicLoading.show({
-    //     template: 'Saving User Details...'
-    //   });
-    //   vm.userDetails.user = {
-    //     userId : vm.userId
-    //   };
-    //   console.log(vm.userDetails);
-    //   registrationService.addUserDetails().save(vm.userDetails,function(response){
-    //     $ionicLoading.hide()
-    //     console.log(response);
-    //     $state.go('add-vehicle',{"user_id":vm.userId});
-    //       },function(error){
-    //         $ionicLoading.hide();
-    //         $scope.alertPop('Error','Something wrong, Cannot add user details');
-    //   });
-  
-  
-    // }
-    // vm.checkPassword = function(before,after){
-    //   vm.showPasswordMisMatch = false;
-    //   if(before !== after){
-    //     vm.showPasswordMisMatch = true;
-    //   }
-    //   return vm.showPasswordMisMatch;
-    // }
+    vm.basicDetails.password = "";
+    vm.rePassword = "";
+    
+    vm.checkPassword = function(before,after){
+        vm.showPasswordMisMatch = false;
+        console.log(before +","+ after);
+      if(before !== after){
+        vm.showPasswordMisMatch = true;
+      }
+      return vm.showPasswordMisMatch;
+    }
     vm.register = function(){
          UserModel.setRegisterData(vm.basicDetails);
-        // registrationService.getOtp(vm.basicDetails.contactNo).save(vm.basicDetails.contactNo, function(response){
-        //     console.log(response);
-        //     $ionicLoading.hide();
-        //         $state.go('otp',{"number":vm.basicDetails.contactNo});
-        //     },function(error){
-        //     console.log(error);
-        //     $ionicLoading.hide();
-        //      $scope.alertPop('Something Wrong', 'OTP can not send.');
-        //     //$state.go('otp',{"number":vm.basicDetails.contactNo});
-        // });
-        $state.go('otp',{"number":vm.basicDetails.contactNbr});            
+         var obj = {
+            contactNbr : vm.basicDetails.contactNbr
+         };
+        registrationService.preRegister().save(obj, function(response){
+            console.log(response);
+            $ionicLoading.hide();
+                $state.go('otp',{"number":vm.basicDetails.contactNbr});
+            },function(error){
+            console.log(error);
+            $ionicLoading.hide();
+            if(error.status == 409){
+                $scope.alertPop('Error', error.data.msg);
+            }
+            else {
+             $scope.alertPop('Error', 'OTP can not send');
+            }
+        });
+        // $state.go('otp',{"number":vm.basicDetails.contactNbr});            
     }
     vm.verifyOtp = function(){
-        $ionicLoading.show({
-            template: 'Verifying OTP...'
-            });
-        var obj = {
-            'contact_no':vm.contactNo,
-            'otp':vm.otp
-        };
-        console.log("coming");
+        // $ionicLoading.show({
+        //     template: 'Verifying OTP...'
+        // });
         var userdata = UserModel.getRegisterData();
-        // registrationService.verifyOtp( obj.contact_no,obj.otp).save(obj, function(response){
-        //     if(response.type == "success"){
-        //         $ionicLoading.hide();
-        //         $ionicLoading.show({
-        //             template: 'Saving user...'
-        //             });
-        //         registrationService.addUser().save(userdata, function(response){
-        //             $ionicLoading.hide();
-        //             $state.go('app.mapView',{"user_id":vm.Id});
-                    
-        //         },function(error){
-        //             $ionicLoading.hide();
-        //             console.log(error);
-        //             $scope.alertPop('Error', 'Can not register user.');
-        //         });
-
-        //     }
-        //     if(response.type == "error"){
-        //         $ionicLoading.hide();
-        //         $scope.alertPop('Error', 'OTP is wrong please try again.');
-        //     }
-        // },function(error){
-        // console.log(error);
-        // });  
+        userdata.otp = vm.otp;
         registrationService.register().save(userdata, function(response){
             console.log(response);
-            $localStorage.user = response;
+            // $localStorage.user = response;
             $ionicLoading.hide();
-            $scope.alertPop('Success', 'Registered successfully. Please login');
+            //alertpop will be changed to successpop
+            $scope.successPop('Success', 'Registered successfully.. Please login');
             $state.go('login');
             
         },function(error){
             $ionicLoading.hide();
             console.log(error);
-            $scope.alertPop('Error', 'Can not register user.');
+            if(error.status == 406){
+                $scope.alertPop('Error', error.data.message);
+            }            
+            else {
+                $scope.alertPop('Error', 'Can not register user.');
+            }
         });  
-}
+    }
+    vm.logout = function(){
+        $ionicLoading.show({
+            template: 'Signing out...'
+        });
+        $timeout(function(){
+            $ionicLoading.hide();
+            $localStorage.user_token = null;
+            $localStorage.loggedin_user = null;
+            $rootScope.is_loggedin = false;
+            // UserModel.unsetUser();
+            $state.go('login');
+          },1000)
+       
+    }
+    vm.preResPwd = function(contactNbr){
+        $ionicLoading.show({
+            template : 'Verifying user'
+        });
+        console.log(contactNbr);
+        var obj = {};
+        obj.contactNbr = contactNbr;
+        loginService.preResPwd(obj.contactNbr).save(obj, function(response){
+            $ionicLoading.hide();
+            if(response.status == "OK"){
+                $state.go('reset-pwd',{"number": obj.contactNbr});
+            }
+            console.log(response);
+        },function(error){
+            $ionicLoading.hide();
+            if(error.status == 404){
+                $scope.alertPop('Error' , error.data.message);
+            }
+            console.log(error);
+        });
+    }
+    vm.checkPassword = function(before,after){
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>" + before,after);
+        vm.showPasswordMisMatch = false;
+        if(before !== after){
+        vm.showPasswordMisMatch = true;
+        }
+        return vm.showPasswordMisMatch;
+    };
+    vm.resetPwd = function(){
+        $ionicLoading.show({
+            template : 'Resetting password'
+        });
+        vm.resPwd.contactNbr = $stateParams.number;
+        console.log(vm.resPwd);
+        loginService.resetPwd().save(vm.resPwd, function(response){
+            console.log(response);
+            $ionicLoading.hide();   
+            if(response.status == "OK"){
+                $timeout(function(){
+                               
+                    $scope.successPop('Success', 'Password resetted successfully...','login'); 
+                },500);
+            }
+            else {
+                $state.go('login');
+            }
+        },function(error){
+            $ionicLoading.hide();
+            if(error.status == 406){
+                $scope.alertPop('Error', error.data.message); 
+            }
+            else {
+                $scope.alertPop('Error', 'Can not reset password','login'); 
+            }
+           
+            console.log(error);
+        });
+
+    }
 
 });

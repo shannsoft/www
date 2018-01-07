@@ -1,4 +1,4 @@
-var app = angular.module('gsg_app', ['ionic','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
+var app = angular.module('gsg_app', ['ionic','ionic-datepicker','ion-floating-menu','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
 
 app.run(function($ionicPlatform,$ionicPopup) {
   $ionicPlatform.ready(function() {
@@ -27,7 +27,25 @@ app.run(function($ionicPlatform,$ionicPopup) {
   });
 })
 
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$httpProvider) {
+  // $httpProvider.interceptors.push(function ($q, $location, $window,$localStorage) {
+  //   return {
+  //     request: function (config) {
+  //       var isSignInUrl = config.url.indexOf('login') > -1 ? true : false;
+  //       if($localStorage.user_token ){
+  //         config.headers = config.headers || {};
+  //         config.headers['Authorization'] = 'bearer '+$localStorage.user_token;
+  //       }
+  //       return config;
+  //     },
+  //     response: function (response) {
+  //       if (response.status === 401) {
+  //         $location.path('/');
+  //       }
+  //       return response || $q.when(response);
+  //     }
+  //   };
+  // });
   // $ionicConfigProvider.tabs.position('top');
   $urlRouterProvider.otherwise('/login');
   $stateProvider
@@ -36,18 +54,48 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     controller:'LoginController',
     controllerAs:'loginCtrl',
     templateUrl: 'templates/login.html',
-    // resolve: {
-    //   logout: checkLoggedin
-    // }
+    resolve: {
+      logout: checkLoggedin
+    }
+  })
+  // .state('pre-reset-password',{
+  //   url: '/prpwd',
+  //   controller:'LoginController',
+  //   controllerAs:'preResPwdctrl',
+  //   templateUrl: 'templates/pre_reset_password.html',
+  //   resolve: {
+  //     logout: checkLoggedin
+  //   }
+  // })
+  .state('password-pre-reset',{
+    url: '/prpwd',
+    controller:'LoginController',
+    controllerAs:'preResPwdctrl',
+    templateUrl: 'templates/pre_reset_password.html',
+    resolve: {
+      logout: checkLoggedin
+    }
+  })
+  .state('reset-pwd',{
+    url: '/resetpwd/:number',
+    controller:'LoginController',
+    controllerAs:'ResPwdctrl',
+    templateUrl: 'templates/reset_password.html',
+    params :{
+      number : null,
+    },
+    resolve: {
+      logout: checkLoggedin
+    }
   })
   .state('register', {
     url: '/register',
     controller:'LoginController',
     controllerAs:'regstrCtrl',
     templateUrl: 'templates/registration.html',
-    // resolve: {
-    //   logout: checkLoggedin
-    // }
+    resolve: {
+      logout: checkLoggedin
+    }
   })
   .state('otp', {
     url: '/otp/:number',
@@ -57,19 +105,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     params:{
       number:null 
     },
-    // resolve: {
-    //   logout: checkLoggedin
-    // }
+    resolve: {
+      logout: checkLoggedin
+    }
   })
-  // .state('basicInfo', {
-  //   url: '/basicInfo/:number',
-  //   controller:'LoginController',
-  //   controllerAs:'loginCtrl',
-  //   templateUrl: 'templates/basic_info.html',
-  //   params:{
-  //     number:null 
-  //   }
-  // })
   .state('user-details', {
     url: '/user-details/:user_id',
     controller:'LoginController',
@@ -97,12 +136,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       vehicle_id : null
     }
   })
-  // .state('change-password',{
-  //   url:'/change-password',
-  //   controller:'userController',
-  //   controllerAs:'chngPwdCtrl',
-  //   templateUrl:'templates/user/change_password.html'
-  // })
   .state('app', {
     url: '/app',
     abstract: true,
@@ -119,6 +152,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.mapView', {
     url: '/mapView',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         templateUrl: 'templates/mapView.html',
@@ -129,6 +165,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.profile', {
     url: '/profile',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         templateUrl: 'templates/user/profile.html',
@@ -137,16 +176,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }
     }
   })
-  .state('app.edit-profile', {
-    url: '/edit-profile',
-    views:{
-      'menuContent':{
-        templateUrl:'templates/profile-edit.html'
-      }
-    }
-  })
+
   .state('app.tarrif-plan', {
     url: '/tarrif-plan',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         controller:'PlanController',
@@ -157,6 +192,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.requests', {
     url: '/myRequests',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         controller:'RequestController',
@@ -167,6 +205,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.history', {
     url: '/history',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         controller:'RequestController',
@@ -177,6 +218,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.contactUs', {
     url: '/contactUs',
+    resolve: {
+      logout: checkLoggedout
+    },
     views: {
       'menuContent': {
         controller:'HelpController',
@@ -187,6 +231,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   })
   .state('app.vehicles',{
     url:'/vehicles',
+    resolve: {
+      logout: checkLoggedout
+    },
     views:{
       'menuContent':{
         controller:'VehicleController',
@@ -196,24 +243,47 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     }
   })
   // if none of the above states are matched, use this as the fallback
-  function checkLoggedin($q, $localStorage, $state, $timeout) {
+  function checkLoggedin($q, $timeout, $rootScope,$http, $state, $localStorage) {
     var deferred = $q.defer();
-    if($localStorage.user){
+    if($localStorage.user_token){
       $timeout(function(){
         deferred.resolve();
+        $rootScope.is_loggedin = true;
         $state.go('app.mapView');
       },100)
     }
     else{
       $timeout(function(){
+        $localStorage.user_token = null;
+        $rootScope.is_loggedin = false;
         deferred.resolve();
-        $state.go('app.mapView');
+        // $state.go('app.mapView');
       },100)
     }
   }
+  function checkLoggedout($q, $timeout, $rootScope,$http, $state, $localStorage) {
+    var deferred = $q.defer();
+   if($localStorage.user_token) {
+      $timeout(function(){
+        $rootScope.is_loggedin = true;
+          console.log("$state >>>>> ",$state.current.name)
+          deferred.resolve();
+      },200)
+    }
+    else{
+     
+      $timeout(function(){
+        $localStorage.token = null;
+        $rootScope.is_loggedin = false;
+        deferred.resolve();
+        $state.go('login');
+      },200)
+    
+  }
+}
 });
 app.constant('CONFIG', {
-  'HTTP_HOST_APP_OAUTH':'testjwtclientid=XY7kmzoNzl100@localhost:8090',
-   'HTTP_HOST_APP':'http://localhost:8090',
-  // 'HTTP_HOST_APP':'http://101.53.136.166:8090'
+  
+  //  'HTTP_HOST_APP':'http://localhost:8090',
+   'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });

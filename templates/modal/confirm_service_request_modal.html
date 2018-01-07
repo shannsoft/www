@@ -1,0 +1,73 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-energized gsg-colour">
+        <button class="button button-clear" ng-click="srvcCtrl.closeConfirmModal()">
+            <i class="icon ion-android-close"></i>
+        </button>
+        <h1 class="title">Confirm Request</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="popular-query">
+            <h3 class="popular-city">Your Choosen Services</h3>
+        </div>
+        <div class="list list-plan">
+            <ion-toggle ng-model="services.isSelect" toggle-class="toggle-calm" ng-repeat="services in srvcCtrl.selectedServicesArr">
+                <h2>{{services.subCategory}}</h2>
+                <h4 ng-show="srvcCtrl.reqTktDataObj.usrVehicle">Price : {{services.price[ srvcCtrl.reqTktDataObj.usrVehicle.vehicle.type ] }} ({{srvcCtrl.reqTktDataObj.usrVehicle.vehicle.type}})</h4>
+            </ion-toggle>
+
+            <p class="heading">{{srvcCtrl.selectedServicesArr.length == 0 ? "No Services Choosen" : " "}}</p>
+        </div>
+        <div class="popular-query">
+            <h3 class="popular-city">Choose Your Vehicle</h3>
+        </div>
+        <div class="list list-plan" ng-init="srvcCtrl.getVehicleList()">
+
+            <ion-radio ng-model="srvcCtrl.reqTktDataObj.usrVehicle" name="vehicle_radio" ng-value="vehicles" ng-repeat="vehicles in srvcCtrl.vehicleList"
+                ng-change="srvcCtrl.getUserScheme(vehicles.vehicle.subType)">
+                <h2>{{vehicles.vehicle.make}} {{vehicles.vehicle.models}} {{vehicles.registrationNumber}}</h2>
+            </ion-radio>
+
+            <p class="heading">{{vehicleCtrl.vehicleList.length == 0 ? "No Vehicles Added" : " "}}</p>
+        </div>
+        <div class="popular-query">
+            <h3 class="popular-city">Service Date</h3>
+            <label class="profile-form item-floating-label">
+                <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="servicedatePickercallback">
+                    <input type="text" name="service_date" ng-model="srvcCtrl.reqTktDataObj.serviceDate" placeholder="Service date">
+                </ionic-datepicker>
+            </label>
+        </div>
+       
+
+
+        <div class="popular-query" ng-hide="srvcCtrl.userScheme == 'null' || !srvcCtrl.userScheme">
+            <h3 class="popular-city">Active plan</h3>
+        </div>
+        <ion-list>
+            <div ng-hide="srvcCtrl.userScheme == 'null' || !srvcCtrl.userScheme">
+                <ion-item class="item-stable query-list" ng-click="srvcCtrl.toggleGroup('scheme')" ng-class="{active: srvcCtrl.isGroupShown('scheme')}">
+
+                    <h3 class="heading">{{srvcCtrl.userScheme.description}}</h3>
+                </ion-item>
+                <ion-item class="item-accordion" ng-show="srvcCtrl.isGroupShown('scheme')">
+                    <ion-item ng-repeat="item in srvcCtrl.userScheme.schemeServiceDtls">
+                        {{item.serviceDesc}}
+                        <br> {{item.freeUsage}} Left
+                        <br> {{item.used}} Used
+                    </ion-item>
+
+                </ion-item>
+            </div>
+            <h5 class="heading">{{srvcCtrl.userScheme == "null" || !srvcCtrl.userScheme && vehicle_radio.$touched ? "You have not subscribed
+                to any plan yet" : " "}}</h5>
+
+        </ion-list>
+        <ion-list ng-hide="srvcCtrl.userScheme == 'null' || !srvcCtrl.userScheme">
+            <ion-checkbox ng-model="srvcCtrl.reqTktDataObj.useUserScheme">Do you want to use your free services
+                <br>from your subscribed plan</ion-checkbox>
+        </ion-list>
+    </ion-content>
+    <ion-footer-bar class="map-footer">
+        <button class="button button-block button-map" type="submit" ng-click="srvcCtrl.requestTicket()">Request</button>
+    </ion-footer-bar>
+</ion-modal-view>

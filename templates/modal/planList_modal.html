@@ -3,41 +3,17 @@
         <button class="button button-clear" ng-click="planCtrl.closeModal()">
             <i class="icon ion-android-close"></i>
         </button>
-        <h1 class="title">Go Special</h1>
+        <h1 class="title">{{planCtrl.planSrvcDtls.description}}</h1>
     </ion-header-bar>
     <ion-content>
         <div class="list list-plan">
-            <a class="item item-avatar" href="">
-                <h4>HEALTH CHECKUP</h4>
-                <p>1 Checkup/Year</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4>BREAKDOWN ASSISTANCE</h4>
-                <p>Free up to 1 year</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4> FREE SCANNING</h4>
-                <p>ONE FREE SCANING/YEAR</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4> FREE TOWING</h4>
-                <p>FREE TOWING</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4>FREE COUPONS</h4>
-                <p>NOT AVAILABLE</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4>SCHEDULED SERVICING</h4>
-                <p>NOT AVAILABLE</p>
-            </a>
-            <a class="item item-avatar" href="">
-                <h4> DISCOUNTS</h4>
-                <p>ON OIL & COOLANT</p>
+            <a class="item item-avatar" href="" ng-repeat="services in planCtrl.planSrvcDtls.schemeServiceDtls" >
+                <h2>{{services.serviceDesc}}</h2>
+                <p>{{services.freeUsage}} Checkup/Year</p>
             </a>
         </div>
     </ion-content>
     <ion-footer-bar class="map-footer" >
-        <button class="button button-block button-map" type="submit">PAY NOW(550+ GST)</button>        
+        <button class="button button-block button-map" type="submit" ng-click="planCtrl.subscribePlan(planCtrl.planSrvcDtls)" >PAY NOW  ({{planCtrl.planSrvcDtls.price}}+ GST) </button>        
     </ion-footer-bar>
 </ion-modal-view>

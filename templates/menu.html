@@ -14,14 +14,14 @@
       <!-- <div class="banner_logo">
           <img src="img/logo3.png" alt="">
       </div> -->
-      <div class="profile_head">
-        <div class="myprofile" ng-controller="ProfileController as profileCtrl">         
-          <img ng-src="{{profileCtrl.profile_image}}" ng-click="openImage('')"/>
+      <div class="profile_head"  ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.getLoginUserDetails()">
+        <div class="myprofile">         
+          <img ng-src="{{profileCtrl.profile_image}}"/>
         </div>      
         <div class="m-t-39">
-            <h5>Subhra kant</h5>
-            <h6 class="">7540951096</h6>
-            <h6 class="">subzz4u14@gmail.com</h6>
+            <h5>{{profileCtrl.userUpdate.firstName }} {{(profileCtrl.userUpdate.middleName == "null" || profileCtrl.userUpdate.middleName == null || !profileCtrl.userUpdate.middleName)? " " : profileCtrl.userUpdate.middleName }} {{profileCtrl.userUpdate.lastName}}</h5>
+            <h6 class="">{{profileCtrl.userUpdate.contactNbr}}</h6>
+            <h6 class="">{{profileCtrl.userUpdate.email}}</h6>
         </div>
       </div>
     </ion-header-bar>
@@ -76,11 +76,18 @@
           </ion-item>
         </a>
         <a href="">
-          <ion-item menu-close class="side-menu">
+            <ion-item menu-close class="side-menu" ng-controller="ProfileController as profileCtrl" ng-click="profileCtrl.changePassword()">
+              <i class="icon ion-locked m-r-10"></i>
+              Change Password
+            </ion-item>
+          </a>
+        <a href="">
+          <ion-item menu-close class="side-menu" ng-controller="LoginController as loginCtrl" ng-click="loginCtrl.logout()">
             <i class="icon ion-power m-r-10"></i>
             Logout
           </ion-item>
         </a>
+        
       </ion-list>
     </ion-con tent>
   </ion-side-menu>

@@ -18,23 +18,23 @@ angular.module('serviceModule', ['ngResource'])
               save:{method:'POST'}
             })
         },
-        saveEmployee: function () {
-            return $resource( CONFIG.HTTP_HOST_APP +'/employee/addEmp',{
-              save:{method:'POST'}
+        preResPwd : function(contactNbr){
+            return $resource( CONFIG.HTTP_HOST_APP + '/gsg/preresetpwd/' + contactNbr , {
+                save : {method : "POST"}
+            })
+        },
+        resetPwd : function(){
+            return $resource( CONFIG.HTTP_HOST_APP + '/gsg/resetpwd/' , {
+                save : {method : "POST"}
             })
         },
     }
 })
 .factory('registrationService', function ($resource,CONFIG) {
     return{
-        getOtp: function (contact_no) {
-            return $resource( CONFIG.HTTP_HOST_APP +'/user/sendOtp/' + contact_no,{
+        preRegister: function () {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/preregister',{
               save:{method:'POST'}
-            })
-        },
-        verifyOtp:function(contact_no,otp){
-            return $resource(CONFIG.HTTP_HOST_APP +'/user/verifyOtp/' + contact_no + '/' + otp,{
-                save:{method:'POST'}
             })
         },
         register: function(){
@@ -58,5 +58,128 @@ angular.module('serviceModule', ['ngResource'])
             })
         }
        
+    }
+})
+.factory('VehicleService', function ($resource,CONFIG,$http,$localStorage) {
+    return{
+
+        addVehicle: function(user_id) {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/users/' + user_id + '/vehicle',{
+                save:{method:'POST'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        getVehicle: function(user_id) {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/users/' + user_id + '/vehicles',{
+              query:{method:'GET'},
+              header:{'Authorization':'bearer '+$localStorage.user_token},
+              isArray:true
+            });
+        },
+        deleteVehicle: function(user_id,vehicle_position) {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/users/' + user_id + '/vehicle/' + vehicle_position,{
+                delete:{method:'DELETE'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        getVehicleMakeModel: function() {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/master/vehicles',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }  
+       
+    }
+})
+
+.factory('UserService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        getUserByCntctNo: function(contact_no){
+            console.log(contact_no);
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/contact/' +  contact_no,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token}
+            })
+        },
+        updateUserById : function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/id/:id',null, {
+                update: {
+                    method:'PUT',
+                    headers: {'Authorization':'bearer '+$localStorage.user_token}
+                }
+                
+            })
+        },
+        changePassword : function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/id/:id/changePassword',null, {
+                update: {
+                    method:'PUT',
+                    headers: {'Authorization':'bearer '+$localStorage.user_token}
+                }
+                
+            })
+        }
+
+    }
+})
+.factory('ServicesService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        getAllServices: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/master/services',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
+    }
+})
+.factory('PlanService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        getSchemes: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/master/schemes',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        subscribePlan: function(data){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/master/schemes/subscribe/' + data.user_id + '/' + data.schemeId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
+    }
+})
+.factory('MasterService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        getAllStates: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/master/states',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
+    }
+})
+.factory('TicketService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        createTicket: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order',{
+                save:{method:'POST'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        getRequestTicket: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/user/' + $localStorage.loggedin_user.userId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
     }
 });

@@ -1,23 +1,43 @@
-app.controller("ProfileController",function($scope,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$cordovaImagePicker){
+app.controller("ProfileController",function($scope,$rootScope,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
     var vm = this;
+    vm.userUpdate = {};
     vm.profile_image = ($localStorage.profile) ? $localStorage.profile : "img/placeholder.jpg"
-    vm.user = {
-      'fname':"amar",
-      'mobile':"7540951096",
-      'maritalStatus':"1"
-    };
-    vm.changePass = {
-        'newPassword':"",
-        'rePassword':"",
+    vm.currentDate = new Date();
+    $scope.minDate = new Date(1905, 6, 1);
+    $scope.maxDate = new Date();
+    if( $localStorage.loggedin_user){
+    vm.userUpdate.dob  = $localStorage.loggedin_user.dob;
+    vm.userUpdate.anniversaryDate = $localStorage.loggedin_user.anniversaryDate;
     }
+    $scope.dobPickerCallback = function (val) {
+        if (!val) {	
+            console.log('Date not selected');
+        } else {
+            vm.userUpdate.dob = moment(val).format('DD-MM-YYYY');
+            console.log('Selected date is : ', vm.userUpdate.dob);
+        }
+    };
+    $scope.anniversaryPickerCallback = function (val) {
+        if (!val) {	
+            console.log('Date not selected');
+        } else {
+            vm.userUpdate.anniversaryDate = moment(val).format('DD-MM-YYYY');
+            console.log('Selected date is : ', vm.userUpdate.anniversaryDate);
+        }
+    };
+
+    vm.changePass = {};
     vm.changePassword = function(){
         $ionicModal.fromTemplateUrl('templates/modal/change_password_modal.html',{
             scope : $scope,
             animation:'slide-in-right'
-        }).then(function(modal){
-            vm.modal = modal;
-            modal.show();
+        }).then(function(changePassModal){
+            vm.changePassModal = changePassModal;
+            changePassModal.show();
         });
+    }
+    vm.changePassModalClose = function(){
+        vm.changePassModal.hide();
     }
     vm.closeModal = function() {
         vm.modal.hide();
@@ -32,7 +52,34 @@ app.controller("ProfileController",function($scope,$state,$ionicModal,$cordovaCa
         vm.showPasswordMisMatch = true;
         }
         return vm.showPasswordMisMatch;
-    }
+    };
+    vm.changePwd = function(){
+        $ionicLoading.show({
+            template : 'Changing password...'
+        });
+        UserService.changePassword().update({ id:$localStorage.loggedin_user.userId},vm.changePass,function(response){
+            vm.changePassModal.hide();
+            $timeout(function(){
+                delete  $localStorage.loggedin_user;
+                 $localStorage.loggedin_user = response.data;
+                $ionicLoading.hide();              
+                $scope.successPop('Success', 'Password changed successfully...'); 
+            },500);
+        },function(error){
+            $ionicLoading.hide();
+            console.log(error);
+            if(error.status == 401){
+                $scope.alertPop('Error', error.data.error); 
+            }
+            if(error.status == 406){
+                $scope.alertPop('Error', error.data.message); 
+            }
+        });
+
+    };
+    // /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+   
     /*******************************************************************************/
   /************************get image from camera**********************************/
   /*******************************************************************************/
@@ -110,4 +157,58 @@ app.controller("ProfileController",function($scope,$state,$ionicModal,$cordovaCa
         $ionicLoading.hide();
       });
   };
+  $rootScope.$on("LOGIN_SUCCESS",function(events,data){
+    vm.getLoginUserDetails();
+  })
+             /*******************************************************************************/
+    /************************This function is used to get user details**********************************/
+            /*******************************************************************************/
+    vm.getLoginUserDetails = function(){
+        vm.userUpdate = angular.copy($localStorage.loggedin_user);
+    };
+             /*******************************************************************************/
+    /************************This function is used to update user details**********************************/
+            /*******************************************************************************/
+    vm.updateProfile = function(){
+        $ionicLoading.show({
+            template: 'Updating User...'
+        })
+        console.log(vm.userUpdate);
+        if(vm.userUpdate.maritalStatus == 0){
+            vm.userUpdate.anniversaryDate = null;
+        }
+        UserService.updateUserById().update({ id:vm.userUpdate.userId},vm.userUpdate,function(response){
+            $timeout(function(){
+                delete  $localStorage.loggedin_user;
+                 $localStorage.loggedin_user = response.data;
+                $ionicLoading.hide();
+                $scope.successPop('Success', 'Profile updated successfully...', 'app.mapView' ); 
+            },1000);
+           
+        },function(error){
+            $ionicLoading.hide();
+            console.log(error);
+            if(error.status == 401){
+                $scope.alertPop('Error', 'Token expired Login again.'); 
+            }
+        });
+    };
+    vm.getAllStates = function(){
+        vm.stateList = [];
+        MasterService.getAllStates().get(function(response){
+            console.log(response);
+            vm.stateList = response.data;
+        },function(error){
+            console.log(error);
+        });
+    };
+    vm.getDistrict = function(state){
+        vm.districtList = [];
+        angular.forEach( vm.stateList,function(item){
+            if(item.stateCd == state){
+                vm.districtList = item.districts;
+                // vm.type = item.type;
+            }
+        });
+    }
 });

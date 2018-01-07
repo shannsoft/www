@@ -1,4 +1,4 @@
-<ion-view cache-view="false" view-title="My Vehicles">
+<ion-view cache-view="false" view-title="My Vehicles" ng-init="vehicleCtrl.getVehicleList()">
     <ion-nav-buttons side="left">
         <button class="back-button" ui-sref="app.mapView">
           <i class="icon ion-chevron-left"></i> 
@@ -16,18 +16,32 @@
                     <!-- <i class="icon" ng-class="vehicleCtrl.isGroupShown(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i> -->
                 &nbsp;
                 <div class="vehicle_list">
-                    <img class="vehicle_image" src="{{item.image}}">
-                    <p class="vehicle_name"> {{item.name}} </p>
+                    
+                    <!-- <img class="vehicle_image" src=""> -->
+                    <p class="vehicle_name"> {{item.vehicle.make}}  {{item.registrationNumber}}  </p>
                 </div>
                 </ion-item>
                 <ion-item class="item-accordion"
                     ng-show="vehicleCtrl.isGroupShown(item)">
                    <div class="vehicle_description">
-                        {{item.name}}  {{item.model}}
+                        {{item.vehicle.make}}  {{item.vehicle.models}} {{item.mfgYear}}
+                        <hr>
+                        
+                        <p class="">  Vehicle No : {{item.registrationNumber}}  </p>
+                        <p class=""> Wheel type : {{item.vehicle.wheels}} Wheeler  </p>
+                        <p class="">  Colour Variant : {{item.variant}}  </p>
+                        <p class="">  Version : {{item.modelVersion}}  </p>
+                        <p class="">  Cubic Capacity : {{item.cubicCapacity ? item.cubicCapacity : "N/A" }}  CC  </p>
+                        <p class="">  Insurance Availability : {{item.insuranceValid ? "Yes" : "No"}}  </p>
+                        <p class="">  Insurance Type : {{item.insuranceType}}  </p>
+                        <p class="" ng-show="item.insuranceValid" >  Expiry Date : {{item.expiryDate}}  </p>
+
+
+
 
                    </div>
-                   <button class="button button-positive vehicle_button" type="submit" ng-click="vehicleCtrl.deleteVehicle()">Delete</button>
-                   <button class="button button-positive vehicle_button float-right" type="submit" ng-click="vehicleCtrl.updateVehicle()">Update</button>
+                   <button class="button button-positive vehicle_button" type="submit" ng-click="vehicleCtrl.deleteVehicle($index)">Delete</button>
+                   <button class="button button-positive vehicle_button float-right" type="submit" ng-click="vehicleCtrl.updateVehicle(item,$index)">Update</button>
                 </ion-item>
             </div>
         </ion-list>

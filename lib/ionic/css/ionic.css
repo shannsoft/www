@@ -7822,7 +7822,7 @@ textarea[disabled],
 input[readonly]:not(.cloned-text-input),
 textarea[readonly]:not(.cloned-text-input),
 select[readonly] {
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   cursor: not-allowed; }
 
 input[type="radio"][disabled],

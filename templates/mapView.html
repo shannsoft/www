@@ -1,5 +1,8 @@
 <ion-view cache-view="false" view-title="GoSpeedyGo">
-    <ion-content class="has-header" scroll="false" ng-init="mapCtrl.mapInit()">
+     <ion-nav-buttons side="right">
+         <i class="icon ion-android-cart cart-icon"></i>
+      </ion-nav-buttons>
+    <ion-content class="has-footer" scroll="false" ng-init="mapCtrl.mapInit()">
         <div id="map"></div>
         <div class="list map-search">
             <label class="item item-location" location-suggestion on-select="changeLocation(latlang)">
@@ -7,24 +10,34 @@
                 <span>{{mapCtrl.location.formatted_address}}</span>
             </label>
         </div>
-
+        <!-- <button class="current-location" type="submit" >need help</button> -->
         <button class="current-location" type="submit" ng-click="mapCtrl.mapInit()"><i class="icon ion-android-locate"></i></button>
-    </ion-content>
-    <ion-footer-bar class="map-footer" >
-        <!-- <button class="button button-block button-map" type="submit">REQUEST A SERVICE</button>     -->
-        <div class="footer-option">
+        <!-- <div class="footer-option" ng-controller="ServiceController as srvcCtrl">
             <ul class="service-list">            
-                <li ng-click="mapCtrl.servicesLeft()"><h6>Breakdown<br>Assistance</h6></li>
-                <li ng-click="mapCtrl.servicesLeft()"><h6>Health<br>Checkup</h6></li>
-                <li ng-click="mapCtrl.servicesLeft()" ><h6>Car<br>Scanning</h6></li>
-                <li ng-click="mapCtrl.servicesLeft()" ><h6>Towing<br>             </h6></li>
-                <li ng-click="mapCtrl.servicesLeft()" ><h6>Oil &<br>Coolant</h6></li>
-                <li ng-click="mapCtrl.servicesLeft()" ><h6>Schedule<br>Servicing</h6></li>
-                <!-- <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li>
-                <li><i class="icon ion-android-bus"></i></li> -->
+                <li ng-click="srvcCtrl.servicesLeft('MAJOR')"><h5>Major<br>Services</h5></li>
+                <li ng-click="srvcCtrl.servicesLeft('MINOR')"><h5>Minor<br>Services</h5></li>
+                <li ng-click="srvcCtrl.servicesLeft('RA')" ><h5>Roadside<br>Assistance</h5></li>
+                 <li ng-click="srvcCtrl.serviceSearch('all')" >                
+                        <i class="icon ion-search"></i>                  
+                 </li>
             </ul> 
-        </div>    
+        </div>    -->
+    </ion-content>
+    
+    <ion-floating-button click="mapCtrl.confirmEmegReq()" has-footer="true" button-color="#73b717" icon="ion-ios-redo" icon-color="#fff" text="Need Help ?"></ion-floating-button>
+     
+    <ion-footer-bar  class="map-footer">
+        <!-- <button class="button button-block button-map" type="submit">EMERGENCY REQUEST</button>    -->
+        <div class="footer-option" ng-controller="ServiceController as srvcCtrl">
+                <ul class="service-list">            
+                    <li ng-click="srvcCtrl.servicesLeft('MAJOR')"><h5>Major<br>Services</h5></li>
+                    <li ng-click="srvcCtrl.servicesLeft('MINOR')"><h5>Minor<br>Services</h5></li>
+                    <li ng-click="srvcCtrl.servicesLeft('RA')" ><h5>Roadside<br>Assistance</h5></li>
+                     <li ng-click="srvcCtrl.serviceSearch('all')" >                
+                            <i class="icon ion-search"></i>                  
+                     </li>
+                </ul> 
+            </div>   
     </ion-footer-bar>
 </ion-view>
   

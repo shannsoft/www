@@ -1,16 +1,48 @@
-<ion-view cache-view="false" view-title="My Requests">
+<ion-view cache-view="false" view-title="My Requests" ng-init="reqCtrl.myOrders()">
         <ion-nav-buttons side="left">
             <button class="back-button" ui-sref="app.mapView">
               <i class="icon ion-chevron-left"></i> 
             </button>
         </ion-nav-buttons>
-    <ion-content>
+    <ion-content scroll="false">
         <ion-slide-box show-pager="false" ion-slide-tabs>
-                <ion-slide ion-slide-tab-label="LIVE">
-                    <h1>No LIVE requests</h1>
+                <ion-slide ion-slide-tab-label="LIVE" disable-scroll="false" >
+                        <ion-list>
+                            <div ng-repeat="liveOrders in reqCtrl.liveOrdersArr">
+                            <ion-item>
+                                    <h4>STATUS: {{liveOrders.status}}</h4>
+                                    <h4>ORDER ID: {{liveOrders.orderId}}</h4>
+                                    <h4>VEHICLE: {{liveOrders.usrVehicle.vehicle.make + " "+ liveOrders.usrVehicle.vehicle.model+ " "+ liveOrders.usrVehicle.registerationNumber}}</h4>
+                                   <h2>SERVICES :</h2>
+                                   <ul>
+                                    <li ng-repeat="Orderdtls in liveOrders.orderDtls">
+                                     
+                                       <p ng-repeat="services in Orderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ liveOrders.usrVehicle.vehicle.type] }} </p>
+                                         
+                                    </li>
+                                </ul>
+                                </ion-item>
+                            </div>
+                        </ion-list>
                 </ion-slide>
                 <ion-slide ion-slide-tab-label="FUTURE">
-                    <h1>No Future bookings</h1>
+                        <ion-list>
+                                <div ng-repeat="futureOrder in reqCtrl.futureOrdersArr">
+                                <ion-item>
+                                        <h4>STATUS: {{futureOrder.status}}</h4>
+                                        <h4>ORDER ID: {{futureOrder.orderId}}</h4>
+                                        <h4>VEHICLE: {{futureOrder.usrVehicle.vehicle.make + "   "+ futureOrder.usrVehicle.vehicle.model+ "    "+ futureOrder.usrVehicle.registrationNumber}}</h4>
+                                       <h2>SERVICES :</h2>
+                                       <ul>
+                                        <li ng-repeat="futureOrderdtls in futureOrder.orderDtls">
+                                         
+                                           <p ng-repeat="services in futureOrderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ futureOrder.usrVehicle.vehicle.type]}} </p>
+                                             
+                                        </li>
+                                    </ul>
+                                    </ion-item>
+                                </div>
+                            </ion-list>
                 </ion-slide>
                 <ion-slide ion-slide-tab-label="COMPLETED">
                     <h1>No completed booking</h1>
