@@ -1,18 +1,34 @@
-app.controller('VehicleController',function($scope,$state,$ionicPopup,$ionicModal,$localStorage,VehicleService,$ionicLoading,$timeout){
+app.controller('VehicleController',function($scope,$state,$ionicPopup,ionicDatePicker,$ionicModal,$localStorage,VehicleService,$ionicLoading,$timeout){
 var vm = this;
 vm.vehicle = {};
 vm.vehicleList = {};
-vm.currentDate = new Date();
-$scope.minDate = new Date();
-$scope.maxDate = new Date(2027, 1, 1);
-$scope.insExpPickerCallback = function (val) {
-    if (!val) {	
-        console.log('Date not selected');
-    } else {
-        vm.vehicle.expiryDate = moment(val).format('DD-MM-YYYY');
-        console.log('Selected date is : ', vm.vehicle.expiryDate);
-    }
+var ipObj1 = {
+    callback: function (val) {  //Mandatory 
+        if(vm.setType == "update"){
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+            vm.updateVehicleData.expiryDate = moment(val).format('YYYY-MM-DD');
+        }
+        else {
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+            vm.vehicle.expiryDate = moment(val).format('YYYY-MM-DD');
+        }
+        
+    },
+    from: new Date(), //Optional 
+    to: new Date(2025,1,1), //Optional 
+    inputDate: new Date(),      //Optional 
+    mondayFirst: true,          //Optional 
+    closeOnSelect: false,       //Optional 
+    templateType: 'popup'       //Optional 
 };
+vm.setExpiry = function(){
+    vm.setType = "set";
+    ionicDatePicker.openDatePicker(ipObj1);
+}
+vm.updateExpiry = function(){
+    vm.setType = "update";
+    ionicDatePicker.openDatePicker(ipObj1);
+}
 if($localStorage.loggedin_user){
     vm.loggedin_user_id = $localStorage.loggedin_user.userId;
 }
@@ -48,6 +64,8 @@ vm.deleteVehicle = function(vehicleId){
     });
 };
 vm.updateVehicleData = {};
+vm.insuranceArr = [true,false];    
+vm.insuranceTypeArr =["edfes","Comprehensive","Zero Depreciation","Third party only"];
 vm.updateVehicle = function(vehicle,position){
    var updateVehiclemodal = $ionicModal.fromTemplateUrl('templates/modal/update_vehicle_modal.html',{
         scope: $scope,
@@ -57,61 +75,83 @@ vm.updateVehicle = function(vehicle,position){
     updateVehiclemodal.then(function(modal){
         vm.modal = modal;
         vm.modal.show();
-        // vm.VehicleToUpdateData(vehicle,position);
         vm.updateVehicleData = vehicle;
         vm.updateVehicleData.vehiclePosition = position;
+        // vm.updateVehicleData = {
+        //     make : vehicle.vehicle.make,
+        //     models : vehicle.vehicle.models,
+        //     registrationNumber : vehicle.registrationNumber,
+        //     variant : vehicle.variant,
+        //     modelVersion : vehicle.modelVersion,
+        //     cubicCapacity : vehicle.cubicCapacity,
+        //     expiryDate : vehicle.expiryDate,
+        //     insuranceType : vehicle.insuranceType,
+        //     insuranceValid : vehicle.insuranceValid,
+        //     mfgYear : vehicle.mfgYear,
+        //     vehiclePosition : position
+        // } 
+        vm.vehicleModelList = [vehicle.vehicle.models];
         console.log(" vm.updateVehicleData  ", vm.updateVehicleData);
+        // $(".insurance").val('true'); // Jquery update
     });
 }
-
-// vm.VehicleToUpdateData = function(vehicle,position){
-//     vm.updateVehicleData = vehicle;
-   
-//     vm.updateVehicleData = {
-//         vehiclePosition : position
-//     }
-//      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",vm.updateVehicleData);
-// }
+vm.getVehicledata = function(){
+    VehicleService.getVehicleMakeModel().get(function(response){
+        console.log(response);
+        vm.vehicleDatas = response.data;
+        vm.makes = [];
+        angular.forEach(response.data,function(item){
+            vm.makes.push(item.make);
+        })
+        console.log(vm.makes);
+    },function(error){
+        console.log(error);
+    });
+    
+};
 vm.closeModal = function(){
     vm.modal.hide();
 }
 vm.updateVehicleDetails = function(){
+    console.log(vm.updateVehicleData);
+    VehicleService.updateVehicle().update({ id:$localStorage.loggedin_user.userId,position:vm.updateVehicleData.vehiclePosition}, vm.updateVehicleData, function(response){
+        console.log(response);
+    },function(error){
+        console.log(error);
+    });
 };
 vm.getVehicleList = function(){
     $ionicLoading.show({
         template: 'Loading...'
     })
     vm.vehicleList = $localStorage.loggedin_user.userVehicles;
-    console.log(vm.vehicleList);
     $timeout(function(){
         $ionicLoading.hide();
     },600);
 };
 
-vm.getVehicledata = function(){
-    VehicleService.getVehicleMakeModel().get(function(response){
-        console.log(response);
-        vm.vehicleMakeList = response.data;
-        //vm.updateVehicleData = vm.vehicleMakeList[0];
-        for(var i in  vm.vehicleMakeList){
-            if( vm.vehicleMakeList[i].make == vm.updateVehicleData.vehicle.make) {
-                vm.selectedMaker =  vm.vehicleMakeList[i];
-            }
-        }
-    },function(error){
-        console.log(error);
-    });
-};
-vm.getModel = function(selectedVehicle){
-    vm.vehicleModelList = [];
-    angular.forEach( vm.vehicleMakeList,function(item){
-        if(item.make == selectedVehicle){
-            vm.vehicleModelList = item.vehicles;
+vm.getModel = function(selectedModel){
+    console.log("coming");
+    console.log(selectedModel);
+    
+    console.log(vm.vehicleDatas);
+    angular.forEach(vm.vehicleDatas,function(item){
+        if(item.make == selectedModel){
+            vm.vehiclesLists = item.vehicles;
+            vm.vehicleModelList = [];
+            angular.forEach(item.vehicles,function(vehicle){
+                vm.vehicleModelList.push(vehicle.models);
+            })
         }
     });
+    console.log(vm.vehicleModelList);
+    
+
 };
 vm.getVehicleType = function(model){
-    angular.forEach( vm.vehicleModelList,function(item){
+    console.log(model);
+    console.log(vm.vehiclesLists);
+    angular.forEach( vm.vehiclesLists,function(item){
         if(item.models == model){
             vm.type = item.type;
             vm.subType = item.subType;
@@ -119,6 +159,14 @@ vm.getVehicleType = function(model){
         }
     });
 };
+vm.getMfgYear = function(){
+    vm.currentYear = 2018;
+    vm.mfgYearArr = [];
+    for(i = 0;i< 30; i++ ){
+        vm.mfgYearArr.push(vm.currentYear--);
+    }
+    console.log(vm.mfgYearArr);
+}
 vm.addVehicle = function(){
     $ionicLoading.show({
         template : 'Adding Vehicle Details...'
@@ -131,6 +179,7 @@ vm.addVehicle = function(){
         type :  vm.type,
         wheels : vm.wheels
     }
+    console.log(vm.vehicle);
      VehicleService.addVehicle(vm.loggedin_user_id).save(vm.vehicle,function(response){
          $localStorage.loggedin_user = response.data;
          $timeout(function(){

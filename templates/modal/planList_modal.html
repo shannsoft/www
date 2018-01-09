@@ -7,9 +7,9 @@
     </ion-header-bar>
     <ion-content>
         <div class="list list-plan">
-            <a class="item item-avatar" href="" ng-repeat="services in planCtrl.planSrvcDtls.schemeServiceDtls" >
-                <h2>{{services.serviceDesc}}</h2>
-                <p>{{services.freeUsage}} Checkup/Year</p>
+            <a class="item item-avatar" ng-hide="services.freeUsage == 0" href="" ng-repeat="services in planCtrl.planSrvcDtls.schemeServiceDtls" >
+                <h2>{{services.freeUsage}} free&nbsp; {{services.serviceDesc}}</h2>
+                <!-- <p>{{services.freeUsage}} Checkup/Year</p> -->
             </a>
         </div>
     </ion-content>

@@ -12,7 +12,12 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     var ipObj1 = {
         callback: function (val) {  //Mandatory 
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-            vm.userUpdate.dob = moment(val).format('DD-MM-YYYY');
+            if(vm.setType == "dob") {
+                vm.userUpdate.dob = moment(val).format('YYYY-MM-DD');
+            }
+            else{
+                vm.userUpdate.anniversaryDate = moment(val).format('YYYY-MM-DD');
+            }
         },
         from: new Date(1905, 1, 1), //Optional 
         to: new Date(), //Optional 
@@ -22,6 +27,11 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         templateType: 'popup'       //Optional 
     };
     vm.openDob = function(){
+        vm.setType = "dob";
+        ionicDatePicker.openDatePicker(ipObj1);
+    }
+    vm.openAnni = function(){
+        vm.setType = "anniver";
         ionicDatePicker.openDatePicker(ipObj1);
     }
     // $scope.dobPickerCallback = function (val) {

@@ -57,7 +57,7 @@
                       <div class="row">               
                           <label class="profile-form item-floating-label  col col-50">
                               <span class="input-label col col-100">DOB</span>
-                              <input type="text" name="dob" placeholder="DOB" ng-model="profileCtrl.userUpdate.dob" ng-click="profileCtrl.openDob()">
+                              <input type="text" name="dob" placeholder="DOB" readonly ng-model="profileCtrl.userUpdate.dob" ng-click="profileCtrl.openDob()">
                               <!-- <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="dobPickerCallback">
                                  <input type="text" name="dob" placeholder="DOB" ng-model="profileCtrl.userUpdate.dob" >
                               </ionic-datepicker> -->
@@ -83,11 +83,10 @@
                         </label>
                         <label class="profile-form item-floating-label" ng-if="profileCtrl.userUpdate.maritalStatus =='1'" ng-class="{'has-error':updateProfile.anniversary.$touched && updateProfile.anniversary.$invalid}">
                           <span class="input-label col col-100">Anniversary date</span>  
-                          <!-- <input type="text" name="anniversary" ng-model="profileCtrl.userUpdate.anniversaryDate" placeholder="Anniversary date" > -->
-                          <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="anniversaryPickerCallback">
-                            <!-- <button class="button button-block button-positive"> {{ currentDate | date:'MMMM/dd/yyyy' }} </button> -->
+                          <input type="text" name="anniversary" ng-model="profileCtrl.userUpdate.anniversaryDate" readonly placeholder="Anniversary date" ng-click="profileCtrl.openAnni()">
+                          <!-- <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="anniversaryPickerCallback">
                             <input type="text" name="anniversary" ng-model="profileCtrl.userUpdate.anniversaryDate" placeholder="Anniversary date" disabled >
-                          </ionic-datepicker>
+                          </ionic-datepicker> -->
                         </label>
                        <span class="error-message" ng-show="updateProfile.anniversary.$error.required && updateProfile.anniversary.$touched">Please enter anniversary date</span>
                         <div class="popular-query">
@@ -121,7 +120,7 @@
                           <label class="profile-form item-floating-label col col-50"  ng-class="{'has-error':updateProfile.district.$touched && updateProfile.district.$invalid}">
                             <span class="input-label col col-100">District*</span>
                             <select class="col col-100" name="district" ng-model="profileCtrl.userUpdate.address[0].district">
-                              <option value="" ng-selected="true"><i class="fa fa-sort-desc">District</i></option>
+                              <option value="" ><i class="fa fa-sort-desc">District</i></option>
                               <option ng-value="districts" ng-repeat="districts in profileCtrl.districtList" >{{districts}}</option>
                             </select>
                           

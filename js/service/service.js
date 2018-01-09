@@ -70,6 +70,14 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
+        updateVehicle: function() {
+            return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/users/:id/vehicle/:position',null,{
+                update: {
+                    method:'PUT',
+                    headers: {'Authorization':'bearer '+$localStorage.user_token}
+                }
+            })
+        },
         getVehicle: function(user_id) {
             return $resource( CONFIG.HTTP_HOST_APP +'/gsg/api/users/' + user_id + '/vehicles',{
               query:{method:'GET'},
