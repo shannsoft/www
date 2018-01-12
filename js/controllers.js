@@ -76,47 +76,47 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
 
 app.controller('MapController',function($cordovaGeolocation,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
   var vm = this;
-  // var diagnostic;
-  // var locationAccuracy;
+  var diagnostic;
+  var locationAccuracy;
   vm.mapInit = function(){
-  //   $scope.location = '';
-  //   $ionicPlatform.ready(function() {
-  //    diagnostic = cordova.plugins.diagnostic;
-  //    locationAccuracy = cordova.plugins.locationAccuracy;
-  //   diagnostic.isLocationEnabled(function(available){
-  //     if(!available){
-  //       locationAccuracy.canRequest(function(canRequest){
-  //         if(canRequest){
-  //             locationAccuracy.request(function (success){
-  //                 console.log("Successfully requested accuracy: "+success.message);
-  //                 $timeout(function(){
-  //                   vm.loadMap();
-  //                 })
-  //             }, function (error){
-  //               console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-  //               if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
-  //                 if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-  //                   diagnostic.switchToLocationSettings();
-  //                 }
-  //               }
-  //               else{
-  //                 $ionicHistory.goBack();
-  //               }
-  //             },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-  //         }
-  //       });
-  //     }
-  //     else{
-  //       $timeout(function(){
-  //         vm.loadMap();
-  //       })
-  //     }
-  //     console.log("Location is " + (available ? "available" : "not available"));
-  //   }, function(error){
-  //     console.error("The following error occurred: "+error);
-  //   });
-  // })
-  vm.loadMap();
+    $scope.location = '';
+    $ionicPlatform.ready(function() {
+     diagnostic = cordova.plugins.diagnostic;
+     locationAccuracy = cordova.plugins.locationAccuracy;
+    diagnostic.isLocationEnabled(function(available){
+      if(!available){
+        locationAccuracy.canRequest(function(canRequest){
+          if(canRequest){
+              locationAccuracy.request(function (success){
+                  console.log("Successfully requested accuracy: "+success.message);
+                  $timeout(function(){
+                    vm.loadMap();
+                  })
+              }, function (error){
+                console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+                if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
+                  if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                    diagnostic.switchToLocationSettings();
+                  }
+                }
+                else{
+                  $ionicHistory.goBack();
+                }
+              },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+          }
+        });
+      }
+      else{
+        $timeout(function(){
+          vm.loadMap();
+        })
+      }
+      console.log("Location is " + (available ? "available" : "not available"));
+    }, function(error){
+      console.error("The following error occurred: "+error);
+    });
+  })
+  // vm.loadMap();
   }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
@@ -195,6 +195,7 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
           vm.emergencyTicket.location=[latlngObj.lat,latlngObj.lng];
           vm.emergencyTicket.userId = $localStorage.loggedin_user.userId;
           vm.emergencyTicket.serviceType = "EMERGENCY"; 
+          console.log(vm.emergencyTicket);
           TicketService.createTicket().save(vm.emergencyTicket,function(response){
             console.log(response);
             $scope.successPop('Success', `Your request has been captured successfully.  Our support team will get back to you shortly.`);
@@ -220,6 +221,15 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
     //   confirmPopup.close();
     // });
 }
+vm.myCartOrders = function(){
+  console.log("coming");
+  TicketService.getCardOrders().get(function(response){
+      console.log(response);
+      vm.cartOrders = response.data;
+  },function(error){
+
+  });
+};
   
 });
 app.controller("HelpController",function($scope){

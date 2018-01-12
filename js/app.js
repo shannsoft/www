@@ -1,6 +1,6 @@
 var app = angular.module('gsg_app', ['ionic','ionic-datepicker','ion-floating-menu','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
 
-app.run(function($ionicPlatform,$ionicPopup) {
+app.run(function($ionicPlatform,$ionicPopup,$state) {
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -13,16 +13,25 @@ app.run(function($ionicPlatform,$ionicPopup) {
     /**************************This function is for exist app***********************/
     /*******************************************************************************/
     $ionicPlatform.registerBackButtonAction(function() {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Alert',
-        template: 'Do you want to exit from the App',
-        okType: 'button-assertive'
-      });
-      confirmPopup.then(function(res) {
-        if (res) {
-          navigator.app.exitApp();
-        } else {}
-      });
+      if($state.current.name == "app.profile" || $state.current.name == "app.vehicles" || $state.current.name == "app.tarrif-plan" || $state.current.name =="app.requests" || $state.current.name == "app.cart" || $state.current.name == "app.contactUs"){
+          $state.go('app.mapView');
+      }
+      if($state.current.name == "app.mapView"){
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Alert',
+          template: 'Do you want to exit from the App',
+          okType: 'button-assertive'
+        });
+        confirmPopup.then(function(res) {
+          if (res) {
+            navigator.app.exitApp();
+          } else {}
+        });
+      }
+      if($state.current.name == "add-vehicle"){
+        $state.go('app.vehicles');
+      }
+
     },100);
   });
 })
@@ -107,6 +116,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
     },
     resolve: {
       logout: checkLoggedin
+    }
+  })
+  .state('check-out', {
+    url: '/ckt?params',
+    controller:'ServiceController',
+    controllerAs:'cktCtrl',
+    templateUrl: 'templates/modal/check_out_modal.html',
+    params:{
+      data:null 
     }
   })
   .state('user-details', {
@@ -203,6 +221,19 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
       }
     }
   })
+  .state('app.cart',{
+    url : '/cart',
+    resolve : {
+      logout : checkLoggedout
+    },
+    views : {
+      'menuContent' : {
+        controller : 'RequestController',
+        controllerAs : 'cartCtrl',
+        templateUrl : 'templates/cart.html'
+      }
+    }
+  })
   .state('app.history', {
     url: '/history',
     resolve: {
@@ -284,7 +315,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
 });
 app.constant('CONFIG', {
   
-  //  'HTTP_HOST_APP':'http://localhost:8090',
+  //  'HTTP_HOST_APP':'http://192.168.0.8:8090',
    'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });
 app.config(function (ionicDatePickerProvider) {

@@ -154,7 +154,7 @@ angular.module('serviceModule', ['ngResource'])
             })
         },
         subscribePlan: function(data){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/master/schemes/subscribe/' + data.user_id + '/' + data.schemeId,{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
@@ -186,6 +186,31 @@ angular.module('serviceModule', ['ngResource'])
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/user/' + $localStorage.loggedin_user.userId,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        getCardOrders: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/cart/user/' + $localStorage.loggedin_user.userId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        removeFromCart: function(cartId){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/cart/' + $localStorage.loggedin_user.userId + '/' + cartId,{
+                delete:{method:'DELETE'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
+    }
+})
+.factory('PaymentService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        codPayment: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/codPayemnt',{
+                save:{method:'POST'},
+                // header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
         }

@@ -1,0 +1,18 @@
+<ion-modal-view ng-init="srvcCtrl.function()">
+        <ion-header-bar class="bar-energized gsg-colour" >
+            <button class="button button-clear" ng-click="srvcCtrl.closeChekoutModal()">
+                <i class="icon ion-android-close"></i>
+            </button>
+            <h1 class="title">Check Out</h1>
+        </ion-header-bar>
+        <ion-content>          
+                <div class="list list-plan">
+                    <ion-radio ng-model="srvcCtrl.paymentType" name="vehicle_radio" ng-value="options"  ng-repeat="options in getPaymentOptions">
+                        <h2>{{options}}</h2>
+                    </ion-radio>           
+                </div>        
+        </ion-content>
+        <ion-footer-bar class="map-footer" >
+            <button class="button button-block button-map" type="submit" ng-click="srvcCtrl.paymentNow()">PAY NOW</button>        
+        </ion-footer-bar>
+    </ion-modal-view>

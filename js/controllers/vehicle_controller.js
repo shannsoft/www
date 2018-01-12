@@ -65,16 +65,16 @@ vm.deleteVehicle = function(vehicleId){
 };
 vm.updateVehicleData = {};
 vm.insuranceArr = [true,false];    
-vm.insuranceTypeArr =["edfes","Comprehensive","Zero Depreciation","Third party only"];
+vm.insuranceTypeArr =["Comprehensive","Zero Depreciation","Third party only"];
 vm.updateVehicle = function(vehicle,position){
    var updateVehiclemodal = $ionicModal.fromTemplateUrl('templates/modal/update_vehicle_modal.html',{
         scope: $scope,
         controller: 'VehicleController',
         animation:'slide-in-up'
     });
-    updateVehiclemodal.then(function(modal){
-        vm.modal = modal;
-        vm.modal.show();
+    updateVehiclemodal.then(function(vehicleUpdateModal){
+        vm.vehicleUpdateModal = vehicleUpdateModal;
+        vm.vehicleUpdateModal.show();
         vm.updateVehicleData = vehicle;
         vm.updateVehicleData.vehiclePosition = position;
         // vm.updateVehicleData = {
@@ -109,14 +109,30 @@ vm.getVehicledata = function(){
     });
     
 };
-vm.closeModal = function(){
-    vm.modal.hide();
+vm.closeVehicleUpdateModal = function(){
+    vm.vehicleUpdateModal.hide();
 }
 vm.updateVehicleDetails = function(){
+    $ionicLoading.show({
+        template : 'Updating...'
+    });
     console.log(vm.updateVehicleData);
     VehicleService.updateVehicle().update({ id:$localStorage.loggedin_user.userId,position:vm.updateVehicleData.vehiclePosition}, vm.updateVehicleData, function(response){
         console.log(response);
+        vm.vehicleUpdateModal.hide();
+        $timeout(function(){
+            $localStorage.loggedin_user = response.data;
+            $ionicLoading.hide();
+            $scope.successPop('Success', 'Vehicle updated Successfully...','app.mapView'); 
+        },500);
     },function(error){
+       
+        $ionicLoading.hide();
+        vm.vehicleUpdateModal.hide();
+        if(error.data.error == "invalid_token"){                     
+            $scope.alertPop('Error', 'Token expired. Login again'); 
+        
+        }
         console.log(error);
     });
 };

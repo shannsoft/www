@@ -7,9 +7,13 @@
     <ion-content scroll="false">
         <ion-slide-box show-pager="false" ion-slide-tabs>
                 <ion-slide ion-slide-tab-label="LIVE" disable-scroll="false" >
+                        <div ng-show="reqCtrl.liveOrdersArr.length == 0 || !reqCtrl.liveOrdersArr" class="cart-empty">
+                                <i class="icon ion-ios-navigate"></i>
+                                <h3> No Live Requests</h3>
+                            </div>
                         <ion-list>
                             <div ng-repeat="liveOrders in reqCtrl.liveOrdersArr">
-                            <ion-item>
+                            <ion-item class="m-b-5">
                                     <h4>STATUS: {{liveOrders.status}}</h4>
                                     <h4>ORDER ID: {{liveOrders.orderId}}</h4>
                                     <h4>VEHICLE: {{liveOrders.usrVehicle.vehicle.make + " "+ liveOrders.usrVehicle.vehicle.model+ " "+ liveOrders.usrVehicle.registerationNumber}}</h4>
@@ -17,7 +21,7 @@
                                    <ul>
                                     <li ng-repeat="Orderdtls in liveOrders.orderDtls">
                                      
-                                       <p ng-repeat="services in Orderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ liveOrders.usrVehicle.vehicle.type] }} </p>
+                                       <p class="w-s-i" ng-repeat="services in Orderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ liveOrders.usrVehicle.vehicle.type] }} </p>
                                          
                                     </li>
                                 </ul>
@@ -26,9 +30,13 @@
                         </ion-list>
                 </ion-slide>
                 <ion-slide ion-slide-tab-label="FUTURE">
+                        <div ng-show="reqCtrl.futureOrdersArr.length == 0 || !reqCtrl.futureOrdersArr" class="cart-empty">
+                                <i class="icon ion-android-calendar"></i>
+                                <h3> No future requests</h3>
+                            </div>
                         <ion-list>
                                 <div ng-repeat="futureOrder in reqCtrl.futureOrdersArr">
-                                <ion-item>
+                                <ion-item class="m-b-5">
                                         <h4>STATUS: {{futureOrder.status}}</h4>
                                         <h4>ORDER ID: {{futureOrder.orderId}}</h4>
                                         <h4>VEHICLE: {{futureOrder.usrVehicle.vehicle.make + "   "+ futureOrder.usrVehicle.vehicle.model+ "    "+ futureOrder.usrVehicle.registrationNumber}}</h4>
@@ -36,7 +44,7 @@
                                        <ul>
                                         <li ng-repeat="futureOrderdtls in futureOrder.orderDtls">
                                          
-                                           <p ng-repeat="services in futureOrderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ futureOrder.usrVehicle.vehicle.type]}} </p>
+                                           <p class="w-s-i" ng-repeat="services in futureOrderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ futureOrder.usrVehicle.vehicle.type]}} </p>
                                              
                                         </li>
                                     </ul>
@@ -45,10 +53,17 @@
                             </ion-list>
                 </ion-slide>
                 <ion-slide ion-slide-tab-label="COMPLETED">
-                    <h1>No completed booking</h1>
+                    <div class="cart-empty">
+                        <i class="icon ion-android-checkbox"></i>
+                        <h3> No Requests Completed</h3>
+                    </div>
+                   
                 </ion-slide>
                 <ion-slide ion-slide-tab-label="CANCELLED">
-                    <h1>No booking CANCELLED</h1>
+                        <div class="cart-empty">
+                                <i class="icon ion-android-cancel"></i>
+                                <h3> No Requests Canceled</h3>
+                            </div>
                 </ion-slide>
                
         </ion-slide-box>   

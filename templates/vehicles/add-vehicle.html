@@ -13,7 +13,7 @@
                         <label class="item item-input col">
                             <select class="" name="maker_of_vehicle" ng-model="vehicleCtrl.vehicle.make" ng-options="makes as makes for makes in vehicleCtrl.makes" ng-change="vehicleCtrl.getModel(vehicleCtrl.vehicle.make)" required>
                                 <option value=""><i class="fa fa-sort-desc">Vehicle Manufacturer</i></option>
-                                <option ng-value="vehicles.make" ng-repeat="vehicles in vehicleCtrl.vehicleMakeList" >{{vehicles.make}}</option>
+                                <!-- <option ng-value="vehicles.make" ng-repeat="vehicles in vehicleCtrl.vehicleMakeList" >{{vehicles.make}}</option> -->
                            </select>                 
                         </label>
                         <span class="plain-text row" ng-show="addVehicle.maker_of_vehicle.$error.required && addVehicle.maker_of_vehicle.$touched">Please choose a maker</span>
@@ -64,12 +64,12 @@
                         </label> 
                         <!-- <span class="plain-text row" ng-show="addVehicle.expiry_date.$error.required && addVehicle.expiry_date.$touched">Expiry date is required</span>  -->
                         <label class="item item-input col">
-                            <select class="" name="insurance_type" ng-model="vehicleCtrl.vehicle.insuranceType" >
+                            <!-- <select class="" name="insurance_type" ng-model="vehicleCtrl.vehicle.insuranceType" >
                                     <option value="">Insurance Type</option>
                                     <option ng-value="Comprehensive">Comprehensive</option>
                                     <option ng-value="zero_depreciation">Zero Depreciation</option>
                                     <option ng-value="third_party">Third party only</option>
-                            </select>  
+                            </select>   -->
                             <select class="" name="insurance_type" ng-model="vehicleCtrl.vehicle.insuranceType" ng-options="insType as insType for insType in vehicleCtrl.insuranceTypeArr" >
                                     <option value=""><i class="fa fa-sort-desc">Insurance Type</i></option>
                             </select> 

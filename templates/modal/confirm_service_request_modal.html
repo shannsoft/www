@@ -32,9 +32,7 @@
         <div class="popular-query">
             <h3 class="popular-city">Service Date</h3>
             <label class="profile-form item-floating-label">
-                <ionic-datepicker date="currentDate.currentDate" min="minDate" max="maxDate" callback="servicedatePickercallback">
-                    <input type="text" name="service_date" ng-model="srvcCtrl.reqTktDataObj.serviceDate" placeholder="Service date">
-                </ionic-datepicker>
+                <input type="text" name="service_date" placeholder="Service Date" ng-model="srvcCtrl.reqTktDataObj.serviceDate" readonly ng-click="srvcCtrl.setServiceDate()">
             </label>
         </div>
        

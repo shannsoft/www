@@ -46,7 +46,7 @@ vm.isGroupShown = function(list){
         obj.schemeId = planToSubscribe.schemeId;
         PlanService.subscribePlan(obj).get(function(response){  
             console.log(response);   
-            $localStorage.loggedin_user = response.data;
+            // $localStorage.loggedin_user = response.data;
             vm.subscrpModal.hide();      
             $timeout(function(){
                 $ionicLoading.hide();

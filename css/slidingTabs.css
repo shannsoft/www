@@ -5,9 +5,9 @@
     height:92%;
 }
 
-ion-slide:nth-child(2n) {
+/* ion-slide:nth-child(2n) {
     background-color: #fff;
-}
+} */
 
 .slider {
     height: 100%;

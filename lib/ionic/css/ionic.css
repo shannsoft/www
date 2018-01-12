@@ -5944,7 +5944,6 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
 .item h4,
 .item h5,
 .item h6,
-.item p,
 .item-content,
 .item-content h1,
 .item-content h2,
@@ -5952,10 +5951,11 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
 .item-content h4,
 .item-content h5,
 .item-content h6,
-.item-content p {
+ {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; }
+  white-space: nowrap; 
+}
 
 a.item {
   color: inherit;
@@ -8283,7 +8283,7 @@ input:checked + .checkbox-icon:after {
   left: -9999px; }
   .item-radio input:checked + .radio-content .item-content {
     /* style the item content when its checked */
-    background: #f7f7f7; }
+    background: #fff; }
   .item-radio input:checked + .radio-content .radio-icon {
     /* show the checkmark icon when its checked */
     visibility: visible; }
