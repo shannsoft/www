@@ -1,0 +1,30 @@
+<ion-modal-view class="modal-request-details">
+        <ion-header-bar class="bar-energized modal-req-det-hed" >
+            <button class="button button-clear" ng-click="reqCtrl.closeREqDetailsModal()">
+                <i class="icon ion-android-close"></i>
+            </button>
+            <h1 class="title">Request Details</h1>
+        </ion-header-bar>
+        <ion-content>      
+                <ion-item>
+                    <h2>ORDER ID - {{reqCtrl.requestDetails.orderId}}</h2><hr>
+                    <!-- <h4 class="w-s-i"> ORDER DATE -  {{reqCtrl.requestDetails.serviceDate}}</h4><hr> -->
+                    <div ng-repeat="orders in reqCtrl.requestDetails.orderDtls">
+                        <span class="span-text">
+                                <p class="w-s-i"></p> Vehicle - {{orders.product.usrVehicle.vehicle.make + " " + orders.product.usrVehicle.vehicle.models + " " + orders.product.usrVehicle.registrationNumber}}</p>
+                        </span><hr>
+                        <span class="span-text" ng-repeat="services in orders.product.services">
+                                <p class="w-s-i">{{$index+1}} - {{services.subCategory}} &nbsp; - &nbsp; {{services.price[ orders.product.usrVehicle.vehicle.type] }} {{services.freeApplied ? "(Free Applied)" : " "}}</p>
+                        </span><hr>
+                        
+                        <span class="span-text">
+                                <p class="w-s-i"> Payment Mode -  {{orders.transactionMode}}</p>
+                                Total Price -  {{reqCtrl.requestDetails.totalPrice}}
+                        </span>
+                    </div>
+                </ion-item>                     
+        </ion-content>
+        <!-- <ion-footer-bar class="map-footer" >
+            <button class="button button-block button-map" type="submit" ng-click="srvcCtrl.paymentNow()">PAY NOW</button>        
+        </ion-footer-bar> -->
+    </ion-modal-view>

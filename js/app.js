@@ -314,7 +314,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
 }
 });
 app.constant('CONFIG', {
-  
+  'PGPayment' : 'https://eazypay.icicibank.com/EazyPG?merchantid=162297&mandatory fields=yVatoApiaE4WH0TsYqEOp7SfGQXlHUU060Wqfm3M5xUm8qrMwqrElqTa93EbUjhA&optional fields=&returnurl=/YGOwvCJO3zRE1ofB37jxefRj9EqG3H5SonkWJPXA7ltazXsPXj35NBvPC5MUIA8&Reference No=yVatoApiaE4WH0TsYqEOp7HWPOcHGsYHrrFquKiPtC4=&submerchantid=K+sSQ/4p/hU+x2h+NgZAwQ==&transaction amount=y6BCYBHd0EjY0Bj6arjhDQ==&paymode=FpgHYf0rXbN28ST4yrdBsw==',
   //  'HTTP_HOST_APP':'http://192.168.0.8:8090',
    'HTTP_HOST_APP':'http://101.53.136.166:8090'
 });

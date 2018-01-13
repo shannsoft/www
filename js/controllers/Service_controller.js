@@ -1,4 +1,4 @@
-app.controller('ServiceController',function($scope,$state,$stateParams,$ionicModal,ionicDatePicker,PaymentService,ServicesService,$localStorage,TicketService,$ionicLoading,$timeout,LocationModel){
+app.controller('ServiceController',function($scope,$state,$http,$stateParams,$ionicModal,ionicDatePicker,PaymentService,ServicesService,$localStorage,TicketService,$ionicLoading,$timeout,LocationModel){
     var vm = this;
     vm.reqTktDataObj = {};
     var ipObj1 = {
@@ -48,11 +48,11 @@ app.controller('ServiceController',function($scope,$state,$stateParams,$ionicMod
         }).then(function(modal) {
           vm.modal = modal;        
           vm.modal.show();
-          vm.serviceType = serviceType;      
-          $timeout(function(){
-            vm.myDesiredService(vm.serviceType);
+          vm.serviceType = serviceType;  
+           vm.myDesiredService(vm.serviceType);    
+          $timeout(function(){           
             $ionicLoading.hide();
-          },700)
+          },500)
       });
     };
     vm.myDesiredService = function(serviceType){
@@ -69,6 +69,7 @@ app.controller('ServiceController',function($scope,$state,$stateParams,$ionicMod
                     }
                 });
             }
+            console.log(vm.ServiceArr);
         },function(error){
             
         });
@@ -84,11 +85,11 @@ app.controller('ServiceController',function($scope,$state,$stateParams,$ionicMod
       }).then(function(modal){        
         vm.modal = modal;
         vm.modal.show();
-        $timeout(function(){
-            vm.serviceType = serviceType;
-            vm.myDesiredService(vm.serviceType);
+        vm.serviceType = serviceType;  
+        vm.myDesiredService(vm.serviceType);
+        $timeout(function(){                   
             $ionicLoading.hide();
-          },500)
+          },700)
         
       });
     };
@@ -150,7 +151,7 @@ app.controller('ServiceController',function($scope,$state,$stateParams,$ionicMod
                 vm.confirmModal.hide();
                 vm.modal.hide();
                 $ionicLoading.hide();
-                vm.openCheckOutModal(response.data);
+                $scope.openCheckOutModal(response.data);
                 // $timeout(function(){
                 //     $ionicLoading.hide();
                 //     $scope.successPop('Success', 'Request generated Successfully...'); 
@@ -166,59 +167,85 @@ app.controller('ServiceController',function($scope,$state,$stateParams,$ionicMod
             $scope.alertPop('Error', 'please choose atleast one service and vehicle'); 
         }
     };
-    vm.openCheckOutModal = function(datas){
-        $ionicLoading.show({
-            template : 'Loading...'
-        })       
-      $ionicModal.fromTemplateUrl('templates/modal/check_out_modal.html',{
-        scope : $scope,
-        animation : 'slide-in-up',
-        controller : 'ServiceController',
-        controllerAs : 'srvcCtrl'
-      }).then(function(checkoutModal){        
-        vm.checkoutModal = checkoutModal;
-        vm.checkoutModal.show();
-        vm.paymentDatas = datas;
-        console.log(vm.paymentDatas);
-        $timeout(function(){
-            $ionicLoading.hide();
+    // vm.openCheckOutModal = function(datas){
+    //     $ionicLoading.show({
+    //         template : 'Loading...'
+    //     })       
+    //   $ionicModal.fromTemplateUrl('templates/modal/check_out_modal.html',{
+    //     scope : $scope,
+    //     animation : 'slide-in-up',
+    //     controller : 'ServiceController',
+    //     controllerAs : 'srvcCtrl'
+    //   }).then(function(checkoutModal){        
+    //     vm.checkoutModal = checkoutModal;
+    //     vm.checkoutModal.show();
+    //     vm.paymentDatas = datas;
+    //     console.log(vm.paymentDatas);
+    //     $timeout(function(){
+    //         $ionicLoading.hide();
 
-          },500)
+    //       },500)
         
-      });
-    };
-    vm.closeChekoutModal = function(){
-        vm.checkoutModal.hide();
-    }
+    //   });
+    // };
+    // vm.closeChekoutModal = function(){
+    //     vm.checkoutModal.hide();
+    // }
     vm.closeModal = function() {
       vm.modal.hide();
     };
     vm.closeConfirmModal = function(){
         vm.confirmModal.hide();
     };
-    $scope.getPaymentOptions = ["COD","INTERNET"];
-    vm.payments = {};
-    vm.paymentNow = function(){
-        vm.paymentDatas.tranMode = vm.paymentType;
-        if(vm.paymentType == "COD"){
-            $ionicLoading.show({
-                template : 'Please wait...'
-            });
-            PaymentService.codPayment().save(vm.paymentDatas,function(response){
-                console.log(response);
-                vm.checkoutModal.hide();
-                $timeout(function(){
-                    $ionicLoading.hide();
-                    $scope.successPop('Success', response.data,'app.mapView'); 
-                },400);
+    // $scope.getPaymentOptions = ["COD","INTERNET"];
+    // vm.payments = {};
+    // vm.paymentNow = function(){
+    //     vm.paymentDatas.tranMode = vm.paymentType;
+    //     if(vm.paymentType == "COD"){
+    //         $ionicLoading.show({
+    //             template : 'Please wait...'
+    //         });
+    //         PaymentService.codPayment().save(vm.paymentDatas,function(response){
+    //             console.log(response);
+    //             vm.checkoutModal.hide();
+    //             $timeout(function(){
+    //                 $ionicLoading.hide();
+    //                 $scope.successPop('Success', response.data,'app.mapView'); 
+    //             },400);
 
-            },function(error){
-                $ionicLoading.hide();
-            });
-        }
-        if(vm.paymentType == "INTERNET"){
-            $scope.alertPop('Error',"Please choose other option .We are currently working on it");
-        }
-    };
+    //         },function(error){
+    //             $ionicLoading.hide();
+    //         });
+    //     }
+    //     if(vm.paymentType == "INTERNET"){
+    //         // $scope.alertPop('Error',"Please choose other option .We are currently working on it");
+    //         // $ionicLoading.show({
+    //         //     template : 'Please wait and donot refresh or press back'
+    //         // });
+    //         // PaymentService.paymentGatewayPayment().get(vm.paymentDatas,function(response){
+    //         //     $ionicLoading.hide();
+    //         //     console.log(response);
+    //         //     // vm.checkoutModal.hide();
+    //         //     // $timeout(function(){
+    //         //     //     $ionicLoading.hide();
+    //         //     //     $scope.successPop('Success', response.data,'app.mapView'); 
+    //         //     // },400);
+
+
+    //         // },function(error){
+    //         //     $ionicLoading.hide();
+    //         //     console.log(error);
+    //         // });
+    //         var req = {
+    //             method: 'GET',
+    //             url: vm.paymentDatas.pgUrl,
+    //         }
+    //         $http(req).then(function(response){
+    //             console.log(response);
+    //         },function(error){
+    //             console.log(error);
+    //         });
+    //     }
+    // };
   
 })

@@ -43,7 +43,7 @@
                            <span class="cart-price gsg-theme"> Price : {{orders.amount}} </span>
                         </td>
                         <td class="col-50 b-l-2">
-                            <button class="button cart-remove" ng-click="cartCtrl.removeFromCart(orders.id)">
+                            <button class="button cart-remove" ng-click="cartCtrl.removeFromCart(orders.id,orders.amount)">
                                 <i class="icon ion-trash-b"></i>&nbsp;Remove
                             </button>
                         </td>

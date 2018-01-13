@@ -2,7 +2,7 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
     var vm = this;
     vm.myOrders = function(){
     TicketService.getRequestTicket().get(function(response){
-        
+        console.log(response.data);
         vm.completedOrdersArr = [];
         vm.canceledOrdersArr = [];
        // vm.newOrdersArr = [];
@@ -19,10 +19,11 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
                     vm.futureOrdersArr.push(item);
                 }
                 else {
-                    // vm.liveOrdersArr.push(item);
+                    vm.liveOrdersArr.push(item);
                 }
             }
         });
+        console.log(vm.futureOrdersArr);
     },function(error){
         console.log(error);
     });
@@ -61,13 +62,14 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
     vm.buyFromCart = function(){
         console.log(vm.cartSelection);
     };
-    vm.removeFromCart = function(cartId){
+    vm.removeFromCart = function(cartId,orderAmount){
         $ionicLoading.show({
             template : 'Removing...'
         });
         console.log(cartId);
         TicketService.removeFromCart(cartId).delete(function(response){
             console.log(response);
+            vm.totalPrice = vm.totalPrice - orderAmount;
             vm.cartOrders = response.data;
             $timeout(function(){
                 $ionicLoading.hide();
@@ -77,5 +79,26 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
             $ionicLoading.hide();
             console.log(error);
         });
+    }
+    vm.reqDetails = function(details){
+        $ionicModal.fromTemplateUrl('templates/modal/req_details_modal.html',{
+            scope : $scope,
+            // animation : 'slide-in-',
+            controller : 'RequestController',
+            controllerAs : 'reqCtrl'
+          }).then(function(reqDetailsModal){        
+            vm.reqDetailsModal = reqDetailsModal;
+            vm.reqDetailsModal.show();
+            vm.requestDetails = details;
+            console.log(vm.requestDetails);
+            // $timeout(function(){
+            //     $ionicLoading.hide();
+    
+            //   },500)
+            
+          });
+    };
+    vm.closeREqDetailsModal = function(){
+        vm.reqDetailsModal.hide();
     }
  });

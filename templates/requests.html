@@ -13,19 +13,19 @@
                             </div>
                         <ion-list>
                             <div ng-repeat="liveOrders in reqCtrl.liveOrdersArr">
-                            <ion-item class="m-b-5">
-                                    <h4>STATUS: {{liveOrders.status}}</h4>
-                                    <h4>ORDER ID: {{liveOrders.orderId}}</h4>
-                                    <h4>VEHICLE: {{liveOrders.usrVehicle.vehicle.make + " "+ liveOrders.usrVehicle.vehicle.model+ " "+ liveOrders.usrVehicle.registerationNumber}}</h4>
-                                   <h2>SERVICES :</h2>
-                                   <ul>
+                            <ion-item class="m-b-5" ng-click="reqCtrl.reqDetails(liveOrders)">
+                                    <h4>STATUS &nbsp;:LIVE</h4>
+                                    <h4>ORDER ID &nbsp;: {{liveOrders.orderId}}</h4>
+                                    <h4>REQUEST DATE &nbsp;: {{liveOrders.serviceDate}}</h4>
+                                   <h4>AMOUNT &nbsp;:{{liveOrders.totalPrice}} </h4>
+                                   <!-- <ul>
                                     <li ng-repeat="Orderdtls in liveOrders.orderDtls">
                                      
                                        <p class="w-s-i" ng-repeat="services in Orderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ liveOrders.usrVehicle.vehicle.type] }} </p>
                                          
                                     </li>
-                                </ul>
-                                </ion-item>
+                                </ul> -->
+                            </ion-item>
                             </div>
                         </ion-list>
                 </ion-slide>
@@ -36,18 +36,11 @@
                             </div>
                         <ion-list>
                                 <div ng-repeat="futureOrder in reqCtrl.futureOrdersArr">
-                                <ion-item class="m-b-5">
-                                        <h4>STATUS: {{futureOrder.status}}</h4>
-                                        <h4>ORDER ID: {{futureOrder.orderId}}</h4>
-                                        <h4>VEHICLE: {{futureOrder.usrVehicle.vehicle.make + "   "+ futureOrder.usrVehicle.vehicle.model+ "    "+ futureOrder.usrVehicle.registrationNumber}}</h4>
-                                       <h2>SERVICES :</h2>
-                                       <ul>
-                                        <li ng-repeat="futureOrderdtls in futureOrder.orderDtls">
-                                         
-                                           <p class="w-s-i" ng-repeat="services in futureOrderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ futureOrder.usrVehicle.vehicle.type]}} </p>
-                                             
-                                        </li>
-                                    </ul>
+                                    <ion-item class="m-b-5" ng-click="reqCtrl.reqDetails(futureOrder)">
+                                        <h4>STATUS &nbsp;:PENDING</h4>
+                                        <h4>ORDER ID &nbsp;: {{futureOrder.orderId}}</h4>
+                                        <h4>REQUEST DATE &nbsp;: {{futureOrder.serviceDate}}</h4>
+                                        <h4>AMOUNT &nbsp;:{{futureOrder.totalPrice}} </h4>
                                     </ion-item>
                                 </div>
                             </ion-list>

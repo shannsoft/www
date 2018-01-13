@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $ionicModal, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
+app.controller('MainController', function($scope, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -37,7 +37,85 @@ app.controller('MainController', function($scope, $ionicModal, $ionicPlatform, $
         $state.go(state);
       }
     });
+  };
+  $scope.getPaymentOptions = ["COD","INTERNET"];
+  $scope.openCheckOutModal = function(datas){
+    $ionicLoading.show({
+        template : 'Loading...'
+    })       
+  $ionicModal.fromTemplateUrl('templates/modal/check_out_modal_test.html',{
+    scope : $scope,
+    animation : 'slide-in-up',
+    controller : 'MainController',
+  }).then(function(checkoutModal){        
+    $scope.checkoutModal = checkoutModal;
+    $scope.checkoutModal.show();
+    $scope.paymentDatas = datas;
+    console.log($scope.paymentDatas);
+    $timeout(function(){
+        $ionicLoading.hide();
+
+      },500)
+    
+  });
+};
+$scope.payments = {};
+$scope.paymentNow = function(){
+  console.log($scope.payments);
+  $scope.paymentDatas.tranMode = $scope.paymentType;
+  if($scope.payments.paymentType == "COD"){
+      $ionicLoading.show({
+          template : 'Please wait...'
+      });
+      PaymentService.codPayment().save($scope.paymentDatas,function(response){
+          console.log(response);
+          $scope.checkoutModal.hide();
+          $timeout(function(){
+              $ionicLoading.hide();
+              $scope.successPop('Success', response.data,'app.mapView'); 
+          },400);
+
+      },function(error){
+          $ionicLoading.hide();
+      });
   }
+  if($scope.payments.paymentType == "INTERNET"){
+      // $scope.alertPop('Error',"Please choose other option .We are currently working on it");
+      // $ionicLoading.show({
+      //     template : 'Please wait and donot refresh or press back'
+      // });
+      // PaymentService.paymentGatewayPayment().get(vm.paymentDatas,function(response){
+      //     $ionicLoading.hide();
+      //     console.log(response);
+      //     // vm.checkoutModal.hide();
+      //     // $timeout(function(){
+      //     //     $ionicLoading.hide();
+      //     //     $scope.successPop('Success', response.data,'app.mapView'); 
+      //     // },400);
+
+
+      // },function(error){
+      //     $ionicLoading.hide();
+      //     console.log(error);
+      // });
+      var req = {
+          method: 'GET',
+          url: vm.paymentDatas.pgUrl,
+      }
+      $http(req).then(function(response){
+          console.log(response);
+      },function(error){
+          console.log(error);
+      });
+  }
+
+};
+$scope.closeChekoutModal = function(){
+  $scope.checkoutModal.hide();
+};
+
+
+
   // $scope.isOnline = function(){
   //   if($cordovaNetwork.isOnline() == true){
   //     return true;
@@ -76,47 +154,47 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
 
 app.controller('MapController',function($cordovaGeolocation,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
   var vm = this;
-  var diagnostic;
-  var locationAccuracy;
+  // var diagnostic;
+  // var locationAccuracy;
   vm.mapInit = function(){
-    $scope.location = '';
-    $ionicPlatform.ready(function() {
-     diagnostic = cordova.plugins.diagnostic;
-     locationAccuracy = cordova.plugins.locationAccuracy;
-    diagnostic.isLocationEnabled(function(available){
-      if(!available){
-        locationAccuracy.canRequest(function(canRequest){
-          if(canRequest){
-              locationAccuracy.request(function (success){
-                  console.log("Successfully requested accuracy: "+success.message);
-                  $timeout(function(){
-                    vm.loadMap();
-                  })
-              }, function (error){
-                console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-                if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
-                  if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                    diagnostic.switchToLocationSettings();
-                  }
-                }
-                else{
-                  $ionicHistory.goBack();
-                }
-              },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-          }
-        });
-      }
-      else{
-        $timeout(function(){
-          vm.loadMap();
-        })
-      }
-      console.log("Location is " + (available ? "available" : "not available"));
-    }, function(error){
-      console.error("The following error occurred: "+error);
-    });
-  })
-  // vm.loadMap();
+  //   $scope.location = '';
+  //   $ionicPlatform.ready(function() {
+  //    diagnostic = cordova.plugins.diagnostic;
+  //    locationAccuracy = cordova.plugins.locationAccuracy;
+  //   diagnostic.isLocationEnabled(function(available){
+  //     if(!available){
+  //       locationAccuracy.canRequest(function(canRequest){
+  //         if(canRequest){
+  //             locationAccuracy.request(function (success){
+  //                 console.log("Successfully requested accuracy: "+success.message);
+  //                 $timeout(function(){
+  //                   vm.loadMap();
+  //                 })
+  //             }, function (error){
+  //               console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+  //               if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
+  //                 if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+  //                   diagnostic.switchToLocationSettings();
+  //                 }
+  //               }
+  //               else{
+  //                 $ionicHistory.goBack();
+  //               }
+  //             },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+  //         }
+  //       });
+  //     }
+  //     else{
+  //       $timeout(function(){
+  //         vm.loadMap();
+  //       })
+  //     }
+  //     console.log("Location is " + (available ? "available" : "not available"));
+  //   }, function(error){
+  //     console.error("The following error occurred: "+error);
+  //   });
+  // })
+  vm.loadMap();
   }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};

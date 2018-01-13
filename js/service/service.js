@@ -213,6 +213,13 @@ angular.module('serviceModule', ['ngResource'])
                 // header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
+        },
+        paymentGatewayPayment: function(){
+            return $resource(CONFIG.PGPayment,{
+                get:{method:'GET'},
+                // header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
         }
     }
 });

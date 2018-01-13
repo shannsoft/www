@@ -647,7 +647,7 @@ profile_content .popular-city{
   font-weight: 700;
   color: #f8f8f8;
   height: 17px;
-  width: 17px;
+  width: 20px;
   position: absolute;
   display: inline-block !important;
   top: 0px;
@@ -937,3 +937,27 @@ cart page style */
     font-size: 17px;
     margin-left: 5px;
 }
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////// */
+.modal-request-details{
+  display: block;
+    border-radius: 15px !important;
+    position: absolute;
+    top: 120px !important;
+    z-index: 10;
+    overflow: hidden;
+    min-height: 40% !important;
+    height: 387px !important;
+    width: 90% !important;
+    background-color: #fff;
+    left: 20px !important;
+    right: 20px !important;
+}
+.modal-req-det-hed{
+  background: #0a9dc7 !important;
+}
+.span-text{
+  color: black;
+    font-size: 15px;
+    font-weight: 600;
+}
+

@@ -190,6 +190,7 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
             /*******************************************************************************/
     vm.getLoginUserDetails = function(){
         vm.userUpdate = angular.copy($localStorage.loggedin_user);
+        console.log(vm.userUpdate);
     };
              /*******************************************************************************/
     /************************This function is used to update user details**********************************/

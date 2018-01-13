@@ -47,11 +47,12 @@ vm.isGroupShown = function(list){
         PlanService.subscribePlan(obj).get(function(response){  
             console.log(response);   
             // $localStorage.loggedin_user = response.data;
-            vm.subscrpModal.hide();      
-            $timeout(function(){
-                $ionicLoading.hide();
-                $scope.successPop('Success', 'Plan Subscribed Successfully...','app.mapView'); 
-            },500);
+            vm.subscrpModal.hide();  
+            $scope.openCheckOutModal(response.data);    
+            // $timeout(function(){
+            //     $ionicLoading.hide();
+            //     $scope.successPop('Success', 'Plan Subscribed Successfully...','app.mapView'); 
+            // },500);
         },function(error){          
             console.log(error);
             $ionicLoading.hide();
