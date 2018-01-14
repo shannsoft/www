@@ -61,6 +61,24 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
     }
     vm.buyFromCart = function(){
         console.log(vm.cartSelection);
+        $ionicLoading.show({
+            template : 'Loading...'
+        });
+        TicketService.buyFromCart(vm.cartSelection.id).get(function(response){
+            console.log(response);
+            $ionicLoading.hide();
+            $scope.openCheckOutModal(response.data);
+            // vm.totalPrice = vm.totalPrice - orderAmount;
+            // vm.cartOrders = response.data;
+            // $timeout(function(){
+            //     $ionicLoading.hide();
+            //     $scope.successPop('Success', 'Removed from cart...','app.cart'); 
+            // },500);
+        },function(error){
+            $ionicLoading.hide();
+            console.log(error);
+        });
+
     };
     vm.removeFromCart = function(cartId,orderAmount){
         $ionicLoading.show({

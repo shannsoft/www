@@ -10,10 +10,17 @@
                     <h2>ORDER ID - {{reqCtrl.requestDetails.orderId}}</h2><hr>
                     <!-- <h4 class="w-s-i"> ORDER DATE -  {{reqCtrl.requestDetails.serviceDate}}</h4><hr> -->
                     <div ng-repeat="orders in reqCtrl.requestDetails.orderDtls">
-                        <span class="span-text">
+                        <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SCHEME' ">
+                                <p class="w-s-i">Scheme - {{orders.product.description}} ({{orders.product.durationInDays}}  Days) </p>
+                        </span>
+                        <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SERVICE' ">
                                 <p class="w-s-i"></p> Vehicle - {{orders.product.usrVehicle.vehicle.make + " " + orders.product.usrVehicle.vehicle.models + " " + orders.product.usrVehicle.registrationNumber}}</p>
                         </span><hr>
-                        <span class="span-text" ng-repeat="services in orders.product.services">
+                        
+                        <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SCHEME' " ng-repeat="schemes in orders.product.schemeServiceDtls">
+                                <p class="w-s-i">{{$index+1}} -&nbsp;{{schemes.freeUsage == 99 ? "Unlimited" : schemes.freeUsage }} &nbsp; {{schemes.serviceDesc}}</p>
+                        </span>
+                        <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SERVICE' " ng-repeat="services in orders.product.services">
                                 <p class="w-s-i">{{$index+1}} - {{services.subCategory}} &nbsp; - &nbsp; {{services.price[ orders.product.usrVehicle.vehicle.type] }} {{services.freeApplied ? "(Free Applied)" : " "}}</p>
                         </span><hr>
                         

@@ -13,11 +13,11 @@ angular.module('serviceModule', ['ngResource'])
 .factory('loginService', function ($resource,CONFIG,$http) {
     return{
 
-        loginOAuth: function (contactNbr,password) {
-            return $resource( CONFIG.HTTP_HOST_APP_OAUTH +'/gsg/oauth/token?grant_type=password&username=' + contactNbr + '&password=' + password,{
-              save:{method:'POST'}
-            })
-        },
+        // loginOAuth: function (contactNbr,password) {
+        //     return $resource( CONFIG.HTTP_HOST_APP_OAUTH +'/gsg/oauth/token?grant_type=password&username=' + contactNbr + '&password=' + password,{
+        //       save:{method:'POST'}
+        //     })
+        // },
         preResPwd : function(contactNbr){
             return $resource( CONFIG.HTTP_HOST_APP + '/gsg/preresetpwd/' + contactNbr , {
                 save : {method : "POST"}
@@ -190,7 +190,7 @@ angular.module('serviceModule', ['ngResource'])
             })
         },
         getCardOrders: function(){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/cart/user/' + $localStorage.loggedin_user.userId,{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/cart/user/' + $localStorage.loggedin_user.userId,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
@@ -202,7 +202,15 @@ angular.module('serviceModule', ['ngResource'])
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
+        },
+        buyFromCart: function(cartId){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/cart/' + $localStorage.loggedin_user.userId + '/' + cartId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
         }
+
     }
 })
 .factory('PaymentService',function(CONFIG,$resource,$http,$localStorage){
@@ -214,8 +222,8 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
-        paymentGatewayPayment: function(){
-            return $resource(CONFIG.PGPayment,{
+        checkPaymentStatus: function(reference_id){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/paymentStatus/' + reference_id,{
                 get:{method:'GET'},
                 // header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true

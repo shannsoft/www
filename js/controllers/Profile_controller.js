@@ -206,9 +206,10 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         UserService.updateUserById().update({ id:vm.userUpdate.userId},vm.userUpdate,function(response){
             $timeout(function(){
                 delete  $localStorage.loggedin_user;
-                 $localStorage.loggedin_user = response.data;
+                $localStorage.loggedin_user = response.data;
+                vm.userUpdate = angular.copy($localStorage.loggedin_user);
                 $ionicLoading.hide();
-                $scope.successPop('Success', 'Profile updated successfully...', 'app.mapView' ); 
+                $scope.successPop('Success', 'Profile updated successfully...'); 
             },1000);
            
         },function(error){

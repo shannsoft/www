@@ -51,10 +51,12 @@ vm.deleteVehicle = function(vehicleId){
     vehicleDeletePopup.then(function(res){
         if(res == true){
         VehicleService.deleteVehicle(vm.loggedin_user_id,vehicleId).delete(function(response){
+            console.log(response);
+            $localStorage.loggedin_user = response.data;
             $timeout(function(){
-                $localStorage.loggedin_user = response.data;
+                vm.vehicleList = $localStorage.loggedin_user.userVehicles;
                 $ionicLoading.hide();
-                $scope.successPop('Success', 'Vehicle deleted Successfully...','app.mapView'); 
+                $scope.successPop('Success', 'Vehicle deleted Successfully...'); 
             },500);
         },function(error){
             console.log(error);
