@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope,$http,$window, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
+app.controller('MainController', function($scope,$http,$window,$cordovaInAppBrowser, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -92,27 +92,35 @@ $scope.paymentNow = function(){
       // },function(erro
       //     console.log(error);
       // });
-      $ionicPlatform.ready(function() {
-        if($scope.ref){
-          $scope.ref.close();
-        }
-        $scope.ref = cordova.InAppBrowser.open($scope.paymentDatas.pgUrl, '_blank','location=no');
-      })
-      PaymentService.checkPaymentStatus($scope.paymentDatas.referenceno).get(function(response){
-        console.log(response);
-        $scope.ref.close();  
-        $scope.successPop(response.data, response.data,'app.mapView'); 
-      },function(error){
-        console.log(error);
-          $ionicLoading.hide();
-          $scope.alertPop('Error', error.data,'app.mapView'); 
-      });
-     
+      var options = {
+        location: 'no',
+        clearcache: 'yes',
+        toolbar: 'no'
+      };
+      document.addEventListener("deviceready", function () {
+        $cordovaInAppBrowser.open($scope.paymentDatas.pgUrl, '_blank', options)
+          .then(function(event) {
+            PaymentService.checkPaymentStatus($scope.paymentDatas.referenceno).get(function(response){
+              console.log(response);
+              $cordovaInAppBrowser.close();  
+              $scope.successPop(response.data, response.data,'app.mapView'); 
+            },function(error){
+              console.log(error);
+              $ionicLoading.hide();
+              $scope.alertPop('Error', error.data,'app.mapView'); 
+            });
+          })
+          .catch(function(event) {
+            // error
+          });
+      }, false);
+      // $ionicPlatform.ready(function() {
+      //   if($scope.ref){
+      //     $scope.ref.close();
+      //   }
+      //   $scope.ref = cordova.InAppBrowser.open(, '_blank','location=no');
+      // })
   }
-  vm.callback = function(){
-    console.log('App Exit');
-  }
-
 };
 $scope.closeChekoutModal = function(){
   $scope.checkoutModal.hide();
