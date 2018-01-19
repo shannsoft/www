@@ -29,7 +29,7 @@
                         <span class="plain-text row" ng-show="regstrCtrl.showPasswordMisMatch && basicInfo.rePassword.$touched">Password doesn't match</span>            
                 </div>
                 <a href="" class="otp-resend" ui-sref="login" >I am already registered</a>
-                <button class="button button-block button-positive" type="submit" ng-disabled="basicInfo.$invalid" ng-click="regstrCtrl.register()">Register</button>
+                <button class="button button-block button-positive" type="submit" ng-disabled="basicInfo.$invalid || regstrCtrl.showPasswordMisMatch" ng-click="regstrCtrl.register()">Register</button>
             </form>
         </div>
     </div>   

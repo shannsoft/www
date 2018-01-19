@@ -234,16 +234,50 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
       }
     }
   })
-  .state('app.history', {
-    url: '/history',
+  .state('app.dashboard', {
+    url: '/dash',
     resolve: {
       logout: checkLoggedout
     },
     views: {
       'menuContent': {
-        controller:'RequestController',
-        controllerAs:'historyCtrl',
-        templateUrl: 'templates/history.html'
+        controller:'DashboardController',
+        controllerAs:'tlCtrl',
+        templateUrl: 'templates/dashboard.html'
+      }
+    }
+  })
+  .state('app.ticketList', {
+    url: '/tl/:st',
+    resolve: {
+      logout: checkLoggedout
+    },
+    params : {
+      st : null,
+    },
+    views: {
+      'menuContent': {
+        controller:'DashboardController',
+        controllerAs:'tlCtrl',
+        templateUrl: 'templates/ticket_list.html'
+      }
+    }
+  })
+ 
+  .state('app.ticketListDetails', {
+    url: '/td/:order_id',
+    resolve: {
+      logout: checkLoggedout
+    },
+    params : {
+      order_id : null,
+      ticketData :null
+    },
+    views: {
+      'menuContent': {
+        controller:'DashboardController',
+        controllerAs:'tlCtrl',
+        templateUrl: 'templates/ticket_list_details.html'
       }
     }
   })
@@ -314,8 +348,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
 }
 });
 app.constant('CONFIG', {
-  //  'HTTP_HOST_APP':'http://192.168.0.8:8090',
-   'HTTP_HOST_APP':'http://101.53.136.166:8090'
+  //  'HTTP_HOST_APP':'http://192.168.0.12:8090',
+   'HTTP_HOST_APP':'http://101.53.136.166:8090',
+   'HTTP_HOST_APP_NEW':'http://101.53.136.166:8091'
 });
 app.config(function (ionicDatePickerProvider) {
   var datePickerObj = {

@@ -1,18 +1,21 @@
 app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$state,$scope,$ionicLoading,TicketService){
     var vm = this;
     vm.myOrders = function(){
+        $ionicLoading.show({
+            template :'Loading...'
+        });
     TicketService.getRequestTicket().get(function(response){
-        console.log(response.data);
+        console.log(response);
         vm.completedOrdersArr = [];
         vm.canceledOrdersArr = [];
        // vm.newOrdersArr = [];
         vm.liveOrdersArr = [];
         vm.futureOrdersArr = [];
         angular.forEach(response.data,function(item){
-            if(item.status == "COMPLETED"){
+            if(item.requestStatus == "CLOSED"){
                 vm.completedOrdersArr.push(item);
             }
-            else if(item.status == "CANCELED"){
+            else if(item.requestStatus == "CANCELED"){
                 vm.canceledOrdersArr.push(item);
             }else{
                 if( moment(item.serviceDate) > moment() ){
@@ -23,8 +26,16 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
                 }
             }
         });
+        console.log(vm.liveOrdersArr);
         console.log(vm.futureOrdersArr);
+        console.log(vm.completedOrdersArr);
+        console.log(vm.canceledOrdersArr);
+        $timeout(function(){
+            $ionicLoading.hide();
+        },400);
     },function(error){
+        $ionicLoading.hide();
+        $scope.alertPop("Error", "Something went wrong.");
         console.log(error);
     });
 };
@@ -89,10 +100,11 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
             console.log(response);
             vm.totalPrice = vm.totalPrice - orderAmount;
             vm.cartOrders = response.data;
-            $timeout(function(){
-                $ionicLoading.hide();
-                $scope.successPop('Success', 'Removed from cart...','app.cart'); 
-            },500);
+            $ionicLoading.hide();
+            // $timeout(function(){
+            //     $ionicLoading.hide();
+            //     $scope.successPop('Success', 'Removed from cart...','app.cart'); 
+            // },500);
         },function(error){
             $ionicLoading.hide();
             console.log(error);

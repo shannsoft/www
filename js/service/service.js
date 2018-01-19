@@ -153,6 +153,13 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
+        getUserSchemes: function(){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/' + $localStorage.loggedin_user.userId + '/schemes',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
         subscribePlan: function(data){
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
                 get:{method:'GET'},
@@ -208,6 +215,35 @@ angular.module('serviceModule', ['ngResource'])
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
+            })
+        },
+        getAllTickets: function(){
+            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/' + $localStorage.loggedin_user.userId + '/assigned',{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        getOrderByOrderId: function(orderId){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/' + orderId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        newSvcAddOn: function(orderId){
+            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/' + orderId + '/addOn',{
+                save:{method:'POST'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+         updateOrder: function(){
+            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/:orderId',null ,{
+                update: {
+                    method:'PUT',
+                    headers: {'Authorization':'bearer '+$localStorage.user_token}
+                }
             })
         }
 

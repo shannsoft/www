@@ -210,7 +210,7 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
                 vm.userUpdate = angular.copy($localStorage.loggedin_user);
                 $ionicLoading.hide();
                 $scope.successPop('Success', 'Profile updated successfully...'); 
-            },1000);
+            },700);
            
         },function(error){
             $ionicLoading.hide();

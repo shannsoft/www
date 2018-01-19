@@ -1,8 +1,17 @@
-app.controller('MainController', function($scope,$http,$window,$cordovaInAppBrowser, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
+app.controller('MainController', function($scope,$http,$rootScope,$window,$cordovaInAppBrowser, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
   /*******************************************************************************/
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+    $rootScope.fromState = fromState;
+    $rootScope.toState = toState;
+    $rootScope.toParams = toParams;
+    $rootScope.fromParams = fromParams;
+
+ })
+
+
   $scope.alertPop = function(title, msg, state) {
     var alertPopup = $ionicPopup.alert({
       title: title || 'Alert',
@@ -38,7 +47,7 @@ app.controller('MainController', function($scope,$http,$window,$cordovaInAppBrow
       }
     });
   };
-  $scope.getPaymentOptions = ["COD","INTERNET"];
+  $scope.getPaymentOptions = ["COD","ONLINE PAYMENT"];
 
   $scope.openCheckOutModal = function(datas){
     $ionicLoading.show({
@@ -52,6 +61,7 @@ app.controller('MainController', function($scope,$http,$window,$cordovaInAppBrow
     $scope.checkoutModal = checkoutModal;
     $scope.checkoutModal.show();
     $scope.paymentDatas = datas;
+    $scope.payments.paymentType = "";
     console.log($scope.paymentDatas);
     $timeout(function(){
         $ionicLoading.hide();
@@ -62,12 +72,15 @@ app.controller('MainController', function($scope,$http,$window,$cordovaInAppBrow
 };
 $scope.payments = {};
 $scope.paymentNow = function(){
-  console.log($scope.payments);
-  $scope.paymentDatas.tranMode = $scope.paymentType;
-  if($scope.payments.paymentType == "COD"){
+  if($scope.payments.paymentType == "" || $scope.payments.paymentType == "null"){
+    $scope.alertPop("Error", "Please Choose one payment method");
+  }
+  else {
+    if($scope.payments.paymentType == "COD"){
       $ionicLoading.show({
           template : 'Please wait...'
       });
+      console.log($scope.paymentDatas);
       PaymentService.codPayment().save($scope.paymentDatas,function(response){
           console.log(response);
           $scope.checkoutModal.hide();
@@ -81,17 +94,8 @@ $scope.paymentNow = function(){
           $scope.alertPop('Error', error.data,'app.mapView'); 
       });
   }
-  if($scope.payments.paymentType == "INTERNET"){
+  if($scope.payments.paymentType == "ONLINE PAYMENT"){
       console.log($scope.paymentDatas);
-      // var req = {
-      //     method: 'GET',
-      //     url: $scope.paymentDatas.pgUrl,
-      // }
-      // $http(req).then(function(response){
-      //     console.log(response);
-      // },function(erro
-      //     console.log(error);
-      // });
       var options = {
         location: 'no',
         clearcache: 'yes',
@@ -103,10 +107,16 @@ $scope.paymentNow = function(){
             PaymentService.checkPaymentStatus($scope.paymentDatas.referenceno).get(function(response){
               console.log(response);
               $cordovaInAppBrowser.close();  
-              $scope.successPop(response.data, response.data,'app.mapView'); 
+              $scope.checkoutModal.hide();
+              $timeout(function(){
+                $scope.successPop("Success", response.data,'app.mapView'); 
+              },500)
+              
             },function(error){
               console.log(error);
+              $scope.checkoutModal.hide();
               $ionicLoading.hide();
+
               $scope.alertPop('Error', error.data,'app.mapView'); 
             });
           })
@@ -114,13 +124,10 @@ $scope.paymentNow = function(){
             // error
           });
       }, false);
-      // $ionicPlatform.ready(function() {
-      //   if($scope.ref){
-      //     $scope.ref.close();
-      //   }
-      //   $scope.ref = cordova.InAppBrowser.open(, '_blank','location=no');
-      // })
+     
   }
+  }
+  
 };
 $scope.closeChekoutModal = function(){
   $scope.checkoutModal.hide();
@@ -281,6 +288,9 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
         text: 'Ok',
         type: 'button',
         onTap: function(){
+          $ionicLoading.show({
+            template : 'Requesting...'
+          })
           var latlngObj = LocationModel.getCurrentLocation();
           vm.emergencyTicket.location=[latlngObj.lat,latlngObj.lng];
           vm.emergencyTicket.userId = $localStorage.loggedin_user.userId;
@@ -288,8 +298,11 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
           console.log(vm.emergencyTicket);
           TicketService.createTicket().save(vm.emergencyTicket,function(response){
             console.log(response);
+            $ionicLoading.hide();
             $scope.successPop('Success', `Your request has been captured successfully.  Our support team will get back to you shortly.`);
           },function(error){
+            $ionicLoading.hide();
+            $scope.alertPop("Error", "Something went wrong..");
             console.log(error);
           });
         }

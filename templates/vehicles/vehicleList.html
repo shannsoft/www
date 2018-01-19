@@ -5,8 +5,13 @@
         </button>
     </ion-nav-buttons>
     <ion-content>
-        <div class="popular-query">
+        <div class="popular-query" ng-hide="vehicleCtrl.vehicleList.length == 0">
                 <h3 class="popular-city">Added Vehicles</h3>
+        </div>
+        <div ng-show="vehicleCtrl.vehicleList.length == 0|| !vehicleCtrl.vehicleList" class="cart-empty">
+                <i class="icon ion-model-s"> </i>
+                <h3> No Vehicles added</h3>
+                <butt>
             </div>
         <ion-list>
             <div ng-repeat="item in vehicleCtrl.vehicleList">

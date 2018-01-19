@@ -1,5 +1,6 @@
 app.controller("PlanController",function($ionicModal,$stateParams,$timeout,$state,$scope,$ionicLoading,PlanService,$localStorage){
    var vm = this;
+   vm.myPlan = {};
    vm.toggleGroup = function(list){
     if(vm.isGroupShown(list)){
         vm.shownGroup = null;
@@ -24,6 +25,7 @@ vm.isGroupShown = function(list){
            
         },function(error){
             console.log(error);
+            $ionicLoading.hide();
         })
 
     };
@@ -65,8 +67,14 @@ vm.isGroupShown = function(list){
         });
     };
    vm.getMyPlan = function(){
-       vm.myPlan = $localStorage.loggedin_user.schemes;
-       console.log(vm.myPlan);
+       PlanService.getUserSchemes().get(function(response){
+        console.log(response);
+        vm.myPlan = response.data;
+       },function(error){
+        console.log(error);
+       });
+    //    vm.myPlan = $localStorage.loggedin_user.schemes;
+    //    console.log(vm.myPlan);
    }
     vm.closeModal = function() {
         vm.subscrpModal.hide();

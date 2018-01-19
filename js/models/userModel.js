@@ -2,6 +2,7 @@ app.factory("UserModel",function() {
   var userModel = {};
   var registerData = {};
   var userdata = {};
+  var tickets = [];
   return {
     setUser : function(user){
       userdata = user;
@@ -14,6 +15,12 @@ app.factory("UserModel",function() {
     },
     getRegisterData : function(userata){
       return registerData;
+    },
+    getTicket:function() {
+      return tickets.length ? tickets : [];
+    },
+    setTicket:function(ticketData) {
+      tickets = ticketData;
     }
   }
 }),

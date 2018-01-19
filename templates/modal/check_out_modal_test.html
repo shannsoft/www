@@ -7,13 +7,13 @@
         </ion-header-bar>
         <ion-content>          
                 <div class="list list-plan">
-                    <ion-radio ng-model="payments.paymentType" name="vehicle_radio" ng-value="options"  ng-repeat="options in getPaymentOptions">
+                    <ion-radio ng-model="payments.paymentType" name="vehicle_radio" ng-value="options"  ng-hide="paymentDatas.productType == 'SCHEME' && options == 'COD'" ng-repeat="options in getPaymentOptions">
                         <h2>{{options}}</h2>
                     </ion-radio>           
                 </div> 
                 <!-- <a ng-href="{{srvcCtrl.paymentDatas.pgUrl}}"> uhgfuygjyfgjfuyhfhgfyu</a>        -->
         </ion-content>
         <ion-footer-bar class="map-footer" >
-            <button class="button button-block button-map" type="submit" ng-click="paymentNow()">PAY NOW</button>        
+            <button class="button button-block button-map" type="submit" ng-disabled="payments.paymentType == 'null'"  ng-click="paymentNow()">PAY NOW</button>        
         </ion-footer-bar>
     </ion-modal-view>

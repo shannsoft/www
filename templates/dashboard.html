@@ -1,0 +1,28 @@
+<ion-view cache-view="false" view-title="Dashboard" ng-init="tlCtrl.getTickets()">
+    <ion-nav-buttons side="left">
+        <button class="back-button" ui-sref="app.mapView">
+          <i class="icon ion-chevron-left"></i> 
+        </button>
+    </ion-nav-buttons>
+    <ion-content class="gsg_main_container">
+        <div class="plan_list" >          
+            <div class="plan_item w-98" ui-sref="app.ticketList({st:'NEW'})">
+                <span class="plan">New Requests</span>
+                <span class="ticket-count">{{tlCtrl.newTicketsArr.length}}</span>
+            </div>
+            <div class="plan_item w-98" ui-sref="app.ticketList({st:'WIP'})">
+                <span class="plan">Work In Progress Requests</span>
+                <span class="ticket-count">{{tlCtrl.wipTicketsArr.length}}</span>
+            </div>
+            <div class="plan_item w-98" ui-sref="app.ticketList({st:'RESOLVED'})">
+                <span class="plan">Resolved Requests</span>
+                <span class="ticket-count">{{tlCtrl.resolvedTicketArr.length}}</span>
+            </div>
+            <div class="plan_item w-98" ui-sref="app.ticketList({st:'CANCELED'})">
+                <span class="plan">Cancelled Requests</span>
+                <span class="ticket-count">{{tlCtrl.canceledTicketArr.length}}</span>
+            </div>                                
+        </div> 
+    </ion-content>
+</ion-view>
+  

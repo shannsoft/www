@@ -11,6 +11,9 @@
 .float-none{
   float : none !important;
 }
+.w-100{
+  width : 100% !important;
+}
 .bar.bar-stable{
   background: #fff !important;
 }
@@ -84,6 +87,9 @@ popup-body{
   padding: 15px 10px;
   text-align: center;
 }
+.text-left{
+  text-align : left !important;
+}
 .gsg-popup .popup-buttons{
   padding:0;
   min-height: 20px !important;
@@ -144,11 +150,17 @@ popup-body{
   color: #fff;
 }
 .center{
-    text-align:center;
+    text-align:center !important;
 }
 .side-menu a{
   text-decoration: none;
   color: #000;
+}
+.m-r-60{
+  margin-right: 60px !important;
+}
+.m-t-128{
+  margin-top: 128px !important;
 }
 .platform-android .action-sheet{
   margin-left: 8px;
@@ -823,7 +835,16 @@ font-size: 12px;
   background: linear-gradient(150deg, rgba(114,183,17,1) 0%, rgba(114,183,17,1) 50%, rgba(89,150,4,1) 50%, rgba(89,150,4,1) 71%, rgba(89,150,4,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#72b711', endColorstr='#599604', GradientType=1 );
 }
-.plan_item:after {
+.w-98{
+  width : 98% !important;
+}
+.ticket-count{
+  font-size: 27px;
+    position: absolute;
+    bottom: 47px;
+    left: 20px;
+}
+/* .plan_item:after {
   border-top: 22px solid #73b711;
   border-left: 16px solid transparent;
   border-right: 16px solid transparent;
@@ -832,7 +853,7 @@ font-size: 12px;
   right: 40%;
   position: absolute;
   bottom: -22px;
-}
+} */
 .plan_item .plan, .plan_item .plan_price{
   text-align: right;
   display: block;
