@@ -200,7 +200,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
                 TicketService.updateOrder().update({orderId : vm.ticketDetails.orderId},obj, function(response){
                 console.log(response);
                 vm.ticketDetails = response.data;
-                $scope.successPop('Success', 'Status changed Successfully...');
+                $scope.successPop('Success', 'Status changed Successfully...', 'app.dashboard');
                 // $localStorage.loggedin_user = response.data;
                 // $timeout(function(){
                 //     vm.vehicleList = $localStorage.loggedin_user.userVehicles;
