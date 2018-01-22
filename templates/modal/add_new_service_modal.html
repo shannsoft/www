@@ -25,27 +25,27 @@
                     <hr>
                         <h3 class="popular-city">{{selections.type}}({{$index+1}})</h3>
                     <hr class="m-r-60" >
-                    <span class="span-text"  ng-hide="selections.serviceList.length == 0" ng-repeat="services in selections.serviceList">
-                            <p class="w-s-i">{{$index+1}} - {{services.subCategory}} &nbsp; - &nbsp;{{services.price[ tlCtrl.oredrDetails.orderDtls[0].product.usrVehicle.vehicle.type] }} {{services.freeApplied ? "(Free Applied)" : " "}} {{services.freeApplied ? "(Free Applied)" : " "}}</p>
+                    <span class="span-text row"  ng-hide="selections.serviceList.length == 0" ng-repeat="services in selections.serviceList">
+                            <p class="w-s-i col col-80">{{$index+1}} - {{services.subCategory}}</p><p class="col-20"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{services.price[ tlCtrl.ticketDetails.orderDtls[0].product.usrVehicle.vehicle.type] }} {{services.freeApplied ? "(Free Applied)" : " "}} {{services.freeApplied ? "(Free Applied)" : " "}}</p>
                     </span>
-                    <span class="span-text" ng-hide="selections.type == 'SERVICES'">
+                    <span class="span-text" ng-hide="selections.type == 'SERVICE'">
                             <p class="w-s-i"> Description - {{selections.desc}}</p>
-                            <p class="w-s-i"> Price - {{selections.price}}</p>
+                            <p class="w-s-i"> Price <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; {{selections.price}}</p>
                     </span>
                   
                 </div> 
             </ion-item> 
               
-         <div class="list list-plan" ng-show="tlCtrl.addOnSvcCapture.type == 'SERVICES'">           
+         <div class="list list-plan" ng-show="tlCtrl.addOnSvcCapture.type == 'SERVICE'">           
             <ion-toggle ng-model="services.isSelect" toggle-class="toggle-calm" ng-repeat="services in tlCtrl.serviceFilterArr">                       
                     <h2>{{services.subCategory}}</h2>
             </ion-toggle>
         </div> 
-        <label ng-show="tlCtrl.addOnSvcCapture.type && tlCtrl.addOnSvcCapture.type !== 'SERVICES'" class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.first_name.$touched && updateProfile.first_name.$invalid}">
+        <label ng-show="tlCtrl.addOnSvcCapture.type && tlCtrl.addOnSvcCapture.type !== 'SERVICE'" class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.first_name.$touched && updateProfile.first_name.$invalid}">
             <span class="input-label col col-100">Item Description</span>
-            <textarea type="text" class="col col-100" name="description" placeholder="Item Description" ng-model="tlCtrl.addOnSvcCapture.desc" rows="5"></textarea>
+            <textarea type="text" class="col col-100" name="description" placeholder="Item Description" ng-model="tlCtrl.addOnSvcCapture.desc" rows="3"></textarea>
         </label>
-        <label ng-show="tlCtrl.addOnSvcCapture.type && tlCtrl.addOnSvcCapture.type !== 'SERVICES'" class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.first_name.$touched && updateProfile.first_name.$invalid}">
+        <label ng-show="tlCtrl.addOnSvcCapture.type && tlCtrl.addOnSvcCapture.type !== 'SERVICE'" class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.first_name.$touched && updateProfile.first_name.$invalid}">
             <span class="input-label col col-100">Item Price</span>
             <input type="number" class="col col-100" name="price" placeholder="Item Price" ng-model="tlCtrl.addOnSvcCapture.price">
         </label>

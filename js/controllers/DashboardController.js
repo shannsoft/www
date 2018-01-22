@@ -1,9 +1,9 @@
-app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScope,$localStorage,ServicesService,UserModel,$stateParams,$timeout,$state,$scope,$ionicLoading,TicketService){
+app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$rootScope,$localStorage,ServicesService,config,UserModel,$stateParams,$timeout,$state,$scope,$ionicLoading,TicketService){
     var vm = this;
     vm.ticketDetails = {};
     
         $scope.ticketLists =  UserModel.getTicket();
-    vm.addOntypeArr = ["SERVICES","CONSUMABLE","SPARE","OIL"];
+    vm.addOntypeArr = ["SERVICE","CONSUMABLE","SPARE","LABOUR"];
     vm.addOnSvcCapture = {
         type : "",
         desc : "",
@@ -21,8 +21,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
             UserModel.setTicket( response.data);
             $ionicLoading.hide();
            
-            // if($state.current.name == "app.dashboard"){
-                vm.canceledTicketArr = [];
+                vm.rejecteddTicketArr = [];
                 vm.resolvedTicketArr = [];
                 vm.newTicketsArr = [];
                 vm.wipTicketsArr = [];
@@ -30,8 +29,8 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
                     if(item.requestStatus == "RESOLVED"){
                         vm.resolvedTicketArr.push(item);
                     }
-                    if(item.requestStatus == "CANCELED"){
-                        vm.canceledTicketArr.push(item);
+                    if(item.requestStatus == "REJECTED"){
+                        vm.rejecteddTicketArr.push(item);
                     }
                     if(item.requestStatus == "CREATED" || item.requestStatus == "EMERGENCY"){
                         vm.newTicketsArr.push(item);
@@ -40,12 +39,13 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
                         vm.wipTicketsArr.push(item);
                     }
                 });
-            // }
+                $scope.$broadcast('scroll.refreshComplete');
         },function(error){
             console.log(error);
             $ionicLoading.hide();
             $scope.alertPop("Error", error.message);
         });
+
     }
     vm.ticketList = function(){
         $ionicLoading.show({
@@ -53,8 +53,9 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
         })
         if($stateParams.st){
             $localStorage.ticketListStateParams = $stateParams.st;
-            vm.ticketCategory =  $localStorage.ticketListStateParams;
+            $rootScope.ticketCategory =  $localStorage.ticketListStateParams;
         }
+        console.log( $rootScope.ticketCategory);
         TicketService.getAllTickets().get(function(response){
             console.log(response);
             UserModel.setTicket( response.data);
@@ -70,6 +71,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
             });  
             $timeout(function(){
                 $ionicLoading.hide();
+                $scope.$broadcast('scroll.refreshComplete');
             },300)    
         },function(error){
             console.log(error);
@@ -105,6 +107,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
     };
     vm.closeNewSvcModal = function(){
         vm.newSvcModal.hide();
+        vm.newSvcModal.remove();
     };
     vm.getAllServices = function(){
         ServicesService.getAllServices().get(function(response){
@@ -119,7 +122,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
     };
     vm.addItemToArray = function(){
        
-        if(vm.addOnSvcCapture.type == "SERVICES"){
+        if(vm.addOnSvcCapture.type == "SERVICE"){
             vm.addOnSvcCapture.serviceList = [];
             angular.forEach(vm.serviceFilterArr,function(service){
                 if(service.isSelect){
@@ -173,7 +176,7 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
             $timeout(function(){
                 $ionicLoading.hide();
                 
-                $scope.successPop('Success', 'Orders added to user cart Successfully...'); 
+                $scope.successPop('Success', 'Orders added to user cart Successfully...','app.dashboard'); 
             },500);
 
         },function(error){
@@ -194,10 +197,10 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
                 if(vm.ticketDetails){
                     obj.assignedQueue = vm.ticketDetails.assignedQueue;
                     obj.assignedToUserId = vm.ticketDetails.assignedToUserId;
-                    obj.requestorUserId = vm.ticketDetails.userId;
+                    obj.userId = vm.ticketDetails.userId;
                     obj.requestStatus = status;
                 }
-                TicketService.updateOrder().update({orderId : vm.ticketDetails.orderId},obj, function(response){
+                TicketService.updateOrder().update({svcEngId : $localStorage.loggedin_user.userId ,orderId : vm.ticketDetails.orderId},obj, function(response){
                 console.log(response);
                 vm.ticketDetails = response.data;
                 $scope.successPop('Success', 'Status changed Successfully...', 'app.dashboard');
@@ -208,11 +211,108 @@ app.controller('DashboardController',function($ionicModal, $ionicPopup,$rootScop
                 //     $scope.successPop('Success', 'Vehicle deleted Successfully...'); 
                 // },500);
             },function(error){
-                console.log(error);
+                if(error.status == 417){
+                    $scope.alertPop("Error", error.data.message);
+                } 
+                else if(error.status == 401){
+                    $scope.alertPop("Error", error.data.error+" Please login again");
+                }
+               else {
                 $scope.alertPop("Error", "some error occured");
+               }
+                
             });
             }
     
         });
     };
+    vm.confirmCOD = function(orderDtlId,calculatedPrice){
+        var amountPrompt = $ionicPopup.prompt({
+            title: 'Amount',
+            template: 'Confirm COD amount',
+            inputType: 'number',
+            inputPlaceholder: 'Amount',
+            okType : 'button-positive'
+          });
+          amountPrompt.then(function(res) {
+              if(res){
+                  if(calculatedPrice !== res){
+                    amountPrompt.close();
+                    $scope.alertPop("Error" , " Please enter valid amount");
+                  }
+                  else{
+                        $ionicLoading.show({
+                            template : 'Please wait..'
+                        });
+                        TicketService.confirmCODPayment(orderDtlId).get(function(response){
+                            $timeout(function(){
+                                $ionicLoading.hide();
+                                $scope.successPop(response.message, response.data, 'app.ticketList'); 
+                            },500);
+                        },function(error){
+                            $ionicLoading.hide();
+                            if(error.status == 417){
+                                $scope.alertPop("Error" , error.message);
+                            }
+                            else{
+                                $scope.alertPop("Error" , "Something wrong occured");
+                            }
+                        });
+                  }
+              }
+            
+          });
+        
+    };
+    // function onSuccess(result){
+    //     console.log(result);
+    //   }
+      
+    //   function onError(result) {
+    //    console.log(result);
+    //   }
+    vm.callThisNumber = function(mobileNbr){
+        // window.plugins.CallNumber.callNumber(onSuccess,onError,mobileNbr,false);
+        PhoneDialer.dial(mobileNbr,function(success) {
+            
+        },function(err) {
+            if (err == "empty") alert("Unknown phone number");
+            else $scope.aletPop("Dialer Error:" + err);
+        });
+    };
+
+
+    vm.getmap = function(location){
+        var lat = location[0];
+        var lng = location[1];
+        var myLatlng = {lat: lat, lng: lng};
+        console.log(myLatlng);
+        var mapOptions = {
+            streetViewControl: true,
+            center: myLatlng,
+            zoom: 13
+        };
+        map = new google.maps.Map(document.getElementById('reqMap'),mapOptions);
+        var myElements = angular.element(document.querySelector('#reqMap'));
+        vm.getLocationName(myLatlng);
+        var div = angular.element("<div class='centerMarker'></div>");
+        myElements.append(div);
+        google.maps.event.addListener(map, 'center_changed', function() {
+            window.setTimeout(function() {
+              var center = map.getCenter();
+              var myLatlng = {lat: center.lat(), lng: center.lng()}
+              vm.getLocationName(myLatlng);
+            }, 100);
+          });
+        
+    };
+    vm.getLocationName = function(latLng){
+        var latlong = latLng.lat+','+latLng.lng;
+      config.getLocationName(latlong).then(function(response) {
+        vm.place = response.data.results[0];
+        vm.location = vm.place;
+        console.log(vm.location);
+      },function(err) {
+      });
+    }
 });

@@ -12,12 +12,6 @@ angular.module('serviceModule', ['ngResource'])
 })
 .factory('loginService', function ($resource,CONFIG,$http) {
     return{
-
-        // loginOAuth: function (contactNbr,password) {
-        //     return $resource( CONFIG.HTTP_HOST_APP_OAUTH +'/gsg/oauth/token?grant_type=password&username=' + contactNbr + '&password=' + password,{
-        //       save:{method:'POST'}
-        //     })
-        // },
         preResPwd : function(contactNbr){
             return $resource( CONFIG.HTTP_HOST_APP + '/gsg/preresetpwd/' + contactNbr , {
                 save : {method : "POST"}
@@ -28,6 +22,16 @@ angular.module('serviceModule', ['ngResource'])
                 save : {method : "POST"}
             })
         },
+    }
+})
+.factory('OtpService', function ($resource,CONFIG,$http) {
+    return{
+        resendOtp : function(contactNbr){
+            return $resource( CONFIG.HTTP_HOST_APP + '/gsg/resendOtp/' + contactNbr , {
+                get : {method : "GET"}
+            })
+        },
+      
     }
 })
 .factory('registrationService', function ($resource,CONFIG) {
@@ -57,6 +61,7 @@ angular.module('serviceModule', ['ngResource'])
                 save:{method:'POST'}
             })
         }
+
        
     }
 })
@@ -183,14 +188,14 @@ angular.module('serviceModule', ['ngResource'])
 .factory('TicketService',function(CONFIG,$resource,$http,$localStorage){
     return{
         createTicket: function(){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order',{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders',{
                 save:{method:'POST'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
         },
         getRequestTicket: function(){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/user/' + $localStorage.loggedin_user.userId,{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/user/' + $localStorage.loggedin_user.userId,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
@@ -218,28 +223,35 @@ angular.module('serviceModule', ['ngResource'])
             })
         },
         getAllTickets: function(){
-            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/' + $localStorage.loggedin_user.userId + '/assigned',{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/' + $localStorage.loggedin_user.userId + '/assigned',{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
         },
         getOrderByOrderId: function(orderId){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/order/' + orderId,{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/' + orderId,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        confirmCODPayment: function(orderDtlId){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/confirmCODPayment/' + orderDtlId,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
         },
         newSvcAddOn: function(orderId){
-            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/' + orderId + '/addOn',{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/' + orderId + '/addOn',{
                 save:{method:'POST'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
         },
          updateOrder: function(){
-            return $resource(CONFIG.HTTP_HOST_APP_NEW + '/gsg/api/orders/:orderId',null ,{
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/:svcEngId/:orderId',null ,{
                 update: {
                     method:'PUT',
                     headers: {'Authorization':'bearer '+$localStorage.user_token}

@@ -13,7 +13,7 @@ app.run(function($ionicPlatform,$ionicPopup,$state) {
     /**************************This function is for exist app***********************/
     /*******************************************************************************/
     $ionicPlatform.registerBackButtonAction(function() {
-      if($state.current.name == "app.profile" || $state.current.name == "app.vehicles" || $state.current.name == "app.tarrif-plan" || $state.current.name =="app.requests" || $state.current.name == "app.cart" || $state.current.name == "app.contactUs"){
+      if($state.current.name == "app.profile" || $state.current.name == "app.dashboard" || $state.current.name == "app.vehicles" || $state.current.name == "app.tarrif-plan" || $state.current.name =="app.requests" || $state.current.name == "app.cart" || $state.current.name == "app.contactUs"){
           $state.go('app.mapView');
       }
       if($state.current.name == "app.mapView"){
@@ -30,6 +30,12 @@ app.run(function($ionicPlatform,$ionicPopup,$state) {
       }
       if($state.current.name == "add-vehicle"){
         $state.go('app.vehicles');
+      }
+      if($state.current.name == "app.ticketList"){
+        $state.go('app.dashboard');
+      }
+      if($state.current.name == "app.ticketListDetails"){
+        $state.go('app.ticketList');
       }
 
     },100);

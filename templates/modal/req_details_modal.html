@@ -5,32 +5,28 @@
             </button>
             <h1 class="title">Request Details</h1>
         </ion-header-bar>
-        <ion-content>      
-                <ion-item ng-hide="reqCtrl.requestDetails.produtType == 'SCHEME' ">
+        <ion-content class="whitesmoke">      
+                <ion-item class="whitesmoke">
                     <h2>ORDER ID - {{reqCtrl.requestDetails.orderId}}</h2>
-                    <p class="w-s-i"><h4>SERVICE DATE - {{reqCtrl.requestDetails.serviceDate}}</h4></p>
+                    <p class="span-text w-s-i"><h4>SERVICE DATE - {{reqCtrl.requestDetails.serviceDate}}</h4></p>
                     <hr>
-                    <!-- <h4 class="w-s-i"> ORDER DATE -  {{reqCtrl.requestDetails.serviceDate}}</h4><hr> -->
+                    <span class="span-text" ng-hide="!reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.make">
+                            <p class="w-s-i"> VEHICLE - {{!reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.make ? " " :reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.make}} {{!reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.models == 'null' ? " ": reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.models}} {{!reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.registrationNumber == 'null' ? " ": reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.registrationNumber}}</p>
+                    
+                    </span>
                     <div ng-repeat="orders in reqCtrl.requestDetails.orderDtls">
-                        <!-- <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SCHEME' ">
-                                <p class="w-s-i">Scheme - {{orders.product.description}} ({{orders.product.durationInDays}}  Days) </p>
-                        </span> -->
-                        <span class="span-text" ng-hide="reqCtrl.requestDetails.produtType == 'EMERGENCY'">
-                                <p class="w-s-i"> VEHICLE - {{orders.product.usrVehicle.vehicle.make == 'null' ? " " :orders.product.usrVehicle.vehicle.make}} {{orders.product.usrVehicle.vehicle.models == 'null' ? " ": orders.product.usrVehicle.vehicle.models}} {{orders.product.usrVehicle.registrationNumber == 'null' ? " ": orders.product.usrVehicle.registrationNumber}}</p>
-                        <hr>
-                        </span>
-                        <!-- <span class="span-text" ng-show="reqCtrl.requestDetails.produtType == 'SCHEME' " ng-repeat="schemes in orders.product.schemeServiceDtls">
-                                <p class="w-s-i">{{$index+1}} -&nbsp;{{schemes.freeUsage == 99 ? "Unlimited" : schemes.freeUsage }} &nbsp; {{schemes.serviceDesc}}</p>
-                        </span> -->
-                        <span class="span-text"  ng-hide="reqCtrl.requestDetails.produtType == 'EMERGENCY'" ng-repeat="services in orders.product.services">
-                                <p class="w-s-i">{{$index+1}} - {{services.subCategory}} &nbsp; - &nbsp; {{services.price[ orders.product.usrVehicle.vehicle.type] }} {{services.freeApplied ? "(Free Applied)" : " "}}</p>
+                            <hr ng-hide="!reqCtrl.requestDetails.orderDtls[0].product.usrVehicle.vehicle.make"> <h3 class="popular-city">Order({{$index+1}})</h3>
+                            <hr class="m-r-25" ng-hide="services.length == 0">
+                        <span class="span-text row"  ng-hide="reqCtrl.requestDetails.produtType == 'EMERGENCY'" ng-repeat="services in orders.product.services">
+                                <p class="w-s-i col col-70"> {{services.subCategory}}&nbsp;{{services.freeApplied ? "(Free Applied)" : " "}}</p> <p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <strike ng-show="services.freeApplied"> {{services.price[ orders.product.usrVehicle.vehicle.type] }}</strike> <strong ng-hide="services.freeApplied">{{services.price[ orders.product.usrVehicle.vehicle.type] }}</strong></p>
                        
-                         </span><hr ng-hide="reqCtrl.requestDetails.produtType == 'EMERGENCY'">
+                        </span><hr class="m-r-25" ng-hide="reqCtrl.requestDetails.produtType == 'EMERGENCY'">
                         <span class="span-text">
-                                <p class="w-s-i"> Payment Mode -  {{orders.transactionMode}}</p>
-                                <p class="w-s-i" ng-show="orders.transactionStatus"> Payment Status -  {{orders.transactionStatus}}</p>
-                                <p class="w-s-i" ng-show="orders.transactionStatus == 'COMPLETED'"> Payment Date -  {{orders.transactionDate == "null" ? "Payments pending" : orders.transactionDate}}</p>
-                                Total Price -  {{reqCtrl.requestDetails.totalPrice}}
+                                <span class="span-text row"><p class="w-s-i col col-70"> <b> Total Price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{orders.calculatedPrice}}</b> </p></span>                                   
+                            <span class="span-text row"><p class="w-s-i col col-70"> Payment Mode </p><p class="col-30"> {{orders.transactionMode}}</p></span>    
+                            <span class="span-text row"><p class="w-s-i col col-70" ng-show="orders.transactionStatus"> Payment Status </p><p class="col-30">{{orders.transactionStatus}}</p></span>    
+                            <span class="span-text row"><p class="w-s-i col col-70" ng-show="orders.transactionStatus == 'COMPLETED'">  Payment Date </p><p class="col-30">{{orders.transactionDate == "null" ? "Payments pending" : orders.transactionDate}}</p></span>    
+                            <!-- <span class="span-text row"><p class="w-s-i col col-70"> <b> Total Price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{reqCtrl.requestDetails.totalPrice}}</b> </p></span>                                    -->
                         </span>
                     </div>
                 </ion-item>                     

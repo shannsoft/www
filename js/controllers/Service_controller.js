@@ -30,6 +30,7 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
         angular.forEach($localStorage.loggedin_user.schemes,function(item){
             if(item.schemeType == schemeType){
                 vm.userScheme = item;
+                console.log(vm.userScheme);
                 vm.schemeId = item.schemeId;
             }
         });
@@ -117,11 +118,14 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
                 }
             });
         }
+        delete vm.confirmModal;
         $ionicModal.fromTemplateUrl('templates/modal/confirm_service_request_modal.html',{
             scope : $scope,
+            cache:false,
             animation : 'slide-in-right',
             controller : 'ServiceController'
           }).then(function(confirmModal){
+            vm.reqTktDataObj = {};
             vm.confirmModal = confirmModal;
             vm.confirmModal.show();
             
@@ -149,14 +153,20 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
          if(vm.reqTktDataObj.services.length > 0 && vm.reqTktDataObj.usrVehicle ){
                 TicketService.createTicket().save(vm.reqTktDataObj,function(response){               
                 vm.confirmModal.hide();
+                vm.confirmModal.remove();
                 vm.modal.hide();
+                vm.modal.remove();
                 $ionicLoading.hide();
-                $scope.openCheckOutModal(response.data);
-                // $timeout(function(){
-                //     $ionicLoading.hide();
-                //     $scope.successPop('Success', 'Request generated Successfully...'); 
-                // },500);
-             
+                console.log(response);
+                if(response.data.isPayable =="YES"){
+                    $scope.openCheckOutModal(response.data);
+                }
+                else if(response.data.isPayable == "NO"){
+                    $timeout(function(){
+                        $ionicLoading.hide();
+                        $scope.successPop('Success', 'Request generated Successfully... Our Coustomer support will get back to you soon'); 
+                    },500);
+                }
             },function(error){
                 $ionicLoading.hide();
                 console.log(error);
@@ -170,9 +180,11 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
     
     vm.closeModal = function() {
       vm.modal.hide();
+      vm.modal.remove();
     };
     vm.closeConfirmModal = function(){
         vm.confirmModal.hide();
+        vm.confirmModal.remove();
     };
    
   

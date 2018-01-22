@@ -25,13 +25,10 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
                     vm.liveOrdersArr.push(item);
                 }
             }
-        });
-        console.log(vm.liveOrdersArr);
-        console.log(vm.futureOrdersArr);
-        console.log(vm.completedOrdersArr);
-        console.log(vm.canceledOrdersArr);
+        })
         $timeout(function(){
             $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
         },400);
     },function(error){
         $ionicLoading.hide();
@@ -50,8 +47,14 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
                vm.totalPrice = vm.totalPrice + item.amount;                
                
             });
+            $scope.$broadcast('scroll.refreshComplete');
         },function(error){
-
+            if(error.status == 417){
+                $scope.alertPop("Error",error.data.message);
+            }
+            else {
+                $scope.alertPop("Error","Error in fetching cart items");
+            }
         });
     };
     vm.getTotalPrice = function(selection){
@@ -79,14 +82,15 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
             console.log(response);
             $ionicLoading.hide();
             $scope.openCheckOutModal(response.data);
-            // vm.totalPrice = vm.totalPrice - orderAmount;
-            // vm.cartOrders = response.data;
-            // $timeout(function(){
-            //     $ionicLoading.hide();
-            //     $scope.successPop('Success', 'Removed from cart...','app.cart'); 
-            // },500);
         },function(error){
             $ionicLoading.hide();
+            if(error.status == 417){
+                $scope.alertPop("Error",error.data.message);
+            }
+           else {
+                $scope.alertPop("Error","Something wrong..Cannot buy this order now ");
+            }
+            
             console.log(error);
         });
 
@@ -101,19 +105,15 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
             vm.totalPrice = vm.totalPrice - orderAmount;
             vm.cartOrders = response.data;
             $ionicLoading.hide();
-            // $timeout(function(){
-            //     $ionicLoading.hide();
-            //     $scope.successPop('Success', 'Removed from cart...','app.cart'); 
-            // },500);
         },function(error){
             $ionicLoading.hide();
+            $scope.alertPop("Error","Error in removing from cart");
             console.log(error);
         });
     }
     vm.reqDetails = function(details){
         $ionicModal.fromTemplateUrl('templates/modal/req_details_modal.html',{
             scope : $scope,
-            // animation : 'slide-in-',
             controller : 'RequestController',
             controllerAs : 'reqCtrl'
           }).then(function(reqDetailsModal){        
@@ -121,14 +121,10 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
             vm.reqDetailsModal.show();
             vm.requestDetails = details;
             console.log(vm.requestDetails);
-            // $timeout(function(){
-            //     $ionicLoading.hide();
-    
-            //   },500)
-            
           });
     };
     vm.closeREqDetailsModal = function(){
         vm.reqDetailsModal.hide();
-    }
+        vm.reqDetailsModal.remove();
+    };
  });

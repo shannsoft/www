@@ -4,28 +4,24 @@
               <i class="icon ion-chevron-left"></i> 
             </button>
         </ion-nav-buttons>
-    <ion-content scroll="false">
+    <ion-content scroll="true">
+            <ion-refresher pulling-text="Pull and leave to refresh..." on-refresh="reqCtrl.myOrders()"></ion-refresher>
         <ion-slide-box show-pager="false" ion-slide-tabs>
                 <ion-slide ion-slide-tab-label="LIVE" disable-scroll="false" >
                         <div ng-show="reqCtrl.liveOrdersArr.length == 0 || !reqCtrl.liveOrdersArr" class="cart-empty">
                                 <i class="icon ion-ios-navigate"></i>
-                                <h3> No Live Requests</h3>
+                                <h3> NO LIVE REQUESTS</h3>
                             </div>
                         <ion-list>
                             <div ng-repeat="liveOrders in reqCtrl.liveOrdersArr">
-                            <ion-item class="m-b-5" ng-hide="liveOrders.produtType == 'SCHEME'" ng-click="reqCtrl.reqDetails(liveOrders)">
-                                    <h4>STATUS &nbsp;:{{liveOrders.requestStatus == "WIP" ? "Work in Progress" : liveOrders.requestStatus}}</h4>
-                                    <h4>ORDER ID &nbsp;: {{liveOrders.orderId}}</h4>
-                                   <h4>REQUEST TYPE &nbsp;:{{liveOrders.produtType}}</h4>                                  
-                                    <h4>REQUEST DATE &nbsp;: {{liveOrders.serviceDate}}</h4>
-                                   <h4>AMOUNT &nbsp;:{{liveOrders.totalPrice}} </h4>
-                                   <!-- <ul>
-                                    <li ng-repeat="Orderdtls in liveOrders.orderDtls">
-                                     
-                                       <p class="w-s-i" ng-repeat="services in Orderdtls.services"> {{$index+1}} {{services.subCategory}}  ( {{services.category}} )   - {{services.price[ liveOrders.usrVehicle.vehicle.type] }} </p>
-                                         
-                                    </li>
-                                </ul> -->
+                            <ion-item class="m-b-12" ng-hide="liveOrders.produtType == 'SCHEME'" ng-click="reqCtrl.reqDetails(liveOrders)">
+                                    <span class="span-text row"><p class="col col-60">STATUS </p><p class="col-40">{{liveOrders.requestStatus == "WIP" ? "Work in Progress" : liveOrders.requestStatus}}</p></span>
+                                    <span class="span-text row"><p class="col col-60">ORDER ID </p><p class="col-40">{{liveOrders.orderId}}</p></span>
+                                    <span class="span-text row"><p class="col col-60">REQUEST TYPE </p><p class="col-40">{{liveOrders.produtType}}</p></span>
+                                    <span class="span-text row"><p class="col col-60">REQUEST DATE </p><p class="col-40">{{liveOrders.serviceDate}}</p></span>
+                                    <span class="span-text row"><p class="col col-60">AMOUNT </p><p class="col-40"> <i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{liveOrders.totalPrice}}</p></span>
+                                                                  
+                                  
                             </ion-item>
                             </div>
                         </ion-list>
@@ -33,16 +29,16 @@
                 <ion-slide ion-slide-tab-label="FUTURE">
                         <div ng-show="reqCtrl.futureOrdersArr.length == 0 || !reqCtrl.futureOrdersArr" class="cart-empty">
                                 <i class="icon ion-android-calendar"></i>
-                                <h3> No future requests</h3>
+                                <h3> NO FUTURE REQUESTS</h3>
                             </div>
                         <ion-list>
                                 <div ng-repeat="futureOrder in reqCtrl.futureOrdersArr">
                                     <ion-item class="m-b-5" ng-click="reqCtrl.reqDetails(futureOrder)">
-                                        <h4>STATUS &nbsp;:{{futureOrder.requestStatus == "WIP" ? "Work in Progress" : futureOrder.requestStatus}}</h4>
-                                        <h4>ORDER ID &nbsp;: {{futureOrder.orderId}}</h4>
-                                        <h4>REQUEST TYPE &nbsp;:{{futureOrder.produtType}}</h4>   
-                                        <h4>REQUEST DATE &nbsp;: {{futureOrder.serviceDate}}</h4>
-                                        <h4>AMOUNT &nbsp;:{{futureOrder.totalPrice}} </h4>
+                                        <span class="span-text row"><p class="col col-60">STATUS </p><p class="col-40">{{futureOrder.requestStatus == "WIP" ? "Work in Progress" : futureOrder.requestStatus}}</p></span>
+                                        <span class="span-text row"><p class="col col-60">ORDER ID </p><p class="col-40">{{futureOrder.orderId}}</p></span>
+                                        <span class="span-text row"><p class="col col-60">REQUEST TYPE </p><p class="col-40">{{futureOrder.produtType}}</p></span>
+                                        <span class="span-text row"><p class="col col-60">REQUEST DATE </p><p class="col-40">{{futureOrder.serviceDate}}</p></span>
+                                        <span class="span-text row"><p class="col col-60">AMOUNT </p><p class="col-40"> <i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{futureOrder.totalPrice}}</p></span>
                                     </ion-item>
                                 </div>
                             </ion-list>
@@ -50,17 +46,16 @@
                 <ion-slide ion-slide-tab-label="CLOSED">
                     <div class="cart-empty" ng-show="reqCtrl.completedOrdersArr.length == 0 || !reqCtrl.completedOrdersArr" >
                         <i class="icon ion-android-checkbox"></i>
-                        <h3> No Requests Completed</h3>
+                        <h3> NO REQUESTS COMPLETED</h3>
                     </div>
                     <ion-list ng-hide="reqCtrl.completedOrdersArr.length == 0 || !reqCtrl.completedOrdersArr" >
                         <div ng-repeat="completedOrder in reqCtrl.completedOrdersArr">
                         <ion-item class="m-b-5"  ng-click="reqCtrl.reqDetails(completedOrder)">
-                                <h4>STATUS &nbsp;:{{completedOrder.requestStatus == "WIP" ? "Work in Progress" : completedOrder.requestStatus}}</h4>
-                                <h4>ORDER ID &nbsp;: {{completedOrder.orderId}}</h4>
-                               <h4>REQUEST TYPE &nbsp;:{{completedOrder.produtType}}</h4>                                  
-                                <h4>REQUEST DATE &nbsp;: {{completedOrder.serviceDate}}</h4>
-                               <h4>AMOUNT &nbsp;:{{completedOrder.totalPrice}} </h4>
-                              
+                               <span class="span-text row"><p class="col col-60">STATUS </p><p class="col-40">{{completedOrder.requestStatus == "WIP" ? "Work in Progress" : completedOrder.requestStatus}}</p></span>
+                               <span class="span-text row"><p class="col col-60">ORDER ID </p><p class="col-40">{{completedOrder.orderId}}</p></span>
+                               <span class="span-text row"><p class="col col-60">REQUEST TYPE </p><p class="col-40">{{completedOrder.produtType}}</p></span>
+                               <span class="span-text row"><p class="col col-60">REQUEST DATE </p><p class="col-40">{{completedOrder.serviceDate}}</p></span>
+                               <span class="span-text row"><p class="col col-60">AMOUNT </p><p class="col-40"> <i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{completedOrder.totalPrice}}</p></span>
                         </ion-item>
                         </div>
                     </ion-list>
@@ -68,18 +63,18 @@
                 <ion-slide ion-slide-tab-label="CANCELLED">
                         <div class="cart-empty" ng-show="reqCtrl.canceledOrdersArr.length == 0 || !reqCtrl.canceledOrdersArr" >
                             <i class="icon ion-android-cancel"></i>
-                            <h3> No Requests Canceled</h3>
+                            <h3> NO REQUESTS CANCELED</h3>
                         </div>
                         
                         <ion-list ng-hide="reqCtrl.canceledOrdersArr.length == 0 || !reqCtrl.canceledOrdersArr" >
                             <div ng-repeat="cancelOrder in reqCtrl.canceledOrdersArr">
                             <ion-item class="m-b-5"  ng-click="reqCtrl.reqDetails(cancelOrder)">
-                                    <h4>STATUS &nbsp;:{{cancelOrder.requestStatus}}</h4>
-                                    <h4>ORDER ID &nbsp;: {{cancelOrder.orderId}}</h4>
-                                    <h4>REQUEST TYPE &nbsp;:{{canceledOrdersArr.produtType}}</h4>                                  
-                                    <h4>REQUEST DATE &nbsp;: {{cancelOrder.serviceDate}}</h4>
-                                    <h4>AMOUNT &nbsp;:{{cancelOrder.totalPrice}} </h4>
                                     
+                                <span class="span-text row"><p class="col col-60">STATUS </p><p class="col-40">{{cancelOrder.requestStatus == "WIP" ? "Work in Progress" : cancelOrder.requestStatus}}</p></span>
+                                <span class="span-text row"><p class="col col-60">ORDER ID </p><p class="col-40">{{cancelOrder.orderId}}</p></span>
+                                <span class="span-text row"><p class="col col-60">REQUEST TYPE </p><p class="col-40">{{cancelOrder.produtType}}</p></span>
+                                <span class="span-text row"><p class="col col-60">REQUEST DATE </p><p class="col-40">{{cancelOrder.serviceDate}}</p></span>
+                                <span class="span-text row"><p class="col col-60">AMOUNT </p><p class="col-40"> <i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{cancelOrder.totalPrice}}</p></span>
                             </ion-item>
                             </div>
                         </ion-list>

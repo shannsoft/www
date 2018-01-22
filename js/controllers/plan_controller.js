@@ -49,8 +49,7 @@ vm.isGroupShown = function(list){
         PlanService.subscribePlan(obj).get(function(response){  
             console.log(response);   
             $ionicLoading.hide();
-            // $localStorage.loggedin_user = response.data;
-            vm.subscrpModal.hide();  
+            vm.subscrpModal.remove();  
             $scope.openCheckOutModal(response.data);    
             // $timeout(function(){
             //     $ionicLoading.hide();
@@ -58,10 +57,10 @@ vm.isGroupShown = function(list){
             // },500);
         },function(error){          
             console.log(error);
-            $ionicLoading.hide();
-            vm.subscrpModal.hide();
+            vm.subscrpModal.hide();        
+            vm.subscrpModal.remove();        
             $timeout(function(){
-               
+                $ionicLoading.hide();
                 $scope.alertPop('Error', error.data.message);
             },500);          
         });
@@ -70,14 +69,20 @@ vm.isGroupShown = function(list){
        PlanService.getUserSchemes().get(function(response){
         console.log(response);
         vm.myPlan = response.data;
+        $localStorage.loggedin_user.schemes = vm.myPlan;
+        angular.forEach(vm.myPlan, function(item){
+            var sbscrptnDate = moment(item.subscriptionDt);
+            var validtyLeft = moment().diff(sbscrptnDate, 'days');
+            item.validityLeft = item.durationInDays-validtyLeft;
+            
+        });
        },function(error){
         console.log(error);
        });
-    //    vm.myPlan = $localStorage.loggedin_user.schemes;
-    //    console.log(vm.myPlan);
    }
-    vm.closeModal = function() {
+    vm.closePlanListModal = function() {
         vm.subscrpModal.hide();
+        vm.subscrpModal.remove();
     }
     
 });

@@ -94,9 +94,9 @@
                         </div>
                         <label class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.houseNbr.$touched && updateProfile.houseNbr.$invalid}">
                             <span class="input-label col col-100">House no., Building name</span>
-                            <input type="text" class="col col-100" placeholder="House no., Building name" name="houseNbr" ng-model="profileCtrl.userUpdate.address[0].houseNbr" ng-pattern="/^[A-Za-z\s\d]+$/">
+                            <input type="text" class="col col-100" placeholder="House no., Building name" name="houseNbr" ng-model="profileCtrl.userUpdate.address[0].houseNbr">
                         </label>
-                        <span class="error-message" ng-show="updateProfile.houseNbr.$error.pattern && updateProfile.houseNbr.$touched">Invalid House no. or Building name</span>                             
+                        <!-- <span class="error-message" ng-show="updateProfile.houseNbr.$error.pattern && updateProfile.houseNbr.$touched">Invalid House no. or Building name</span>                              -->
                         <label class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.locality.$touched && updateProfile.locality.$invalid}">
                             <span class="input-label col col-100">Locality,area or street</span>
                             <input type="text" class="col col-100" placeholder="Locality,area or street" name="locality" ng-model="profileCtrl.userUpdate.address[0].locality" ng-pattern="/^[A-Za-z\s\d]+$/" >

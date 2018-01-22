@@ -8264,7 +8264,7 @@ input:checked + .checkbox-icon:after {
 
 .item-radio .item-content {
   /* give some room to the right for the checkmark icon */
-  padding-right: 64px; }
+  padding-right: 5%; }
 
 .item-radio .radio-icon {
   /* checkmark icon will be hidden by default */
@@ -8274,7 +8274,7 @@ input:checked + .checkbox-icon:after {
   z-index: 3;
   visibility: hidden;
   padding: 14px;
-  height: 100%;
+  height: 20%;
   font-size: 24px; }
 
 .item-radio input {
@@ -9855,3 +9855,6 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+.strike{
+  color: #e600009e !important;
+}

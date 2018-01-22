@@ -1,8 +1,10 @@
-app.controller('LoginController', function($ionicModal,$stateParams, loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
+app.controller('LoginController', function($ionicModal,$stateParams, OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
     var vm = this;
     var map;
     var marker;
     vm.basicDetails = {};
+    vm.basicDetails.password = "";
+    vm.rePassword = "";
     if($stateParams.number){
       vm.contactNo = $stateParams.number;
     }
@@ -12,10 +14,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
     if($stateParams.vehicle_id){
       vm.vehicleId = $stateParams.vehicle_id;
     }
-    
-    vm.user = {contactNbr:'',password:''};
-    
-    
+    vm.user = {contactNbr:'',password:''};    
     vm.login = function() {
         $ionicLoading.show({
             template:'Signing in...'
@@ -36,21 +35,27 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
                     } ,
                 data: $httpParamSerializer($scope.data)
                 }
-            $http(req).then(function(data){                   
-                console.log(data);
+            $http(req).then(function(data){
+                console.log(data);                   
                 $localStorage.user_token = data.data.access_token;
                 $rootScope.is_loggedin = true;  
                 UserService.getUserByCntctNo(vm.user.contactNbr).get(function(response){
                     $localStorage.loggedin_user = response.data;
+                    if($localStorage.previousUserId != $localStorage.loggedin_user.userId){
+                        $localStorage.userChanged = true;
+                        $localStorage.previousUserId = $localStorage.loggedin_user.userId;
+                    }
                     UserModel.setUser(response.data);
                     $timeout(function(){
                         $ionicLoading.hide();
-                        console.log(1);
                         $scope.$emit("LOGIN_SUCCESS");
                         $state.go('app.mapView');
                     });
                    
                 },function(error){
+                    if(error.status == 417){
+                        $scope.alertPop('Error', error.data.message); 
+                    }
                    console.log(error);
                 });
                                
@@ -59,6 +64,9 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
                 console.log(error);
                 if(error.status == 400){
                     $scope.alertPop('Error', 'Invalid username or password.'); 
+                }
+                if(error.status == 417){
+                    $scope.alertPop('Error', error.data.message); 
                 }
             });
           
@@ -71,24 +79,15 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
   
     // }
   }
-    vm.basicDetails.password = "";
-    vm.rePassword = "";
-    
-    vm.checkPassword = function(before,after){
-        vm.showPasswordMisMatch = false;
-        console.log(before +","+ after);
-      if(before !== after){
-        vm.showPasswordMisMatch = true;
-      }
-      return vm.showPasswordMisMatch;
-    }
     vm.register = function(){
+         $ionicLoading.show({
+            template: 'Verifying mobile number...'
+        });
          UserModel.setRegisterData(vm.basicDetails);
          var obj = {
             contactNbr : vm.basicDetails.contactNbr
          };
         registrationService.preRegister().save(obj, function(response){
-            console.log(response);
             $ionicLoading.hide();
                 $state.go('otp',{"number":vm.basicDetails.contactNbr});
             },function(error){
@@ -97,20 +96,21 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             if(error.status == 409){
                 $scope.alertPop('Error', error.data.msg);
             }
+            if(error.status == 417){
+                $scope.alertPop('Error', error.data.message )}
+
             else {
-             $scope.alertPop('Error', 'OTP can not send');
+             $scope.alertPop('Error', 'OTP can not send.Something wrong');
             }
-        });
-        // $state.go('otp',{"number":vm.basicDetails.contactNbr});            
+        });            
     }
     vm.verifyOtp = function(){
-        // $ionicLoading.show({
-        //     template: 'Verifying OTP...'
-        // });
+        $ionicLoading.show({
+            template: 'Verifying OTP...'
+        });
         var userdata = UserModel.getRegisterData();
         userdata.otp = vm.otp;
         registrationService.register().save(userdata, function(response){
-            console.log(response);
             // $localStorage.user = response;
             $ionicLoading.hide();
             //alertpop will be changed to successpop
@@ -121,6 +121,9 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             $ionicLoading.hide();
             console.log(error);
             if(error.status == 406){
+                $scope.alertPop('Error', error.data.message);
+            }
+            if(error.status == 417){
                 $scope.alertPop('Error', error.data.message);
             }            
             else {
@@ -139,14 +142,13 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             $rootScope.is_loggedin = false;
             // UserModel.unsetUser();
             $state.go('login');
-          },1000)
+          },700)
        
     }
     vm.preResPwd = function(contactNbr){
         $ionicLoading.show({
             template : 'Verifying user'
         });
-        console.log(contactNbr);
         var obj = {};
         obj.contactNbr = contactNbr;
         loginService.preResPwd(obj.contactNbr).save(obj, function(response){
@@ -154,17 +156,20 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             if(response.status == "OK"){
                 $state.go('reset-pwd',{"number": obj.contactNbr});
             }
-            console.log(response);
         },function(error){
             $ionicLoading.hide();
             if(error.status == 404){
                 $scope.alertPop('Error' , error.data.message);
             }
-            console.log(error);
+            if(error.status == 417){
+                $scope.alertPop('Error' , error.data.message);
+            }
+           else {
+                $scope.alertPop('Error' , "Something wrong occured");
+            }
         });
     }
     vm.checkPassword = function(before,after){
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>" + before,after);
         vm.showPasswordMisMatch = false;
         if(before !== after){
         vm.showPasswordMisMatch = true;
@@ -176,14 +181,12 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             template : 'Resetting password'
         });
         vm.resPwd.contactNbr = $stateParams.number;
-        console.log(vm.resPwd);
         loginService.resetPwd().save(vm.resPwd, function(response){
-            console.log(response);
             $ionicLoading.hide();   
             if(response.status == "OK"){
                 $timeout(function(){
                                
-                    $scope.successPop('Success', 'Password resetted successfully...','login'); 
+                    $scope.successPop('Success', 'Password changed successfully...','login'); 
                 },500);
             }
             else {
@@ -201,6 +204,13 @@ app.controller('LoginController', function($ionicModal,$stateParams, loginServic
             console.log(error);
         });
 
+    };
+    vm.resendOtp = function(contactNbr){
+        OtpService.resendOtp(contactNbr).get(function(response){
+            console.log(response);
+        },function(error){
+            console.log(error);
+        });
     }
 
 });

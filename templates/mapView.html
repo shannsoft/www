@@ -1,4 +1,4 @@
-<ion-view cache-view="false" view-title="GoSpeedyGo">
+<ion-view cache-view="false" view-title="GoSpeedyGo" ng-init="mapCtrl.showToast()">
      <ion-nav-buttons side="right">
          <i class="icon ion-android-cart cart-icon" ui-sref="app.cart"></i>
          <span class="_2tVMo0" ng-init="mapCtrl.myCartOrders()" ng-hide="mapCtrl.cartOrders.length == 0 || !mapCtrl.cartOrders">{{mapCtrl.cartOrders.length}}</span>
@@ -13,16 +13,6 @@
         </div>
         <!-- <button class="current-location" type="submit" >need help</button> -->
         <button class="current-location" type="submit" ng-click="mapCtrl.mapInit()"><i class="icon ion-android-locate"></i></button>
-        <!-- <div class="footer-option" ng-controller="ServiceController as srvcCtrl">
-            <ul class="service-list">            
-                <li ng-click="srvcCtrl.servicesLeft('MAJOR')"><h5>Major<br>Services</h5></li>
-                <li ng-click="srvcCtrl.servicesLeft('MINOR')"><h5>Minor<br>Services</h5></li>
-                <li ng-click="srvcCtrl.servicesLeft('RA')" ><h5>Roadside<br>Assistance</h5></li>
-                 <li ng-click="srvcCtrl.serviceSearch('all')" >                
-                        <i class="icon ion-search"></i>                  
-                 </li>
-            </ul> 
-        </div>    -->
     </ion-content>
     
     <ion-floating-button click="mapCtrl.confirmEmegReq()" has-footer="true" button-color="#73b717" icon="ion-ios-redo" icon-color="#fff" text="Need Help ?"></ion-floating-button>

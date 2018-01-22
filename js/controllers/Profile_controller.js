@@ -1,6 +1,7 @@
 app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
     var vm = this;
     vm.userUpdate = {};
+    vm.districtList = [];
     vm.profile_image = ($localStorage.profile) ? $localStorage.profile : "img/placeholder.jpg"
     vm.currentDate = new Date();
     $scope.minDate = new Date(1905, 6, 1);
@@ -11,7 +12,6 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     }
     var ipObj1 = {
         callback: function (val) {  //Mandatory 
-            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
             if(vm.setType == "dob") {
                 vm.userUpdate.dob = moment(val).format('YYYY-MM-DD');
             }
@@ -44,10 +44,9 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     // };
     $scope.anniversaryPickerCallback = function (val) {
         if (!val) {	
-            console.log('Date not selected');
+      
         } else {
             vm.userUpdate.anniversaryDate = moment(val).format('DD-MM-YYYY');
-            console.log('Selected date is : ', vm.userUpdate.anniversaryDate);
         }
     };
 
@@ -63,15 +62,14 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     }
     vm.changePassModalClose = function(){
         vm.changePassModal.hide();
+        vm.changePassModal.remove();
     }
     vm.closeModal = function() {
         vm.modal.hide();
+        vm.modal.remove();
     }
-    vm.changePwd = function(){
-        console.log(vm.changePass );
-    }
+    
     vm.checkPassword = function(before,after){
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>" + before,after);
         vm.showPasswordMisMatch = false;
         if(before !== after){
         vm.showPasswordMisMatch = true;
@@ -84,6 +82,7 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         });
         UserService.changePassword().update({ id:$localStorage.loggedin_user.userId},vm.changePass,function(response){
             vm.changePassModal.hide();
+            vm.changePassModal.remove();
             $timeout(function(){
                 delete  $localStorage.loggedin_user;
                  $localStorage.loggedin_user = response.data;
@@ -92,7 +91,6 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
             },500);
         },function(error){
             $ionicLoading.hide();
-            console.log(error);
             if(error.status == 401){
                 $scope.alertPop('Error', error.data.error); 
             }
@@ -117,15 +115,12 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         titleText:'Select a way to upload',
         cancelText:'cancel',
         cancel: function(){
-            console.log("cancelled");
         },
         buttonClicked: function(index){
             if(index == 0){
-                console.log("camera is choosen");
                 vm.openCamera();
             }
             if(index == 1){
-                console.log("gallery is choosen");
                 vm.openGallery();
             }
             return true;
@@ -191,6 +186,7 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     vm.getLoginUserDetails = function(){
         vm.userUpdate = angular.copy($localStorage.loggedin_user);
         console.log(vm.userUpdate);
+        vm.districtList.push(vm.userUpdate.address[0].district);
     };
              /*******************************************************************************/
     /************************This function is used to update user details**********************************/
@@ -199,7 +195,6 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         $ionicLoading.show({
             template: 'Updating User...'
         })
-        console.log(vm.userUpdate);
         if(vm.userUpdate.maritalStatus == 0){
             vm.userUpdate.anniversaryDate = null;
         }
@@ -214,7 +209,6 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
            
         },function(error){
             $ionicLoading.hide();
-            console.log(error);
             if(error.status == 401){
                 $scope.alertPop('Error', 'Token expired Login again.'); 
             }
@@ -223,10 +217,8 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
     vm.getAllStates = function(){
         vm.stateList = [];
         MasterService.getAllStates().get(function(response){
-            console.log(response);
             vm.stateList = response.data;
         },function(error){
-            console.log(error);
         });
     };
     vm.getDistrict = function(state){

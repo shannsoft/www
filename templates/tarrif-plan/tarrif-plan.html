@@ -10,16 +10,16 @@
                 <ion-list ng-repeat="myScheme in planCtrl.myPlan" >                  
                     <ion-item class="item-stable query-list" ng-click="planCtrl.toggleGroup(myScheme)" ng-class="{active: planCtrl.isGroupShown(myScheme)}">                    
                         <h3 class="heading">{{myScheme.description}}</h3>
-                    <h4 style="margin-left:10px;">Validity : {{myScheme.durationInDays}} Days </h4>
+                    <h4 style="margin-left:10px;">Expires In: {{myScheme.validityLeft}} Days </h4>
                     </ion-item>                      
                     <ion-item class="item-accordion" ng-show="planCtrl.isGroupShown(myScheme)">
-                        <ion-item ng-repeat="item in myScheme.schemeServiceDtls">
-                            <h2> {{item.serviceDesc}}</h2>
-                            <p ng-hide="item.freeUsage == 0">{{item.freeUsage}} Free service/Year </p><p ng-hide="item.freeUsage == 0"> {{item.used}} Used   </p>                           
+                        <ion-item ng-hide="item.freeUsage == 0" ng-repeat="item in myScheme.schemeServiceDtls">
+                            <h2> {{item.freeUsage == 99 ? "Unlimited" : item.freeUsage-item.used+" of "+item.freeUsage}}&nbsp;Free&nbsp;{{item.serviceDesc}} Left</h2>
+                            <!-- <p>{{item.freeUsage == 99 ? "Unlimited" : item.freeUsage}} Free service/Year </p><p> {{item.used}} Used   </p>                            -->
                         </ion-item>
-                        <ion-item ng-if="myScheme.discountOnConsumable">
+                        <!-- <ion-item ng-if="myScheme.discountOnConsumable">
                                 <h2>Discounts Available</h2>
-                        </ion-item>
+                        </ion-item> -->
                     </ion-item>                   
                 </ion-list>               
             </div>  

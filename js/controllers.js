@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope,$http,$rootScope,$window,$cordovaInAppBrowser, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
+app.controller('MainController', function($scope,PlanService,$http,$rootScope,$window,$cordovaInAppBrowser,$localStorage, $ionicModal,$ionicLoading,PaymentService, $ionicPlatform, $timeout, $state, $ionicPopup,$cordovaNetwork,$cordovaDevice) {
   var vm = this;
   /*******************************************************************************/
   /**************************Use for alert pop up on******************************/
@@ -11,7 +11,17 @@ app.controller('MainController', function($scope,$http,$rootScope,$window,$cordo
 
  })
 
-
+$scope.checkSvcEngineer = function(){
+  $scope.isEngineer = false;
+    if($localStorage.loggedin_user){
+      angular.forEach($localStorage.loggedin_user.roles, function(item){
+        if(item == "ROLE_ENGINEER" ){
+          $scope.isEngineer = true;
+        }
+      });
+    }
+  return $scope.isEngineer;
+};
   $scope.alertPop = function(title, msg, state) {
     var alertPopup = $ionicPopup.alert({
       title: title || 'Alert',
@@ -66,7 +76,7 @@ app.controller('MainController', function($scope,$http,$rootScope,$window,$cordo
     $timeout(function(){
         $ionicLoading.hide();
 
-      },500)
+      },300)
     
   });
 };
@@ -84,6 +94,7 @@ $scope.paymentNow = function(){
       PaymentService.codPayment().save($scope.paymentDatas,function(response){
           console.log(response);
           $scope.checkoutModal.hide();
+          $scope.checkoutModal.remove();
           $timeout(function(){
               $ionicLoading.hide();
               $scope.successPop('Success', response.data,'app.mapView'); 
@@ -108,13 +119,22 @@ $scope.paymentNow = function(){
               console.log(response);
               $cordovaInAppBrowser.close();  
               $scope.checkoutModal.hide();
+              $scope.checkoutModal.remove();
               $timeout(function(){
                 $scope.successPop("Success", response.data,'app.mapView'); 
               },500)
+              $timeout(function(){
+                PlanService.getUserSchemes().get(function(response){
+                  $localStorage.loggedin_user.schemes = response.data;
+                 },function(error){
+                  console.log(error);
+                 },2000);
+              });
               
             },function(error){
               console.log(error);
               $scope.checkoutModal.hide();
+              $scope.checkoutModal.remove();
               $ionicLoading.hide();
 
               $scope.alertPop('Error', error.data,'app.mapView'); 
@@ -131,6 +151,7 @@ $scope.paymentNow = function(){
 };
 $scope.closeChekoutModal = function(){
   $scope.checkoutModal.hide();
+  $scope.checkoutModal.remove();
 };
 
 
@@ -160,6 +181,7 @@ $scope.closeChekoutModal = function(){
   }
   vm.closeModal = function() {
     vm.modal.hide();
+    vm.modal.remove();
   }
   
 });
@@ -171,7 +193,7 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
 });
 
 
-app.controller('MapController',function($cordovaGeolocation,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
+app.controller('MapController',function($cordovaGeolocation,$cordovaToast,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
   var vm = this;
   var diagnostic;
   var locationAccuracy;
@@ -190,6 +212,8 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
                     vm.loadMap();
                   })
               }, function (error){
+              
+               
                 console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
                 if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
                   if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
@@ -201,6 +225,22 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
                 }
               },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
           }
+          // else{
+          //   window.plugins.toast.showWithOptions({
+          //     message: "As per Android policy allow location Permissionfor his app.Go to Settings >> Apps >> GSG >>Permission >> Location",
+          //     duration: "3000", // 2000 ms
+          //     position: "center",
+          //     styling: {
+          //       opacity: 0.75, // 0.0 (transparent) to 1.0 (opaque). Default 0.8
+          //       backgroundColor: '#FFF', // make sure you use #RRGGBB. Default #333333
+          //       textColor: '#000', // Ditto. Default #FFFFFF
+          //       textSize: 20.5, // Default is approx. 13.
+          //       cornerRadius: 16, // minimum is 0 (square). iOS default 20, Android default 100
+          //       horizontalPadding: 20, // iOS default 16, Android default 50
+          //       verticalPadding: 16 // iOS default 12, Android default 30
+          //     }
+          //   });
+          // }
         });
       }
       else{
@@ -215,6 +255,17 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
   })
   // vm.loadMap();
   }
+  vm.showToast = function(){
+    $cordovaToast.show('toast success','7000','center').then(function(success) {
+      // success
+
+      console.log(success);
+    }, function (error) {
+      // error
+      console.log(success);
+    });
+  
+  }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
     $ionicLoading.show();
@@ -222,8 +273,8 @@ app.controller('MapController',function($cordovaGeolocation,TicketService,$ionic
       $ionicLoading.hide();
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
-      var myLatlng = {lat: lat, lng: lng}
-      // LocationModel.setCurrentLocation(myLatlng);
+      var myLatlng = {lat: lat, lng: lng};
+      LocationModel.setCurrentLocation(myLatlng);
       vm.loadMapLocation(myLatlng);
       var latLng = lat + "," + lng;
       vm.getLocationName(myLatlng);

@@ -79,22 +79,8 @@ vm.updateVehicle = function(vehicle,position){
         vm.vehicleUpdateModal.show();
         vm.updateVehicleData = vehicle;
         vm.updateVehicleData.vehiclePosition = position;
-        // vm.updateVehicleData = {
-        //     make : vehicle.vehicle.make,
-        //     models : vehicle.vehicle.models,
-        //     registrationNumber : vehicle.registrationNumber,
-        //     variant : vehicle.variant,
-        //     modelVersion : vehicle.modelVersion,
-        //     cubicCapacity : vehicle.cubicCapacity,
-        //     expiryDate : vehicle.expiryDate,
-        //     insuranceType : vehicle.insuranceType,
-        //     insuranceValid : vehicle.insuranceValid,
-        //     mfgYear : vehicle.mfgYear,
-        //     vehiclePosition : position
-        // } 
+       
         vm.vehicleModelList = [vehicle.vehicle.models];
-        console.log(" vm.updateVehicleData  ", vm.updateVehicleData);
-        // $(".insurance").val('true'); // Jquery update
     });
 }
 vm.getVehicledata = function(){
@@ -113,6 +99,7 @@ vm.getVehicledata = function(){
 };
 vm.closeVehicleUpdateModal = function(){
     vm.vehicleUpdateModal.hide();
+    vm.vehicleUpdateModal.remove();
 }
 vm.updateVehicleDetails = function(){
     $ionicLoading.show({
@@ -122,6 +109,7 @@ vm.updateVehicleDetails = function(){
     VehicleService.updateVehicle().update({ id:$localStorage.loggedin_user.userId,position:vm.updateVehicleData.vehiclePosition}, vm.updateVehicleData, function(response){
         console.log(response);
         vm.vehicleUpdateModal.hide();
+        vm.vehicleUpdateModal.remove();
         $timeout(function(){
             $localStorage.loggedin_user = response.data;
             $ionicLoading.hide();
@@ -131,6 +119,7 @@ vm.updateVehicleDetails = function(){
        
         $ionicLoading.hide();
         vm.vehicleUpdateModal.hide();
+        vm.vehicleUpdateModal.remove();
         if(error.data.error == "invalid_token"){                     
             $scope.alertPop('Error', 'Token expired. Login again'); 
         
@@ -143,6 +132,7 @@ vm.getVehicleList = function(){
         template: 'Loading...'
     })
     vm.vehicleList = $localStorage.loggedin_user.userVehicles;
+    console.log(vm.vehicleList);
     $timeout(function(){
         $ionicLoading.hide();
     },600);
