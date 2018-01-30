@@ -1,4 +1,4 @@
-app.controller("ProfileController",function($scope,$rootScope,$jrCrop,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
+app.controller("ProfileController",function($scope,$rootScope,$jrCrop,$ionicPlatform,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
     var vm = this;
     vm.userUpdate = {};
     vm.districtList = [];
@@ -147,17 +147,14 @@ app.controller("ProfileController",function($scope,$rootScope,$jrCrop,ionicDateP
         $localStorage.profile = vm.profile_image;
     }, function(err) {});
   };
-  /*******************************************************************************/
-  /************************get image from gallery**********************************/
-  /*******************************************************************************/
-  vm.openGallery = function() {
+  vm.selectImage = function(){
     var option = {
-      maximumImagesCount: 1,
-      width: 800,
-      height: 800,
-      quality: 80,
-      allowEdit: true
-    };
+        maximumImagesCount: 1,
+        width: 800,
+        height: 800,
+        quality: 80,
+        allowEdit: true
+    }; 
     $cordovaImagePicker.getPictures(option).then(function(results) {
         for (var i = 0; i < results.length; i++) {
             // vm.profile_image = results[i];
@@ -166,7 +163,29 @@ app.controller("ProfileController",function($scope,$rootScope,$jrCrop,ionicDateP
         }
       }, function(error) {
         $ionicLoading.hide();
-      });
+    });
+  }
+  /*******************************************************************************/
+  /************************get image from gallery**********************************/
+  /*******************************************************************************/
+    vm.openGallery = function() {
+        $ionicPlatform.ready(function() {
+            diagnostic = cordova.plugins.diagnostic;
+            cordova.plugins.diagnostic.getExternalStorageAuthorizationStatus(function(status){
+                if(status === cordova.plugins.diagnostic.permissionStatus.GRANTED){
+                    vm.selectImage();
+                }
+                else{
+                    cordova.plugins.diagnostic.requestExternalStorageAuthorization(function(status){
+                        vm.selectImage();
+                    }, function(error){
+                        console.error(error);
+                    });
+                }
+            }, function(error){
+                console.error("The following error occurred: "+error);
+            });
+        })
     };
     $scope.crop = function(url) {
         $jrCrop.crop({

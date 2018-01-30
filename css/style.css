@@ -277,7 +277,7 @@ margin-top  : 15px;
 }
 .item-background{
   border: none;
-    background: #cccccc70;
+  background: #ddd;
 }
 /*******************************************************************************/
 /*******************************OTP Page Style**********************************/
@@ -1058,7 +1058,7 @@ cart page style */
     color: #73b717;
 }
 .strike{
-  color: #e600009e !important;
+  color: #dd4a59!important
 }
 .req-modal-ftr-btn{
   font-size: 13px !important;
@@ -1070,8 +1070,10 @@ cart page style */
   color : red;
 }
 .rating-modal{
-  background: transparent !important ;
-  background-color: #000000e3 !important ;
+  background-color:rgba(0,0,0,0.9);
+}
+.rating-modal.bar{
+  background:rgba(0,0,0,0.9)!important;
 }
 
 .rate-icon{
