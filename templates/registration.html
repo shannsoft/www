@@ -13,17 +13,17 @@
                     <span class="plain-text row" ng-show="basicInfo.mobile.$error.required && basicInfo.mobile.$touched">Please Enter your Mobile no.</span>
                     <span class="plain-text row" ng-show="basicInfo.mobile.$error.pattern && basicInfo.mobile.$touched">invalid mobile</span>                        
                     <label class="item item-input">
-                        <input type="text" name="email" ng-model="regstrCtrl.basicDetails.email" placeholder="Email" ng-pattern="/^[A-Za-z]+[a-z0-9._]+@[a-z0-9]+\.[a-z.]{2,10}$/" required>
+                        <input type="text" name="email" ng-model="regstrCtrl.basicDetails.email" placeholder="Email" ng-pattern="/^[A-Za-z]+[a-z0-9._-]+@[A-Za-z0-9._-]+\.[A-Za-z.-_]{2,10}$/" required>
                     </label>
                         <span class="plain-text row" ng-show="basicInfo.email.$error.required && basicInfo.email.$touched">Please Enter your email</span>
                         <span class="plain-text row" ng-show="basicInfo.email.$error.pattern && basicInfo.email.$touched">Email is invalid(eg:example@exam.ple)</span>          
                     <label class="item item-input">
                         <input type="password" name="password" placeholder="Password" ng-model="regstrCtrl.basicDetails.password" ng-pattern="/^(?=.*?[a-zA-Z0-9])(?=.*?[#?!@$%^&*-]).{4,}$/" required>                
                     </label>
-                        <span class="plain-text row" ng-show="basicInfo.password.$error.required && basicInfo.password.$touched">Please anter a password</span>
+                        <span class="plain-text row" ng-show="basicInfo.password.$error.required && basicInfo.password.$touched">Please enter a password</span>
                         <span class="plain-text row" ng-show="basicInfo.password.$error.pattern && basicInfo.password.$touched">Password must be 4 characters long having atleast one special character</span>                             
                     <label class="item item-input">
-                        <input type="password" name="rePassword" placeholder="Password" ng-model="regstrCtrl.rePassword" ng-change="regstrCtrl.checkPassword(regstrCtrl.basicDetails.password, regstrCtrl.rePassword)" required>                
+                        <input type="password" name="rePassword" placeholder="Retype password" ng-model="regstrCtrl.rePassword" ng-change="regstrCtrl.checkPassword(regstrCtrl.basicDetails.password, regstrCtrl.rePassword)" required>                
                     </label>                       
                         <span class="plain-text row" ng-show="basicInfo.rePassword.$error.required && basicInfo.rePassword.$touched">Please re-enter your password</span>
                         <span class="plain-text row" ng-show="regstrCtrl.showPasswordMisMatch && basicInfo.rePassword.$touched">Password doesn't match</span>            

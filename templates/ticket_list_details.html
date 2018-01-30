@@ -39,19 +39,26 @@
                 </span><hr>
                 <div ng-repeat="orders in tlCtrl.ticketDetails.orderDtls"> 
                         <h3 class="popular-city">Order-{{$index+1}}&nbsp; ({{orders.product.serviceDate}})</h3>
-                        <hr class="m-r-25" ng-hide="orders.product.services.length == 0">
-                    <span class="span-text row"  ng-hide="services.length == 0" ng-repeat="services in orders.product.services">
+                        <hr class="m-r-25"><br>
+                    <span class="span-text row"  ng-hide="orders.product.services.length == 0" ng-repeat="services in orders.product.services">
                         <p class="w-s-i col col-80">{{services.subCategory}}&nbsp;{{services.freeApplied ? "(Free Applied)" : " "}} </p> <p class="col-20" ><i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <strike class="strike" ng-show="services.freeApplied">{{services.price[ orders.product.usrVehicle.vehicle.type] }}</strike> <strong ng-hide="services.freeApplied">{{services.price[ orders.product.usrVehicle.vehicle.type] }} </strong> </p>
                     </span><hr class="m-r-25" ng-hide="orders.product.services.length == 0">
                    
-                        <span class="span-text row" ng-hide="orders.transactionMode == 'NA'"><p class="col col-80"> Calculated Price </p><p class="col-20"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.calculatedPrice}} </b></p></span>
-                        <h3 class="popular-city span-text" ng-hide="orders.transactionMode == 'NA'">Payment Details</h3>
-                        <hr class="m-r-25" ng-hide="orders.transactionMode == 'NA'">
-                        <!-- <span class="span-text row"><p class="col col-60">Service Date </p><p class="col-40"><b>{{orders.product.serviceDate}} </b></p></span> -->
-                        <span class="span-text row" ng-hide="orders.transactionMode == 'NA'"><p class="col col-50">Payment Mode</p><p class="col-50"><b>{{orders.transactionMode}} </b><button class="location-name m-l-30" ng-show="orders.transactionMode =='COD'" type="submit" ng-disabled="orders.transactionStatus == 'COMPLETED' || tlCtrl.ticketDetails.requestStatus == 'CREATED' || tlCtrl.ticketDetails.requestStatus == 'EMERGENCY'" ng-click="tlCtrl.confirmCOD(orders.id,orders.calculatedPrice)">Received</button></p></span>
-                        <span class="span-text row" ng-hide="orders.transactionMode == 'NA'"><p class="col col-50">Payment Status</p><p class="col-50"><b>{{orders.transactionStatus}} </b></p></span>
-                        <span class="span-text row" ng-hide="orders.transactionMode == 'NA'" ng-show="orders.transactionStatus == 'COMPLETED'"><p class="col col-50" >Payment Date</p><p class="col-50"><b> {{!orders.transactionDate ? "Payments pending" : orders.transactionDate}} </b></p></span>
-                        <hr ng-hide="orders.transactionMode == 'NA'">
+                   
+                    <span class="span-text row" ng-show="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && orders.product.services.length == 0" ><strong><p> This is an EMERGENCY order.</p></strong></span>                                   
+                    <span class="span-text row" ng-show="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && !tlCtrl.ticketDetails.orderDtls[1]" ><strong><p> Please Add on services as per customer requirement </p></strong></span>                                   
+                    <span class="span-text row" ng-show="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && tlCtrl.ticketDetails.orderDtls[1]" ><strong><p> New Services confirmed to this request by Customer</p></strong></span>                                   
+
+
+                        <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-80"> Calculated Price </p><p class="col-20"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.calculatedPrice}} </b></p></span>
+                        <h3 class="popular-city span-text" ng-hide="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && orders.transactionMode == 'NA'">Payment Details</h3>
+                        <hr class="m-r-25" ng-hide="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && orders.transactionMode == 'NA'">
+                       
+                        <span class="span-text row" ng-hide="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && orders.transactionMode == 'NA'"><p class="col col-50">Payment Mode</p><p class="col-50"><b>{{orders.transactionMode}} </b><button class="location-name m-l-30" ng-show="orders.transactionMode =='COD'" type="submit" ng-disabled="orders.transactionStatus == 'COMPLETED' || tlCtrl.ticketDetails.requestStatus == 'CREATED' || tlCtrl.ticketDetails.requestStatus == 'EMERGENCY'" ng-click="tlCtrl.confirmCOD(orders.id,orders.calculatedPrice)">Received</button></p></span>
+                        <span class="span-text row" ng-hide="tlCtrl.ticketDetails.produtType == 'EMERGENCY' && orders.transactionMode == 'NA'"><p class="col col-50">Payment Status</p><p class="col-50"><b>{{orders.transactionStatus}} </b></p></span>
+                        <span class="span-text row" ng-show="orders.transactionStatus == 'COMPLETED' && orders.transactionDate"><p class="col col-50" >Payment Date</p><p class="col-50"><b> {{orders.transactionDate}} </b></p></span>
+                        <!-- <hr ng-hide="orders.transactionMode == 'NA'"> -->
+                        <br>
                 </div>           
            </ion-item>
            <div class="button-bar">

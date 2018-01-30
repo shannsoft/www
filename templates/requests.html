@@ -4,8 +4,11 @@
               <i class="icon ion-chevron-left"></i> 
             </button>
         </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <i class="icon ion-refresh cart-icon" ng-click="reqCtrl.myOrders()"></i>
+        </ion-nav-buttons>
     <ion-content scroll="true">
-            <ion-refresher pulling-text="Pull and leave to refresh..." on-refresh="reqCtrl.myOrders()"></ion-refresher>
+            <!-- <ion-refresher pulling-text="Pull and leave to refresh..." on-refresh="reqCtrl.myOrders()"></ion-refresher> -->
         <ion-slide-box show-pager="false" ion-slide-tabs>
                 <ion-slide ion-slide-tab-label="LIVE" disable-scroll="false" >
                         <div ng-show="reqCtrl.liveOrdersArr.length == 0 || !reqCtrl.liveOrdersArr" class="cart-empty">

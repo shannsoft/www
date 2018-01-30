@@ -1,4 +1,4 @@
-var app = angular.module('gsg_app', ['ionic','ionic-datepicker','ion-floating-menu','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
+var app = angular.module('gsg_app', ['ionic','ionic-datepicker','jrCrop','ion-floating-menu','ionic-ratings','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
 
 app.run(function($ionicPlatform,$ionicPopup,$state) {
   $ionicPlatform.ready(function() {

@@ -127,4 +127,20 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
         vm.reqDetailsModal.hide();
         vm.reqDetailsModal.remove();
     };
+    vm.openRatingModal = function(){
+        console.log("comingggggg");
+        $ionicModal.fromTemplateUrl('templates/modal/rating_modal.html',{
+            scope : $scope,
+             animation : 'slide-in-up',
+            controller : 'RequestController',
+            controllerAs : 'reqCtrl'
+          }).then(function(ratingModal) {
+            vm.ratingModal = ratingModal;        
+            vm.ratingModal.show();
+        });
+    };
+    vm.closeRatingModal = function(){
+        vm.ratingModal.hide();
+        vm.ratingModal.remove();
+    };
  });

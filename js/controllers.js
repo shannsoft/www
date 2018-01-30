@@ -10,7 +10,21 @@ app.controller('MainController', function($scope,PlanService,$http,$rootScope,$w
     $rootScope.fromParams = fromParams;
 
  })
-
+ $scope.ratingsObject = {
+  iconOn: 'ion-android-favorite',    //Optional 
+  iconOff: 'ion-android-favorite-outline',   //Optional 
+  iconOnColor: '#73b717',  //Optional 
+  iconOffColor:  'white',    //Optional 
+  rating:  0, //Optional 
+  minRating:1,    //Optional 
+  readOnly: true, //Optional 
+  callback: function(rating, index) {    //Mandatory 
+    $scope.ratingsCallback(rating, index);
+  }
+};
+$scope.ratingsCallback = function(rating, index) {
+  console.log('Selected rating is : ', rating, ' and the index is : ', index);
+};
 $scope.checkSvcEngineer = function(){
   $scope.isEngineer = false;
     if($localStorage.loggedin_user){
@@ -197,6 +211,7 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
   var vm = this;
   var diagnostic;
   var locationAccuracy;
+  
   vm.mapInit = function(){
     $scope.location = '';
     $ionicPlatform.ready(function() {
@@ -212,8 +227,6 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
                     vm.loadMap();
                   })
               }, function (error){
-              
-               
                 console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
                 if(error.code !== locationAccuracy.ERROR_USER_DISAGREED){
                   if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
@@ -221,26 +234,21 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
                   }
                 }
                 else{
-                  $ionicHistory.goBack();
+                  // $ionicHistory.goBack();
+                  vm.mapInit();
                 }
               },locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
           }
-          // else{
-          //   window.plugins.toast.showWithOptions({
-          //     message: "As per Android policy allow location Permissionfor his app.Go to Settings >> Apps >> GSG >>Permission >> Location",
-          //     duration: "3000", // 2000 ms
-          //     position: "center",
-          //     styling: {
-          //       opacity: 0.75, // 0.0 (transparent) to 1.0 (opaque). Default 0.8
-          //       backgroundColor: '#FFF', // make sure you use #RRGGBB. Default #333333
-          //       textColor: '#000', // Ditto. Default #FFFFFF
-          //       textSize: 20.5, // Default is approx. 13.
-          //       cornerRadius: 16, // minimum is 0 (square). iOS default 20, Android default 100
-          //       horizontalPadding: 20, // iOS default 16, Android default 50
-          //       verticalPadding: 16 // iOS default 12, Android default 30
-          //     }
-          //   });
-          // }
+          else{
+            $cordovaToast.show('As per Android permission guideline please Allow location permission to use Google map service.Go to Settings >> apps >> GSG >>Permission >> Location','10000','center').then(function(success) {
+              // success
+        
+              console.log(success);
+            }, function (error) {
+              // error
+              console.log(success);
+            });
+          }
         });
       }
       else{
@@ -256,7 +264,7 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
   // vm.loadMap();
   }
   vm.showToast = function(){
-    $cordovaToast.show('toast success','7000','center').then(function(success) {
+    $cordovaToast.showLongCenter('toast success').then(function(success) {
       // success
 
       console.log(success);
@@ -268,7 +276,7 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
   }
   vm.loadMap = function(){
     var options = {timeout: 20000, enableHighAccuracy: true};
-    $ionicLoading.show();
+    // $ionicLoading.show();
     $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
       $ionicLoading.hide();
       var lat = position.coords.latitude;
@@ -281,7 +289,7 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
     }, function(error) {
       $ionicLoading.hide();
       console.log('Could not get location: ', error);
-      $scope.alertPop('Warning', 'Something went wrong please try again.');
+      $scope.alertPop('Warning', 'Map loading failed. Check your network ');
     });
   }
 

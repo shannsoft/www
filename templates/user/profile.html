@@ -99,12 +99,12 @@
                         <!-- <span class="error-message" ng-show="updateProfile.houseNbr.$error.pattern && updateProfile.houseNbr.$touched">Invalid House no. or Building name</span>                              -->
                         <label class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.locality.$touched && updateProfile.locality.$invalid}">
                             <span class="input-label col col-100">Locality,area or street</span>
-                            <input type="text" class="col col-100" placeholder="Locality,area or street" name="locality" ng-model="profileCtrl.userUpdate.address[0].locality" ng-pattern="/^[A-Za-z\s\d]+$/" >
+                            <input type="text" class="col col-100" placeholder="Locality,area or street" name="locality" ng-model="profileCtrl.userUpdate.address[0].locality" >
                         </label>
                         <span class="error-message" ng-show="updateProfile.locality.$error.pattern && updateProfile.locality.$touched">Invalid Locality, Area or Street</span>                             
                         <label class="profile-form item-floating-label" ng-class="{'has-error':updateProfile.city.$touched && updateProfile.city.$invalid}">
                             <span class="input-label col col-100">City*</span>
-                            <input type="text" class="col col-100" placeholder="City*" name="city" ng-model="profileCtrl.userUpdate.address[0].city" ng-pattern="/^[A-Za-z\s]+$/" >
+                            <input type="text" class="col col-100" placeholder="City*" name="city" ng-model="profileCtrl.userUpdate.address[0].city"  >
                         </label>
                         <!-- <span class="error-message" ng-show="updateProfile.city.$error.required && updateProfile.city.$touched">Please enter your City</span>                              -->
                         <span class="error-message" ng-show="updateProfile.city.$error.pattern && updateProfile.city.$touched">Invalid City</span>                             
@@ -149,7 +149,7 @@
                       
 
                   </div>
-                  <!-- <button class="button button-positive change-pwd-btn" type="submit" ng-click="profileCtrl.changePassword()">Change Password</button> -->
+                 
                   
               
     </ion-content>

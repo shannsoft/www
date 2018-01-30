@@ -314,5 +314,6 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
         console.log(vm.location);
       },function(err) {
       });
-    }
+    };
+   
 });

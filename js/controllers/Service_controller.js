@@ -150,6 +150,7 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
             }
         });
         // console.log(vm.reqTktDataObj);
+        
          if(vm.reqTktDataObj.services.length > 0 && vm.reqTktDataObj.usrVehicle ){
                 TicketService.createTicket().save(vm.reqTktDataObj,function(response){               
                 vm.confirmModal.hide();

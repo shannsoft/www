@@ -1,4 +1,4 @@
-app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
+app.controller("ProfileController",function($scope,$rootScope,$jrCrop,ionicDatePicker,$state,$ionicModal,$cordovaCamera,$localStorage,$ionicActionSheet,$ionicLoading,$cordovaImagePicker,UserModel,UserService,MasterService,$timeout){
     var vm = this;
     vm.userUpdate = {};
     vm.districtList = [];
@@ -155,31 +155,35 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
       maximumImagesCount: 1,
       width: 800,
       height: 800,
-      quality: 80
+      quality: 80,
+      allowEdit: true
     };
     $cordovaImagePicker.getPictures(option).then(function(results) {
         for (var i = 0; i < results.length; i++) {
-          var img = new Image();
-          img.crossOrigin = 'Anonymous';
-          img.onload = function() {
-            var canvas = document.createElement('CANVAS');
-            var ctx = canvas.getContext('2d');
-            var dataURL;
-            canvas.height = this.height;
-            canvas.width = this.width;
-            ctx.drawImage(this, 0, 0);
-            vm.profile_image = canvas.toDataURL('image/png');
-            $localStorage.profile = vm.profile_image;
-          }
-          img.src = results[i];
+            // vm.profile_image = results[i];
+            // $localStorage.profile = vm.profile_image;
+            $scope.crop(results[i]);
         }
       }, function(error) {
         $ionicLoading.hide();
       });
-  };
-  $rootScope.$on("LOGIN_SUCCESS",function(events,data){
-    vm.getLoginUserDetails();
-  })
+    };
+    $scope.crop = function(url) {
+        $jrCrop.crop({
+            url: url,
+            width: 200,
+            height: 200
+        }).then(function(canvas) {
+            var image = canvas.toDataURL();
+            vm.profile_image = image;
+            $localStorage.profile = vm.profile_image;
+        }, function() {
+            // User canceled or couldn't load image.
+        });
+    }
+    $rootScope.$on("LOGIN_SUCCESS",function(events,data){
+        vm.getLoginUserDetails();
+    })
              /*******************************************************************************/
     /************************This function is used to get user details**********************************/
             /*******************************************************************************/
@@ -187,6 +191,7 @@ app.controller("ProfileController",function($scope,$rootScope,ionicDatePicker,$s
         vm.userUpdate = angular.copy($localStorage.loggedin_user);
         console.log(vm.userUpdate);
         vm.districtList.push(vm.userUpdate.address[0].district);
+        
     };
              /*******************************************************************************/
     /************************This function is used to update user details**********************************/

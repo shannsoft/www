@@ -1060,3 +1060,30 @@ cart page style */
 .strike{
   color: #e600009e !important;
 }
+.req-modal-ftr-btn{
+  font-size: 13px !important;
+    line-height: 45px !important;
+    
+    background: #0a9dc7 !important;
+}
+.red{
+  color : red;
+}
+.rating-modal{
+  background: transparent !important ;
+  background-color: #000000e3 !important ;
+}
+
+.rate-icon{
+  margin-top: 151px;
+  font-size: 40px;
+  letter-spacing: 15px;
+}
+.review-box{
+  margin-top: 28px;
+  margin-left: 43px;
+  width: 73%;
+  color: #fafafa;
+  background: transparent;
+  border: 1px solid white;
+}
