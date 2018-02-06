@@ -856,6 +856,9 @@ font-size: 12px;
 .w-98{
   width : 98% !important;
 }
+.w-95{
+  width : 95% !important;
+}
 .w-84{
   width: 84%;
 }
@@ -968,6 +971,12 @@ cart page style */
 .cart-remove{
   background: transparent !important;
     color: red !important;
+}
+.cart-edit-remove{
+  background: transparent !important;
+  color: red !important;
+  font-size: 20px;
+  text-align: center;
 }
 .button-cart-continue{
   margin: 7px !important;

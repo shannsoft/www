@@ -250,6 +250,13 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
+        pendingAddOnList: function(a,b){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/' + a + '/addOnCart/' + b,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
          updateOrder: function(){
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/:svcEngId/:orderId',null ,{
                 update: {

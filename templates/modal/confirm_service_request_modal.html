@@ -22,7 +22,7 @@
         </div>
         <div class="list list-plan m-b-0" ng-init="srvcCtrl.getVehicleList()">
 
-            <ion-radio name="test_{{$index}}" ng-model="srvcCtrl.reqTktDataObj.usrVehicle" ng-value="vehicles" ng-repeat="vehicles in srvcCtrl.vehicleList track by $index" 
+            <ion-radio name="vehicle_radio" ng-model="srvcCtrl.reqTktDataObj.usrVehicle" ng-value="vehicles" ng-repeat="vehicles in srvcCtrl.vehicleList track by $index" 
                 ng-change="srvcCtrl.getUserScheme(vehicles.vehicle.subType)">
                 <h2>{{vehicles.vehicle.make}} {{vehicles.vehicle.models}} {{vehicles.registrationNumber}}</h2>
             </ion-radio>
@@ -38,11 +38,11 @@
             </label>        
         </ion-item>
 
-        <div class="popular-query" ng-hide="!srvcCtrl.userScheme">
+        <div class="popular-query" ng-hide="srvcCtrl.reqTktDataObj.usrVehicle && !srvcCtrl.userScheme.schemeId">
             <h3 class="popular-city">Active plan</h3>
         </div>
         <ion-list>
-            <div ng-hide="!srvcCtrl.userScheme">
+            <div ng-show="srvcCtrl.userScheme.schemeId && srvcCtrl.userScheme.schemeType == srvcCtrl.reqTktDataObj.usrVehicle.vehicle.subType">
                 <ion-item class="item-stable query-list" ng-click="srvcCtrl.toggleGroup('scheme')" ng-class="{active: srvcCtrl.isGroupShown('scheme')}">
 
                     <h3 class="heading">{{srvcCtrl.userScheme.description}}</h3>
@@ -55,15 +55,20 @@
                         <h2>Discounts Available</h2>
                     </ion-item> -->
                 </ion-item>
+                <ion-checkbox ng-model="srvcCtrl.reqTktDataObj.useUserScheme">Do you want to use your free services
+                    <br>from your subscribed plan
+                </ion-checkbox>
             </div>
-            <h5 class="heading">{{srvcCtrl.userScheme == "null" || !srvcCtrl.userScheme && vehicle_radio.$touched ? "You have not subscribed
-                to any plan yet" : " "}}</h5>
-
+            <ion-item class="heading w-95 item-background m-t-5" ng-show="srvcCtrl.reqTktDataObj.usrVehicle && !srvcCtrl.userScheme.schemeId"> 
+                You have not subscribed to any plan of selected vehicle type yet
+            </ion-item>
+            
         </ion-list>
-        <ion-list ng-hide="srvcCtrl.userScheme == 'null' || !srvcCtrl.userScheme">
+        <!-- <ion-list ng-hide="srvcCtrl.userScheme == 'null' || !srvcCtrl.userScheme">
             <ion-checkbox ng-model="srvcCtrl.reqTktDataObj.useUserScheme">Do you want to use your free services
-                <br>from your subscribed plan</ion-checkbox>
-        </ion-list>
+                <br>from your subscribed plan
+            </ion-checkbox>
+        </ion-list> -->
     </ion-content>
     <ion-footer-bar class="map-footer">
         <button class="button button-block button-map" type="submit" ng-click="srvcCtrl.requestTicket()">Request</button>

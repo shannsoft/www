@@ -26,7 +26,11 @@
                        
                         </span><hr class="m-r-25" ng-hide="orders.product.services.length == 0">
                         <span class="span-text">
-                                <span class="span-text row" ng-hide="orders.product.services.length == 0" ><p class="w-s-i col col-70"> <b> Total Price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{orders.calculatedPrice}}</b> </p></span>                                   
+                                <span class="span-text row" ng-hide="orders.product.services.length == 0" ><p class="w-s-i col col-70"> <b> Calculated price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{orders.calculatedPrice}}</b> </p></span>    
+                                <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"> GST </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.igst}} </b></p></span>
+                        <hr ng-hide="orders.product.services.length == 0">
+                        <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"><strong>  Total </strong> </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.payableAmount}} </b></p></span>
+
                             <span class="span-text row" ng-hide="!orders.transactionMode || orders.transactionMode == 'NA'"><p class="w-s-i col col-70"> Payment Mode </p><p class="col-30"> {{orders.transactionMode}}</p></span>    
                             <span class="span-text row"  ng-hide="!orders.transactionStatus || orders.transactionStatus == 'NA' || orders.transactionMode == 'NA'"><p class="w-s-i col col-70"> Payment Status </p><p class="col-30">{{orders.transactionStatus}}</p></span>    
                             <span class="span-text row"  ng-show="orders.transactionStatus == 'COMPLETED' && orders.transactionDate"><p class="w-s-i col col-70">  Payment Date </p><p class="col-30">{{orders.transactionDate}}</p></span>    

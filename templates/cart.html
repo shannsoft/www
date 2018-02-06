@@ -41,9 +41,14 @@
                         <td class="col-50">
                            <span class="cart-price gsg-theme"> Price : <i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{orders.amount}} </span>
                         </td>
-                        <td class="col-50 b-l-2">
+                        <td class="col-25 " ng-hide="orders.productType == 'SCHEME'">
+                            <button class="button" ng-click="cartCtrl.openEditCartOrderModal(orders)">
+                                <i class="icon ion-edit"></i>&nbsp;
+                            </button>
+                        </td>
+                        <td class="col-25 ">
                             <button class="button cart-remove" ng-click="cartCtrl.removeFromCart(orders.id,orders.amount)">
-                                <i class="icon ion-trash-b"></i>&nbsp;Remove
+                                <i class="icon ion-trash-b"></i>&nbsp;
                             </button>
                         </td>
                     </tr>

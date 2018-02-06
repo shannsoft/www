@@ -143,4 +143,22 @@ app.controller("RequestController",function($ionicModal,$stateParams,$timeout,$s
         vm.ratingModal.hide();
         vm.ratingModal.remove();
     };
+    vm.openEditCartOrderModal = function(orderToBeEdited){
+        vm.ordersToBeEdited = {};
+        $ionicModal.fromTemplateUrl('templates/modal/cart_edit_modal.html',{
+            scope : $scope,
+            animation : 'slide-in-up',
+            controller : 'RequestController',
+            controllerAs : 'cartCtrl'
+        }).then(function(editCartModal){
+            console.log(orderToBeEdited);
+            vm.ordersToBeEdited = orderToBeEdited;
+            vm.editCartModal = editCartModal;        
+            vm.editCartModal.show();
+        })
+    };
+    vm.closeEditCartModal = function(){
+        vm.editCartModal.hide();
+        vm.editCartModal.remove();
+    };
  });

@@ -180,6 +180,7 @@ app.controller("ProfileController",function($scope,$rootScope,$jrCrop,$ionicPlat
                         vm.selectImage();
                     }, function(error){
                         console.error(error);
+                        vm.openGallery();
                     });
                 }
             }, function(error){

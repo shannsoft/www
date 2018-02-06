@@ -111,7 +111,7 @@ $scope.paymentNow = function(){
           $scope.checkoutModal.remove();
           $timeout(function(){
               $ionicLoading.hide();
-              $scope.successPop('Success', response.data,'app.mapView'); 
+              $scope.successPop('Success','Request is created. Please check your My Request for more details','app.mapView'); 
           },400);
 
       },function(error){

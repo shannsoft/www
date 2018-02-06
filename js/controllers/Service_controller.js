@@ -27,9 +27,11 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
         return vm.shownGroup === scheme;
     };
     vm.getUserScheme = function(schemeType){
+        vm.userScheme = {};
         angular.forEach($localStorage.loggedin_user.schemes,function(item){
             if(item.schemeType == schemeType){
                 vm.userScheme = item;
+                console.log(vm.reqTktDataObj.usrVehicle);
                 console.log(vm.userScheme);
                 vm.schemeId = item.schemeId;
             }

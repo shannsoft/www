@@ -23,6 +23,10 @@
                 <span class="plan">Rejected Requests</span>
                 <span class="ticket-count">{{tlCtrl.rejecteddTicketArr.length}}</span>
             </div>                                
+            <div class="plan_item w-98" ui-sref="app.ticketList({st:'CLOSED'})">
+                <span class="plan">Completed Requests</span>
+                <span class="ticket-count">{{tlCtrl.closedTicketArr.length}}</span>
+            </div>                                
         </div> 
     </ion-content>
 </ion-view>

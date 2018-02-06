@@ -4,6 +4,7 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
     
         $scope.ticketLists =  UserModel.getTicket();
     vm.addOntypeArr = ["SERVICE","CONSUMABLE","SPARE","LABOUR"];
+    vm.gstPercentageArr = [0,5,12,18,28];
     vm.addOnSvcCapture = {
         type : "",
         desc : "",
@@ -25,7 +26,11 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
                 vm.resolvedTicketArr = [];
                 vm.newTicketsArr = [];
                 vm.wipTicketsArr = [];
+                vm.closedTicketArr = [];
                 angular.forEach(response.data, function(item){
+                    if(item.requestStatus == "CLOSED"){
+                        vm.closedTicketArr.push(item);
+                    }
                     if(item.requestStatus == "RESOLVED"){
                         vm.resolvedTicketArr.push(item);
                     }
@@ -39,13 +44,13 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
                         vm.wipTicketsArr.push(item);
                     }
                 });
-                $scope.$broadcast('scroll.refreshComplete');
+               
         },function(error){
             console.log(error);
             $ionicLoading.hide();
             $scope.alertPop("Error", error.message);
         });
-
+        $scope.$broadcast('scroll.refreshComplete');
     }
     vm.ticketList = function(){
         $ionicLoading.show({
@@ -71,14 +76,14 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
             });  
             $timeout(function(){
                 $ionicLoading.hide();
-                $scope.$broadcast('scroll.refreshComplete');
+               
             },300)    
         },function(error){
             console.log(error);
             $ionicLoading.hide();
             $scope.alertPop("Error", error.message);
         });
-            
+        $scope.$broadcast('scroll.refreshComplete');  
     };                 
      
     vm.getOrderForTicket = function(){
@@ -87,14 +92,21 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
         }
         vm.ticketDetails = $localStorage.ticketDetailsData;
         console.log(vm.ticketDetails);
-        // TicketService.getOrderByOrderId($stateParams.order_id).get(function(response){
-        //     console.log(response);
-        //     vm.oredrDetails = response.data;
-        // },function(error){
-        //     console.log(error);
-        // });
     };
+    vm.refreshTicketDetailsPage = function(){
+        console.log($localStorage.ticketDetailsData.orderId);
+        TicketService.getOrderByOrderId($localStorage.ticketDetailsData.orderId).get(function(response){
+            console.log(response);
+            vm.ticketDetails = response.data;
+            vm.getPendingAddOns(vm.ticketDetails.orderId,vm.ticketDetails.userId);
+        },function(error){
+            console.log(error);
+        });
+        $scope.$broadcast('scroll.refreshComplete');
+    }; 
+    
     vm.openAddNewSvcModal = function(){
+        vm.addOnSvcCapture = {};
         vm.addOnSvcItemArr = [];
         $ionicModal.fromTemplateUrl('templates/modal/add_new_service_modal.html',{
             scope : $scope,
@@ -130,37 +142,50 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
                 }
             });
             if(vm.addOnSvcItemArr.length > 0){
+                vm.yesService = false;
                 angular.forEach(vm.addOnSvcItemArr,function(items){
                     if(items.type == vm.addOnSvcCapture.type){
+                        vm.yesService = true;
                         var index =  vm.addOnSvcItemArr.indexOf(items);
                         vm.addOnSvcItemArr.splice(index , 1);
                         vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
                     }
                 });
+                if(!vm.yesService ){
+                    vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
+                }
+
             }
             else {
                 vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
             }           
         }
         else {
-            if(vm.addOnSvcItemArr.length > 0){
-                angular.forEach(vm.addOnSvcItemArr,function(items){
-                    if(items.type == vm.addOnSvcCapture.type){
-                        var index =  vm.addOnSvcItemArr.indexOf(items);
-                        vm.addOnSvcItemArr.splice(index , 1);
-                        vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
-                    }
-                    else {
-                        var index =  vm.addOnSvcItemArr.indexOf(items);
-                        if(vm.addOnSvcItemArr.length == index+1){
-                            vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
-                        }
-                    }
-                });
+            console.log(vm.addOnSvcCapture);
+            if(!vm.addOnSvcCapture.desc || vm.addOnSvcCapture.price == null || vm.addOnSvcCapture.price == '' || !vm.addOnSvcCapture.gst ){
+                $scope.alertPop("Error" , " Required fields can not be blank");
             }
             else {
                 vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
-            } 
+                // if(vm.addOnSvcItemArr.length > 0){
+                //     angular.forEach(vm.addOnSvcItemArr,function(items){
+                //         if(items.type == vm.addOnSvcCapture.type){
+                //             var index =  vm.addOnSvcItemArr.indexOf(items);
+                //             vm.addOnSvcItemArr.splice(index , 1);
+                //             vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
+                //         }
+                //         else {
+                //             var index =  vm.addOnSvcItemArr.indexOf(items);
+                //             if(vm.addOnSvcItemArr.length == index+1){
+                //                 vm.addOnSvcItemArr.push(vm.addOnSvcCapture);
+                //             }
+                //         }
+                //     });
+                // }
+                // else {
+                    
+                // } 
+            }
         }
         vm.addOnSvcCapture = {};
         console.log(vm.addOnSvcItemArr);
@@ -172,11 +197,12 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
         console.log(vm.addOnSvcItemArr);
         TicketService.newSvcAddOn($stateParams.order_id).save(vm.addOnSvcItemArr, function(response){
             console.log(response);
+            
             vm.newSvcModal.hide();
             $timeout(function(){
                 $ionicLoading.hide();
-                
-                $scope.successPop('Success', 'Orders added to user cart Successfully...','app.dashboard'); 
+                vm.refreshTicketDetailsPage();
+                $scope.successPop('Success', 'Orders added to user cart Successfully...'); 
             },500);
 
         },function(error){
@@ -203,13 +229,8 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
                 TicketService.updateOrder().update({svcEngId : $localStorage.loggedin_user.userId ,orderId : vm.ticketDetails.orderId},obj, function(response){
                 console.log(response);
                 vm.ticketDetails = response.data;
-                $scope.successPop('Success', 'Status changed Successfully...', 'app.dashboard');
-                // $localStorage.loggedin_user = response.data;
-                // $timeout(function(){
-                //     vm.vehicleList = $localStorage.loggedin_user.userVehicles;
-                //     $ionicLoading.hide();
-                //     $scope.successPop('Success', 'Vehicle deleted Successfully...'); 
-                // },500);
+                $scope.successPop('Success', 'Status changed Successfully...');
+                    vm.refreshTicketDetailsPage();
             },function(error){
                 if(error.status == 417){
                     $scope.alertPop("Error", error.data.message);
@@ -226,44 +247,63 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
     
         });
     };
-    vm.confirmCOD = function(orderDtlId,calculatedPrice){
-        var amountPrompt = $ionicPopup.prompt({
-            title: 'Amount',
-            template: 'Confirm COD amount',
-            inputType: 'number',
-            inputPlaceholder: 'Amount',
-            okType : 'button-positive'
-          });
-          amountPrompt.then(function(res) {
-              if(res){
-                  if(calculatedPrice !== res){
-                    amountPrompt.close();
-                    $scope.alertPop("Error" , " Please enter valid amount");
-                  }
-                  else{
-                        $ionicLoading.show({
-                            template : 'Please wait..'
-                        });
-                        TicketService.confirmCODPayment(orderDtlId).get(function(response){
-                            $timeout(function(){
-                                $ionicLoading.hide();
-                                $scope.successPop(response.message, response.data, 'app.ticketList'); 
-                            },500);
-                        },function(error){
-                            $ionicLoading.hide();
-                            if(error.status == 417){
-                                $scope.alertPop("Error" , error.message);
-                            }
-                            else{
-                                $scope.alertPop("Error" , "Something wrong occured");
-                            }
-                        });
-                  }
-              }
-            
-          });
-        
+    vm.reduceDiscountFromCod = function(discount){   
+        vm.finalAmt = (vm.orderDetailGCCOD.CalculatedPrice - discount) + parseInt(vm.orderDetailGCCOD.Gst);
+    }
+    vm.openConfirmCodModal = function(orderDtlId,gst,calculatedPrice){
+        vm.orderDetailGCCOD = {};
+        $ionicModal.fromTemplateUrl('templates/modal/codConfirm_modal.html',{
+            scope : $scope,
+            animation : 'slide-in-up',
+            controller : 'DashboardController'
+          }).then(function(codConfirmModal) {
+            vm.codConfirmModal = codConfirmModal;   
+            vm.orderDetailGCCOD.Gst = gst;     
+            vm.orderDetailGCCOD.CalculatedPrice = calculatedPrice;     
+            vm.orderDetailGCCOD.OrderdtlId = orderDtlId;     
+            vm.codConfirmModal.show();
+
+        });
     };
+    vm.closeCodConfirmModdal = function(){
+        vm.codConfirmModal.hide();
+        vm.codConfirmModal.remove();
+        
+    }
+    vm.confirmCOD = function(enteredCod,finalAmt,orderDtlId){
+        console.log(enteredCod);
+        console.log(finalAmt);
+        console.log(orderDtlId);
+        if(!enteredCod || enteredCod != finalAmt){
+           
+            $scope.alertPop("Error" , " Incorrect final amount");
+        }
+        else{
+            $ionicLoading.show({
+                template : 'Please wait..'
+            });
+            TicketService.confirmCODPayment(orderDtlId).get(function(response){
+                vm.codConfirmModal.hide();
+                vm.codConfirmModal.remove();
+                $timeout(function(){
+                    $ionicLoading.hide();
+                    vm.refreshTicketDetailsPage();
+                    $scope.successPop(response.message, response.data); 
+                },500);
+            },function(error){
+                vm.codConfirmModal.hide();
+                vm.codConfirmModal.remove();
+                $ionicLoading.hide();
+                if(error.status == 417){
+                    $scope.alertPop("Error" , error.message);
+                }
+                else{
+                    $scope.alertPop("Error" , "Something wrong occured");
+                }
+            });
+        }
+    };
+  
     // function onSuccess(result){
     //     console.log(result);
     //   }
@@ -315,5 +355,14 @@ app.controller('DashboardController',function($ionicModal,$window, $ionicPopup,$
       },function(err) {
       });
     };
+    vm.getPendingAddOns = function(a,b){
+        vm.pendingAddOns= {};
+        TicketService.pendingAddOnList(a,b).get(function(response){
+          console.log(response);
+          vm.pendingAddOns = response.data;
+        },function(error){
+           console.log(error);
+        });
+    }
    
 });
