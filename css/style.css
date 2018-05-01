@@ -17,6 +17,9 @@
 .w-100{
   width : 100% !important;
 }
+.m-t-10-px{
+  margin-top: 10px;
+}
 .bar.bar-stable{
   background: #fff !important;
 }
@@ -142,7 +145,7 @@ popup-body{
 .item-label{
   background: transparent;
   border: none;
- 
+
 }
 .item-label-already-registered{
   margin-top: 200px;
@@ -441,7 +444,7 @@ margin-top: 55px;
   margin-top:0px;
   border-radius: 10px !important;
 }
-.popular-city{  
+.popular-city{
   text-transform: uppercase;
   text-align: left;
   margin-left: 19px;
@@ -449,7 +452,7 @@ margin-top: 55px;
   font-family: serif;
   font-weight: 600;
 }
-profile_content .popular-city{  
+profile_content .popular-city{
   font-family: sans-serif;
 }
 
@@ -509,7 +512,7 @@ profile_content .popular-city{
   margin: 0;
   font-size: 18px;
   background: rgb(115, 183, 17) ;
-  border-radius:0; 
+  border-radius:0;
   color: #ffffff;
   letter-spacing: 1px;
   /* margin-left:-3px; */
@@ -557,14 +560,14 @@ profile_content .popular-city{
   margin-top: 13px;
   background-color: #030302;
   color: white;
-  
+
 }
 .icon-pickup{
   color:green;
 }
 .icon-drop{
   color:red;
-} 
+}
 .inactive{
   margin: 0 8px;
   padding: 6px;
@@ -601,7 +604,7 @@ profile_content .popular-city{
 }
 .choose-location{
   position: absolute;
-  top: 0; 
+  top: 0;
   left: 0;
   right: 0;
   height: 200px;
@@ -671,7 +674,7 @@ profile_content .popular-city{
     margin-right:20px;
     color: #73b717;
 }
-._2tVMo0{  
+._2tVMo0{
   background: #f40606;
   border-radius: 50%;
   font-weight: 700;
@@ -721,7 +724,7 @@ profile_content .popular-city{
   margin-left: 6px;
 }
 .tab_name{
-  
+
   font-size: 13px;
   color: #131111;
 }
@@ -890,19 +893,19 @@ font-size: 12px;
   font-size: 35px;
 }
 .list-plan .item{
-  padding-left:20px; 
+  padding-left:20px;
 }
 .b-t-n{
-  border-top:none 
+  border-top:none
 }
 .b-l-n{
-  border-left:none 
+  border-left:none
 }
 .b-r-n{
-  border-right:none 
+  border-right:none
 }
 .b-b-n{
-  border-bottom:none 
+  border-bottom:none
 }
 input:focus+ .has-input{
   /* border-color: #73b711; */
@@ -920,7 +923,7 @@ input:focus+ .has-input{
   display: block;
   margin: 1px;
   height: 33px;
- 
+
   background: #f2f2f2;
 }
 .heading{
@@ -966,7 +969,7 @@ cart page style */
     border-left: none;
     border-right: none;
     text-align: center;
-    
+
 }
 .cart-remove{
   background: transparent !important;
@@ -1072,7 +1075,7 @@ cart page style */
 .req-modal-ftr-btn{
   font-size: 13px !important;
     line-height: 45px !important;
-    
+
     background: #0a9dc7 !important;
 }
 .red{
@@ -1098,3 +1101,4 @@ cart page style */
   background: transparent;
   border: 1px solid white;
 }
+/* referral  */

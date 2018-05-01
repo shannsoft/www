@@ -17,12 +17,12 @@ vm.isGroupShown = function(list){
            template: 'Loading...'
        })
         PlanService.getSchemes().get(function(response){
-            console.log(response);           
+            console.log(response);
             $timeout(function(){
                 $ionicLoading.hide();
                 vm.shemelist = response.data;
             },400)
-           
+
         },function(error){
             console.log(error);
             $ionicLoading.hide();
@@ -39,6 +39,42 @@ vm.isGroupShown = function(list){
             vm.planSrvcDtls = scheme_detail;
         });
     };
+    vm.referralArr = [
+      {
+        type : "Internet",
+        data : null,
+        isSelect:false,
+      },
+      {
+        type : "Social",
+        data : null,
+        isSelect:false,
+      },
+      {
+        type : "Friend",
+        data : {
+          refCode : "",
+          info:null
+        },
+        isSelect:false,
+      },
+      {
+        type : "Employee",
+        data : {
+          refCode : "",
+          info:null
+        },
+        isSelect:false,
+      },
+    ];
+    vm.onReferral = function($index) {
+      angular.forEach(vm.referralArr , function(value, key) {
+          $index == key ? value.isSelect = true : value.isSelect = false;
+      });
+    }
+    vm.validateRefCode = function(referral) {
+      referral.data.info = "Mr. Sahil";
+    }
     vm.subscribePlan = function(planToSubscribe){
         $ionicLoading.show({
             template:'Subscribing...'
@@ -46,23 +82,23 @@ vm.isGroupShown = function(list){
         var obj = {};
         obj.user_id = $localStorage.loggedin_user.userId;
         obj.schemeId = planToSubscribe.schemeId;
-        PlanService.subscribePlan(obj).get(function(response){  
-            console.log(response);   
+        PlanService.subscribePlan(obj).get(function(response){
+            console.log(response);
             $ionicLoading.hide();
-            vm.subscrpModal.remove();  
-            $scope.openCheckOutModal(response.data);    
+            vm.subscrpModal.remove();
+            $scope.openCheckOutModal(response.data);
             // $timeout(function(){
             //     $ionicLoading.hide();
-            //     $scope.successPop('Success', 'Plan Subscribed Successfully...','app.mapView'); 
+            //     $scope.successPop('Success', 'Plan Subscribed Successfully...','app.mapView');
             // },500);
-        },function(error){          
+        },function(error){
             console.log(error);
-            vm.subscrpModal.hide();        
-            vm.subscrpModal.remove();        
+            vm.subscrpModal.hide();
+            vm.subscrpModal.remove();
             $timeout(function(){
                 $ionicLoading.hide();
                 $scope.alertPop('Error', error.data.message);
-            },500);          
+            },500);
         });
     };
    vm.getMyPlan = function(){
@@ -74,7 +110,7 @@ vm.isGroupShown = function(list){
             var sbscrptnDate = moment(item.subscriptionDt);
             var validtyLeft = moment().diff(sbscrptnDate, 'days');
             item.validityLeft = item.durationInDays-validtyLeft;
-            
+
         });
        },function(error){
         console.log(error);
@@ -84,5 +120,5 @@ vm.isGroupShown = function(list){
         vm.subscrpModal.hide();
         vm.subscrpModal.remove();
     }
-    
+
 });
