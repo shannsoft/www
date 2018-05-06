@@ -1,4 +1,4 @@
-app.controller("PlanController",function($ionicModal,$stateParams,$timeout,$state,$scope,$ionicLoading,PlanService,$localStorage){
+app.controller("PlanController",function($ionicModal,$stateParams,$timeout,$state,$scope,$ionicLoading,$ionicPopup,PlanService,$localStorage){
    var vm = this;
    vm.myPlan = {};
    vm.toggleGroup = function(list){
@@ -98,11 +98,19 @@ vm.isGroupShown = function(list){
             referral.data.info = response.data.name;
           }
           else{
-            alert("Please enter valid ref code !");
+            // alert("Please enter valid ref code !");
+            $ionicPopup.alert({
+             title: 'Error',
+             template: 'Please enter valid ref code !'
+           });
           }
       },function(error){
           console.log(error);
-          alert("Error Occured !");
+          // alert("Error Occured !");
+          $ionicPopup.alert({
+           title: 'Error',
+           template: error.message
+         });
       });
     }
     vm.subscribePlan = function(planToSubscribe){
@@ -115,7 +123,11 @@ vm.isGroupShown = function(list){
         obj.schemeId = planToSubscribe.schemeId;
         // checking for the friend and employee sanity test
         if( (vm.selectedReferral.type == "Friend" || vm.selectedReferral.type == "Employee") && vm.selectedReferral.data.info == "" ){
-          alert("Please enter valid ref code !");
+          // alert("Please enter valid ref code !");
+          $ionicPopup.alert({
+           title: 'Error',
+           template: 'Please enter valid ref code !'
+         });
           $ionicLoading.hide();
           return;
         }
