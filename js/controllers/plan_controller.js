@@ -53,7 +53,7 @@ vm.isGroupShown = function(list){
       {
         type : "Friend",
         data : {
-          refCode : "",
+          refCode : null,
           info:null
         },
         isSelect:false,
@@ -61,29 +61,57 @@ vm.isGroupShown = function(list){
       {
         type : "Employee",
         data : {
-          refCode : "",
+          refCode : null,
           info:null
         },
         isSelect:false,
       },
     ];
+    vm.selectedReferral = null;
     vm.onReferral = function($index) {
+
       angular.forEach(vm.referralArr , function(value, key) {
-          $index == key ? value.isSelect = true : value.isSelect = false;
+        if($index == key)
+        {
+          value.isSelect = true;
+          vm.selectedReferral = value;
+        }
+        else {
+          value.isSelect = false;
+        }
       });
     }
+    vm.resetReferral = function() {
+        vm.selectedReferral = {};
+        angular.forEach(vm.referralArr , function(value, key) {
+            value.isSelect = true;
+            if(value.data) {
+                value.data.refCode = null,
+                value.data.info = null
+            }
+          });
+    }
     vm.validateRefCode = function(referral) {
-      referral.data.info = "Mr. Sahil";
+      referral.data.info = "xxxxxxx"; // hardcoded , as service not prepared.
     }
     vm.subscribePlan = function(planToSubscribe){
         $ionicLoading.show({
             template:'Subscribing...'
         })
         var obj = {};
+        var referralObj = {};
         obj.user_id = $localStorage.loggedin_user.userId;
         obj.schemeId = planToSubscribe.schemeId;
-        PlanService.subscribePlan(obj).get(function(response){
+        if(vm.selectedReferral) {
+          referralObj = {
+            referType : vm.selectedReferral.type,
+            referralCd : vm.selectedReferral.data ? vm.selectedReferral.data.refCode : null,
+          }
+
+        }
+        PlanService.subscribePlan(obj).save(referralObj,function(response){
             console.log(response);
+            vm.resetReferral();
             $ionicLoading.hide();
             vm.subscrpModal.remove();
             $scope.openCheckOutModal(response.data);
@@ -93,6 +121,7 @@ vm.isGroupShown = function(list){
             // },500);
         },function(error){
             console.log(error);
+            vm.resetReferral();
             vm.subscrpModal.hide();
             vm.subscrpModal.remove();
             $timeout(function(){

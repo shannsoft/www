@@ -1,4 +1,4 @@
-app.controller('LoginController', function($ionicModal,$stateParams, OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
+app.controller('LoginController', function($ionicModal,$stateParams, CONFIG,OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
     var vm = this;
     var map;
     var marker;
@@ -28,7 +28,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
         // if($scope.isOnline()){
             var req = {
                 method: 'POST',
-                url: "http://101.53.136.166:8090/gsg/oauth/token",
+                url: CONFIG.HTTP_HOST_APP+"/gsg/oauth/token",
                 headers: {
                     "Authorization": "Basic " + $scope.encoded,
                     "Content-type": "application/x-www-form-urlencoded"
