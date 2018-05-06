@@ -42,27 +42,27 @@ vm.isGroupShown = function(list){
     vm.referralArr = [
       {
         type : "Internet",
-        data : null,
+        data : "",
         isSelect:false,
       },
       {
         type : "Social",
-        data : null,
+        data : "",
         isSelect:false,
       },
       {
         type : "Friend",
         data : {
-          refCode : null,
-          info:null
+          refCode : "",
+          info:""
         },
         isSelect:false,
       },
       {
         type : "Employee",
         data : {
-          refCode : null,
-          info:null
+          refCode : "",
+          info:""
         },
         isSelect:false,
       },
@@ -86,13 +86,24 @@ vm.isGroupShown = function(list){
         angular.forEach(vm.referralArr , function(value, key) {
             value.isSelect = true;
             if(value.data) {
-                value.data.refCode = null,
-                value.data.info = null
+                value.data.refCode = "",
+                value.data.info = ""
             }
           });
     }
     vm.validateRefCode = function(referral) {
-      referral.data.info = "xxxxxxx"; // hardcoded , as service not prepared.
+      // referral.data.info = "xxxxxxx"; // hardcoded , as service not prepared.
+      PlanService.getReferralUser(referral.data.refCode).get(function(response){
+          if(response.data && response.data.name != "") {
+            referral.data.info = response.data.name;
+          }
+          else{
+            alert("Please enter valid ref code !");
+          }
+      },function(error){
+          console.log(error);
+          alert("Error Occured !");
+      });
     }
     vm.subscribePlan = function(planToSubscribe){
         $ionicLoading.show({
@@ -102,13 +113,20 @@ vm.isGroupShown = function(list){
         var referralObj = {};
         obj.user_id = $localStorage.loggedin_user.userId;
         obj.schemeId = planToSubscribe.schemeId;
+        // checking for the friend and employee sanity test
+        if( (vm.selectedReferral.type == "Friend" || vm.selectedReferral.type == "Employee") && vm.selectedReferral.data.info == "" ){
+          alert("Please enter valid ref code !");
+          $ionicLoading.hide();
+          return;
+        }
         if(vm.selectedReferral) {
           referralObj = {
             referType : vm.selectedReferral.type,
-            referralCd : vm.selectedReferral.data ? vm.selectedReferral.data.refCode : null,
+            referralCd : vm.selectedReferral.data ? vm.selectedReferral.data.refCode : "",
           }
 
         }
+
         PlanService.subscribePlan(obj).save(referralObj,function(response){
             console.log(response);
             vm.resetReferral();

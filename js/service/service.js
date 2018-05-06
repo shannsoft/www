@@ -172,6 +172,13 @@ angular.module('serviceModule', ['ngResource'])
         //         isArray : true
         //     })
         // }
+        getReferralUser: function(refCd){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/salesusers/referral/'+refCd ,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                // isArray : true
+            })
+        },
         subscribePlan: function(data){
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
                 save:{method:'POST'},
