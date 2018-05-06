@@ -101,7 +101,11 @@ vm.isGroupShown = function(list){
             // alert("Please enter valid ref code !");
             $ionicPopup.alert({
              title: 'Error',
-             template: 'Please enter valid ref code !'
+             template: 'Please enter valid ref code !',
+             // buttons: [
+             //   {text:"ok"},
+             //   { type: 'button-assertive' },
+             // ]
            });
           }
       },function(error){
@@ -109,7 +113,11 @@ vm.isGroupShown = function(list){
           // alert("Error Occured !");
           $ionicPopup.alert({
            title: 'Error',
-           template: error.message
+           template: error.message,
+           // buttons: [
+           //   {text:"ok"},
+           //   { type: 'button-assertive' },
+           // ]
          });
       });
     }
@@ -126,7 +134,11 @@ vm.isGroupShown = function(list){
           // alert("Please enter valid ref code !");
           $ionicPopup.alert({
            title: 'Error',
-           template: 'Please enter valid ref code !'
+           template: 'Please enter valid ref code !',
+           // buttons: [
+           //   {text:"ok"},
+           //   { type: 'button-assertive' },
+           // ]
          });
           $ionicLoading.hide();
           return;
