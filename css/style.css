@@ -1102,3 +1102,21 @@ cart page style */
   border: 1px solid white;
 }
 /* referral  */
+
+
+.icon {
+  font-size: 40px;
+}
+#referralList ion-icon{
+  float: right;
+  cursor: pointer;
+}
+#referralList span.skip{
+  float: right;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.ref-search ion-icon{
+  position: absolute;
+    margin-top: 3%;
+}

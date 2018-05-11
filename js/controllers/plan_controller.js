@@ -1,5 +1,6 @@
 app.controller("PlanController",function($ionicModal,$stateParams,$timeout,$state,$scope,$ionicLoading,$ionicPopup,PlanService,$localStorage){
    var vm = this;
+   vm.skippedReferral = false;
    vm.myPlan = {};
    vm.toggleGroup = function(list){
     if(vm.isGroupShown(list)){
@@ -39,33 +40,65 @@ vm.isGroupShown = function(list){
             vm.planSrvcDtls = scheme_detail;
         });
     };
+    // vm.referralArr = [
+    //   {
+    //     type : "Internet",
+    //     data : "",
+    //     isSelect:false,
+    //   },
+    //   {
+    //     type : "Social",
+    //     data : "",
+    //     isSelect:false,
+    //   },
+    //   {
+    //     type : "Friend",
+    //     data : {
+    //       name : "",
+    //       mobileNbr:""
+    //     },
+    //     isSelect:false,
+    //   },
+    //   {
+    //     type : "Employee",
+    //     data : {
+    //       refCode : "",
+    //       info:"",
+    //       showDetails:false
+    //     },
+    //     isSelect:false,
+    //   },
+    // ];
     vm.referralArr = [
-      {
-        type : "Internet",
-        data : "",
-        isSelect:false,
-      },
-      {
-        type : "Social",
-        data : "",
-        isSelect:false,
-      },
-      {
-        type : "Friend",
-        data : {
-          refCode : "",
-          info:""
+        {
+            "referType": "Internet",
+            "mobileNbr": "",
+            "referralCd": "",
+            "isSelect":false
         },
-        isSelect:false,
-      },
-      {
-        type : "Employee",
-        data : {
-          refCode : "",
-          info:""
+        {
+            "referType": "Social",
+            "mobileNbr": "",
+            "referralCd": "",
+            "isSelect":false
         },
-        isSelect:false,
-      },
+        {
+            "referType": "Friend",
+            "mobileNbr": "",
+            "referralCd": "",
+            "name":"",
+            "isSelect":false
+        },
+        {
+            "referType": "Employee",
+            "mobileNbr": "",
+            "referralCd": "",
+            "name":"",
+            "isSelect":false,
+            "showDetails":false
+        },
+        
+      
     ];
     vm.selectedReferral = null;
     vm.onReferral = function($index) {
@@ -84,72 +117,101 @@ vm.isGroupShown = function(list){
     vm.resetReferral = function() {
         vm.selectedReferral = {};
         angular.forEach(vm.referralArr , function(value, key) {
-            value.isSelect = true;
-            if(value.data) {
-                value.data.refCode = "",
-                value.data.info = ""
-            }
+            value.isSelect = false;
+            value.mobileNbr = "";
+            value.referralCd = "";
+            value.name = "";
+            value.showDetails = false;
           });
     }
     vm.validateRefCode = function(referral) {
       // referral.data.info = "xxxxxxx"; // hardcoded , as service not prepared.
-      PlanService.getReferralUser(referral.data.refCode).get(function(response){
+      PlanService.getReferralUser(referral.refCode).get(function(response){
           if(response.data && response.data.name != "") {
-            referral.data.info = response.data.name;
+            referral.name = response.data.name;
+            referral.showDetails = true;
           }
           else{
-            // alert("Please enter valid ref code !");
             $ionicPopup.alert({
              title: 'Error',
              template: 'Please enter valid ref code !',
-             // buttons: [
-             //   {text:"ok"},
-             //   { type: 'button-assertive' },
-             // ]
            });
           }
       },function(error){
           console.log(error);
-          // alert("Error Occured !");
           $ionicPopup.alert({
            title: 'Error',
            template: error.message,
-           // buttons: [
-           //   {text:"ok"},
-           //   { type: 'button-assertive' },
-           // ]
          });
       });
     }
+    vm.skipReferral = function(){
+        $('#referralList').addClass('animated bounceOutLeft');
+        vm.selectedReferral = null;
+    }
+    // to validate current referral if selelcted
+    vm.validateReferral = function() {
+        if(!vm.selectedReferral){
+
+            return {
+                "mobileNbr": "",
+                "referType": "",
+                "referralCd": ""
+            }; // if no referral 
+        }
+        if(vm.selectedReferral.referType == "Internet" || vm.selectedReferral.referType == "Social"){
+            return vm.selectedReferral;
+        }
+        // test for the friend 
+        if(vm.selectedReferral.referType == "Friend" && (vm.selectedReferral.mobileNbr == "" ) ){
+            $ionicPopup.alert({
+                title: 'Error',
+                template: 'Please enter valid information !',
+              });
+              return null;
+        }
+        // test for the Employee 
+        else if(vm.selectedReferral.referType == "Employee" && (vm.selectedReferral.name == "" ) ){
+            $ionicPopup.alert({
+                title: 'Error',
+                template: 'Please enter Employee information !',
+              });
+              return null;
+        }
+        else{
+            return vm.selectedReferral;
+        }
+    }
     vm.subscribePlan = function(planToSubscribe){
+
+        // validating referral entry
+        var referralObj = {};
+        referralObj = vm.validateReferral();
+        if(!referralObj) return;
+
         $ionicLoading.show({
             template:'Subscribing...'
         })
         var obj = {};
-        var referralObj = {};
         obj.user_id = $localStorage.loggedin_user.userId;
         obj.schemeId = planToSubscribe.schemeId;
         // checking for the friend and employee sanity test
-        if( (vm.selectedReferral.type == "Friend" || vm.selectedReferral.type == "Employee") && vm.selectedReferral.data.info == "" ){
-          // alert("Please enter valid ref code !");
-          $ionicPopup.alert({
-           title: 'Error',
-           template: 'Please enter valid ref code !',
-           // buttons: [
-           //   {text:"ok"},
-           //   { type: 'button-assertive' },
-           // ]
-         });
-          $ionicLoading.hide();
-          return;
-        }
-        if(vm.selectedReferral) {
-          referralObj = {
-            referType : vm.selectedReferral.type,
-            referralCd : vm.selectedReferral.data ? vm.selectedReferral.data.refCode : "",
-          }
+        // if( (vm.selectedReferral.type == "Friend" || vm.selectedReferral.type == "Employee") && vm.selectedReferral.data.info == "" ){
+        //   // alert("Please enter valid ref code !");
+        //   $ionicPopup.alert({
+        //    title: 'Error',
+        //    template: 'Please enter valid ref code !',
+        //  });
+        //   $ionicLoading.hide();
+        //   return;
+        // }
+        // if(vm.selectedReferral) {
+        //   referralObj = {
+        //     referType : vm.selectedReferral.type,
+        //     referralCd : vm.selectedReferral.data ? vm.selectedReferral.data.refCode : "",
+        //   }
 
-        }
+        // }
 
         PlanService.subscribePlan(obj).save(referralObj,function(response){
             console.log(response);
