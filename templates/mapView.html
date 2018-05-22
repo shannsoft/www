@@ -1,4 +1,4 @@
-<ion-view cache-view="false" view-title="GoSpeedyGo" >
+<ion-view cache-view="false" view-title="GoSpeedyGo" ng-init="mapCtrl.checkUpdateVersion()" >
      <ion-nav-buttons side="right">
          <i class="icon ion-android-cart cart-icon" ui-sref="app.cart"></i>
          <span class="_2tVMo0" ng-init="mapCtrl.myCartOrders()" ng-hide="mapCtrl.cartOrders.length == 0 || !mapCtrl.cartOrders">{{mapCtrl.cartOrders.length}}</span>

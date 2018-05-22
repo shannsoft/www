@@ -22,6 +22,11 @@ angular.module('serviceModule', ['ngResource'])
                 save : {method : "POST"}
             })
         },
+        versionCheck : function(){
+            return $resource( CONFIG.HTTP_HOST_APP + '/gsg/version/check' , {
+                save : {method : "POST"}
+            })
+        }
     }
 })
 .factory('OtpService', function ($resource,CONFIG,$http) {
@@ -165,11 +170,25 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
-        subscribePlan: function(data){
-            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
+        // subscribePlan: function(data){
+        //     return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
+        //         get:{method:'GET'},
+        //         header:{'Authorization':'bearer '+$localStorage.user_token},
+        //         isArray : true
+        //     })
+        // }
+        getReferralUser: function(refCd){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/salesusers/referral/'+refCd ,{
                 get:{method:'GET'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
-                isArray : true
+                // isArray : true
+            })
+        },
+        subscribePlan: function(data){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/users/buyScheme/' + data.user_id + '/' + data.schemeId,{
+                save:{method:'POST'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                // isArray : true
             })
         }
     }
@@ -215,6 +234,20 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         },
+        editItemFromCart: function(id,position){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/cart/' + id + '/' + position + '/remove',{
+                delete:{method:'DELETE'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
+        mailInvoice: function(order_id){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/report/' + order_id,{
+                get:{method:'GET'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        },
         buyFromCart: function(cartId){
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/cart/' + $localStorage.loggedin_user.userId + '/' + cartId,{
                 get:{method:'GET'},
@@ -238,7 +271,7 @@ angular.module('serviceModule', ['ngResource'])
         },
         confirmCODPayment: function(orderDtlId){
             return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/orders/confirmCODPayment/' + orderDtlId,{
-                get:{method:'GET'},
+                save:{method:'POST'},
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
@@ -284,5 +317,17 @@ angular.module('serviceModule', ['ngResource'])
                 isArray : true
             })
         }
+    }
+})
+.factory('FeedbackService',function(CONFIG,$resource,$http,$localStorage){
+    return{
+        rateOrder: function(order_id){
+            return $resource(CONFIG.HTTP_HOST_APP + '/gsg/api/feedback/' + order_id,{
+                save:{method:'POST'},
+                header:{'Authorization':'bearer '+$localStorage.user_token},
+                isArray : true
+            })
+        }
+        
     }
 });

@@ -10,6 +10,57 @@ app.controller('MainController', function($scope,PlanService,$http,$rootScope,$w
     $rootScope.fromParams = fromParams;
 
  })
+//  $scope.isOnline = function(){
+//   if($cordovaNetwork.isOnline() == true){
+   
+//   }
+//   else{
+//       $cordovaToast.show('No Internet Connection.Please connect to wifi or turn on your mobile network','3000','bottom').then(function(success) {         
+      
+//       }, function (error) {
+      
+//       });
+
+//     }
+//  }
+//  $scope.isOnline();
+ $scope.backButtonAction = function(){
+  document.addEventListener("deviceready", function () {
+    $ionicPlatform.registerBackButtonAction(function() {
+      if($state.current.name == "app.profile" || $state.current.name == "app.dashboard" || $state.current.name == "app.vehicles" || $state.current.name == "app.tarrif-plan" || $state.current.name =="app.requests" || $state.current.name == "app.cart" || $state.current.name == "app.contactUs"){
+          $state.go('app.mapView');
+      }
+      if($state.current.name == "app.mapView"){
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Alert',
+          template: 'Do you want to exit from the App',
+          okType: 'button-assertive'
+        });
+        confirmPopup.then(function(res) {
+          if (res) {
+            navigator.app.exitApp();
+          } else {}
+        });
+      }
+      if($state.current.name == "add-vehicle"){
+        $state.go('app.vehicles');
+      }
+      if($state.current.name == "app.ticketList"){
+        $state.go('app.dashboard');
+      }
+      if($state.current.name == "app.ticketListDetails"){
+        $state.go('app.ticketList');
+      }
+      if($state.current.name == "register" || $state.current.name == "password-pre-reset" || $state.current.name == "reset-pwd" ){
+        $state.go('login');
+      }
+
+
+    },100);
+  });
+ }
+ $scope.backButtonAction();
+
  $scope.ratingsObject = {
   iconOn: 'ion-android-favorite',    //Optional 
   iconOff: 'ion-android-favorite-outline',   //Optional 
@@ -17,13 +68,15 @@ app.controller('MainController', function($scope,PlanService,$http,$rootScope,$w
   iconOffColor:  'white',    //Optional 
   rating:  0, //Optional 
   minRating:1,    //Optional 
-  readOnly: true, //Optional 
+  readOnly: false, //Optional 
   callback: function(rating, index) {    //Mandatory 
     $scope.ratingsCallback(rating, index);
   }
 };
+
 $scope.ratingsCallback = function(rating, index) {
   console.log('Selected rating is : ', rating, ' and the index is : ', index);
+  $scope.$emit("ratings_available",rating);
 };
 $scope.checkSvcEngineer = function(){
   $scope.isEngineer = false;
@@ -111,7 +164,7 @@ $scope.paymentNow = function(){
           $scope.checkoutModal.remove();
           $timeout(function(){
               $ionicLoading.hide();
-              $scope.successPop('Success','Request is created. Please check your My Request for more details','app.mapView'); 
+              $scope.successPop('Success','Request Successful. Please check your My Request for more details','app.mapView'); 
           },400);
 
       },function(error){
@@ -135,7 +188,12 @@ $scope.paymentNow = function(){
               $scope.checkoutModal.hide();
               $scope.checkoutModal.remove();
               $timeout(function(){
-                $scope.successPop("Success", response.data,'app.mapView'); 
+                if(response.data == "SUCCESSFUL"){
+                  $scope.successPop("Success", "Payment Successful",'app.mapView'); 
+                }
+                else {
+                  $scope.alertPop("Error", response.data,'app.mapView'); 
+                }
               },500)
               $timeout(function(){
                 PlanService.getUserSchemes().get(function(response){
@@ -207,7 +265,7 @@ app.controller('HomeController', function($ionicModal, $timeout,$state) {
 });
 
 
-app.controller('MapController',function($cordovaGeolocation,$cordovaToast,TicketService,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,$localStorage){
+app.controller('MapController',function($cordovaGeolocation,$cordovaToast,TicketService,$cordovaAppVersion,$ionicModal,config,$scope,LocationModel,$ionicPlatform,$ionicLoading,$timeout,$state,$ionicPopup,$ionicHistory,loginService,$localStorage){
   var vm = this;
   var diagnostic;
   var locationAccuracy;
@@ -351,7 +409,11 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
             template : 'Requesting...'
           })
           var latlngObj = LocationModel.getCurrentLocation();
-          vm.emergencyTicket.location=[latlngObj.lat,latlngObj.lng];
+          vm.emergencyTicket.location={
+            lat : latlngObj.lat,
+            lng : latlngObj.lng,
+
+          };
           vm.emergencyTicket.userId = $localStorage.loggedin_user.userId;
           vm.emergencyTicket.serviceType = "EMERGENCY"; 
           console.log(vm.emergencyTicket);
@@ -361,7 +423,12 @@ app.controller('MapController',function($cordovaGeolocation,$cordovaToast,Ticket
             $scope.successPop('Success', `Your request has been captured successfully.  Our support team will get back to you shortly.`);
           },function(error){
             $ionicLoading.hide();
-            $scope.alertPop("Error", "Something went wrong..");
+            if(error.status == 417 ||  error.message){
+              $scope.alertPop("Error" , error.data.message);
+          }
+          else{
+              $scope.alertPop("Error" , "Something wrong. Please try again later");
+          }
             console.log(error);
           });
         }
@@ -392,6 +459,78 @@ vm.myCartOrders = function(){
 
   });
 };
+  vm.checkUpdateVersion = function(){
+    vm.versionArray = [];
+    document.addEventListener("deviceready", function () {
+      $cordovaAppVersion.getVersionNumber().then(function (version) {  
+        console.log(version);    
+        var appVersion = version;
+        vm.versionArray = appVersion.split("."); 
+        var obj = {
+          'major' :   parseInt(vm.versionArray[0]), 
+          'minor' :   parseInt(vm.versionArray[1]),
+          'patch' :   parseInt(vm.versionArray[2]),
+        }
+        loginService.versionCheck().save(obj,function(response){
+          console.log(response);
+          if(response.data == "MAJOR"){
+            $ionicPlatform.registerBackButtonAction(function(e){
+              e.preventDefault();
+            }, 100);
+            var minorUpdatePop = $ionicPopup.alert({
+              title: "Update available !!!",
+              template : "A new version of application available.Kindly update to latest version for new features",
+              // cssClass : "gsg-success-popup",
+              buttons:[{
+                text: 'Exit',
+                type: 'button-assertive',
+                onTap: function(){
+                  // vm.backButtonAction();
+                  navigator.app.exitApp();
+
+                }
+              },{
+                text: 'Update Now',
+                type: 'button-positive',
+                onTap: function(){
+                  window.location.href = 'http://play.google.com/store/apps/details?id=gsg.com';
+                }
+              }]
+            }).then(function(res){
+              
+              $scope.backButtonAction();
+            })
+          }
+          if(response.data == "MINOR" || response.data == "PATCH"){
+           var minorUpdatePop =  $ionicPopup.alert({
+              title: "Update available !!!",
+              template : "A new version of application available.Kindly update to latest version for new features",
+              // cssClass : "gsg-success-popup",
+              buttons:[{
+                text: 'Cancel',
+                type: 'button-assertive',
+                onTap: function(){
+                  minorUpdatePop.close();
+                }
+              },{
+                text: 'Update Now',
+                type: 'button-positive',
+                onTap: function(){
+                  window.location.href = 'http://play.google.com/store/apps/details?id=gsg.com';
+                }
+              }]
+            })
+          }
+        },function(error){
+          console.log(error);
+        });
+      },function(error){ 
+        console.log(error);
+      });
+      
+    }, false);
+   
+  }
   
 });
 app.controller("HelpController",function($scope){

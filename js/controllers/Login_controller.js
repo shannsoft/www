@@ -1,10 +1,21 @@
-app.controller('LoginController', function($ionicModal,$stateParams, OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
+app.controller('LoginController', function($ionicModal,$stateParams,$ionicHistory, OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource,CONFIG, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
     var vm = this;
     var map;
     var marker;
     vm.basicDetails = {};
     vm.basicDetails.password = "";
     vm.rePassword = "";
+    vm.toggleGroup = function(list){
+        if(vm.isGroupShown(list)){
+            vm.shownGroup = null;
+        }
+        else{
+            vm.shownGroup = list;
+        }
+    };
+    vm.isGroupShown = function(list){
+        return vm.shownGroup === list;
+    }
     if($stateParams.number){
       vm.contactNo = $stateParams.number;
     }
@@ -14,7 +25,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
     if($stateParams.vehicle_id){
       vm.vehicleId = $stateParams.vehicle_id;
     }
-    vm.user = {contactNbr:'',password:''};    
+    vm.user = {contactNbr:'',password:''};
     vm.login = function() {
         $ionicLoading.show({
             template:'Signing in...'
@@ -28,7 +39,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
         // if($scope.isOnline()){
             var req = {
                 method: 'POST',
-                url: "http://101.53.136.166:8090/gsg/oauth/token",
+                url: CONFIG.HTTP_HOST_APP+"/gsg/oauth/token",
                 headers: {
                     "Authorization": "Basic " + $scope.encoded,
                     "Content-type": "application/x-www-form-urlencoded"
@@ -36,9 +47,10 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
                 data: $httpParamSerializer($scope.data)
                 }
             $http(req).then(function(data){
-                console.log(data);                   
+                console.log(data);
                 $localStorage.user_token = data.data.access_token;
-                $rootScope.is_loggedin = true;  
+                $localStorage.user_token_expiresIn = data.data.expires_in;
+                $rootScope.is_loggedin = true;
                 UserService.getUserByCntctNo(vm.user.contactNbr).get(function(response){
                     $localStorage.loggedin_user = response.data;
                     if($localStorage.previousUserId != $localStorage.loggedin_user.userId){
@@ -51,32 +63,32 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
                         $scope.$emit("LOGIN_SUCCESS");
                         $state.go('app.mapView');
                     });
-                   
+
                 },function(error){
                     if(error.status == 417){
-                        $scope.alertPop('Error', error.data.message); 
+                        $scope.alertPop('Error', error.data.message);
                     }
                    console.log(error);
                 });
-                               
+
             },function(error){
                 $ionicLoading.hide();
                 console.log(error);
                 if(error.status == 400){
-                    $scope.alertPop('Error', 'Invalid username or password.'); 
+                    $scope.alertPop('Error', 'Invalid username or password.');
                 }
                 if(error.status == 417){
-                    $scope.alertPop('Error', error.data.message); 
+                    $scope.alertPop('Error', error.data.message);
                 }
             });
-          
+
 
     //     }
     // else{
     //     // $ionicLoading.show({
     //     //     template: 'No Internet connection....'
     //     // })
-  
+
     // }
   }
     vm.register = function(){
@@ -97,12 +109,12 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
                 $scope.alertPop('Error', error.data.msg);
             }
             if(error.status == 417){
-                $scope.alertPop('Error', error.data.message )}
+                $scope.alertPop('Error', "Mobile Number Is Already Registered" )}
 
             else {
              $scope.alertPop('Error', 'OTP can not send.Something wrong');
             }
-        });            
+        });
     }
     vm.verifyOtp = function(){
         $ionicLoading.show({
@@ -116,7 +128,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
             //alertpop will be changed to successpop
             $scope.successPop('Success', 'Registered successfully.. Please login');
             $state.go('login');
-            
+
         },function(error){
             $ionicLoading.hide();
             console.log(error);
@@ -125,11 +137,11 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
             }
             if(error.status == 417){
                 $scope.alertPop('Error', error.data.message);
-            }            
+            }
             else {
                 $scope.alertPop('Error', 'Can not register user.');
             }
-        });  
+        });
     }
     vm.logout = function(){
         $ionicLoading.show({
@@ -143,7 +155,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
             // UserModel.unsetUser();
             $state.go('login');
           },700)
-       
+
     }
     vm.preResPwd = function(contactNbr){
         $ionicLoading.show({
@@ -182,11 +194,11 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
         });
         vm.resPwd.contactNbr = $stateParams.number;
         loginService.resetPwd().save(vm.resPwd, function(response){
-            $ionicLoading.hide();   
+            $ionicLoading.hide();
             if(response.status == "OK"){
                 $timeout(function(){
-                               
-                    $scope.successPop('Success', 'Password changed successfully...','login'); 
+
+                    $scope.successPop('Success', 'Password changed successfully...','login');
                 },500);
             }
             else {
@@ -195,12 +207,12 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
         },function(error){
             $ionicLoading.hide();
             if(error.status == 406){
-                $scope.alertPop('Error', error.data.message); 
+                $scope.alertPop('Error', error.data.message);
             }
             else {
-                $scope.alertPop('Error', 'Can not reset password','login'); 
+                $scope.alertPop('Error', 'Can not reset password','login');
             }
-           
+
             console.log(error);
         });
 
@@ -212,5 +224,7 @@ app.controller('LoginController', function($ionicModal,$stateParams, OtpService,
             console.log(error);
         });
     }
-
+    vm.goBack = function(){
+        $ionicHistory.goBack();
+    }
 });

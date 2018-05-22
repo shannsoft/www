@@ -1,6 +1,6 @@
 var app = angular.module('gsg_app', ['ionic','ionic-datepicker','jrCrop','ion-floating-menu','ionic-ratings','serviceModule','ui.utils','ngCordova','ngStorage','ngCookies']);
 
-app.run(function($ionicPlatform,$ionicPopup,$state) {
+app.run(function($ionicPlatform,$ionicPopup,$state,$cordovaToast) {
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -9,6 +9,9 @@ app.run(function($ionicPlatform,$ionicPopup,$state) {
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+
+
     /*******************************************************************************/
     /**************************This function is for exist app***********************/
     /*******************************************************************************/
@@ -118,7 +121,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
     controllerAs:'otpCtrl',
     templateUrl: 'templates/otp_verification.html',
     params:{
-      number:null 
+      number:null
     },
     resolve: {
       logout: checkLoggedin
@@ -130,7 +133,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
     controllerAs:'cktCtrl',
     templateUrl: 'templates/modal/check_out_modal.html',
     params:{
-      data:null 
+      data:null
     }
   })
   .state('user-details', {
@@ -139,8 +142,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
     controllerAs:'userCtrl',
     templateUrl: 'templates/user_details.html',
     params:{
-      user_id:null 
+      user_id:null
     }
+  })
+  .state('term-condition',{
+    url: 'terms',
+    controller:'LoginController',
+    controllerAs:'userCtrl',
+    templateUrl: 'templates/terms.html',
+
   })
   .state('add-vehicle', {
     url: '/add-vehicle',
@@ -151,15 +161,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
     //   user_id : null
     // }
   })
-  .state('insurance', {
-    url: '/insurance/:vehicle_id',
-    controller:'LoginController',
-    controllerAs:'loginCtrl',
-    templateUrl: 'templates/insurance.html',
-    params:{
-      vehicle_id : null
-    }
-  })
+
   .state('app', {
     url: '/app',
     abstract: true,
@@ -269,7 +271,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
       }
     }
   })
- 
+
   .state('app.ticketListDetails', {
     url: '/td/:order_id',
     resolve: {
@@ -342,21 +344,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
       },200)
     }
     else{
-     
+
       $timeout(function(){
         $localStorage.token = null;
         $rootScope.is_loggedin = false;
         deferred.resolve();
         $state.go('login');
       },200)
-    
+
   }
 }
 });
 app.constant('CONFIG', {
-  //  'HTTP_HOST_APP':'http://192.168.0.12:8090',
    'HTTP_HOST_APP':'http://101.53.136.166:8090',
-   'HTTP_HOST_APP_NEW':'http://101.53.136.166:8091'
+   // 'HTTP_HOST_APP':'http://101.53.136.166:8091'
 });
 app.config(function (ionicDatePickerProvider) {
   var datePickerObj = {

@@ -45,6 +45,12 @@
     overflow: hidden;
     min-width:80px; 
 }
+.my_cart .slidingTabs ul li {
+    min-width:50% !important; 
+}
+.my_cart .slidingTabs ul li.tab-active {
+    width:50% !important; 
+}
 
 .slidingTabs ul li.tab-active {
     color: rgba(114,183,17,1);

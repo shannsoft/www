@@ -10,7 +10,7 @@
                 <div ng-repeat="orders in cartCtrl.ordersToBeEdited.product.services">
                     <span class="span-text row" >
                         <p class="w-s-i col col-60"> {{orders.subCategory}} {{orders.category == "RA" || orders.category == "MAJOR" || orders.category == "MINOR" ? " " : '('+orders.category+')'}}&nbsp;{{orders.freeApplied ? "(Free Applied)" : " "}}</p> <p class="col-20"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <strike class="strike" ng-show="orders.freeApplied"> {{orders.price[ cartCtrl.ordersToBeEdited.product.usrVehicle.vehicle.type] }}</strike> <strong ng-hide="orders.freeApplied">{{orders.price[ cartCtrl.ordersToBeEdited.product.usrVehicle.vehicle.type] }}</strong></p>
-                        <a class="col-20 cart-edit-remove" ng-click="cartCtrl.removeItem()">  <i class="icon ion-trash-b"></i></a>
+                        <a class="col-20 cart-edit-remove" ng-click="cartCtrl.removeItem(cartCtrl.ordersToBeEdited.id, $index)">  <i class="icon ion-trash-b"></i></a>
                     </span>
                                      
                 </div>
@@ -18,7 +18,7 @@
         </ion-content>
         <ion-footer-bar class="map-footer" >
             <div class="button-bar">
-                <a class="button req-modal-ftr-btn" ng-click="reqCtrl.openRatingModal()"> Done</a>
+                <a class="button req-modal-ftr-btn" ng-click="cartCtrl.closeEditCartModal()"> Done</a>
                 <!-- <a class="button req-modal-ftr-btn" ng-click="reqCtrl.changeTicketStatus('RESOLVED')"> <i class="icon ion-android-mail"></i> Mail Invoice</a> -->
            </div>
         </ion-footer-bar>

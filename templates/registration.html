@@ -26,10 +26,14 @@
                         <input type="password" name="rePassword" placeholder="Retype password" ng-model="regstrCtrl.rePassword" ng-change="regstrCtrl.checkPassword(regstrCtrl.basicDetails.password, regstrCtrl.rePassword)" required>                
                     </label>                       
                         <span class="plain-text row" ng-show="basicInfo.rePassword.$error.required && basicInfo.rePassword.$touched">Please re-enter your password</span>
-                        <span class="plain-text row" ng-show="regstrCtrl.showPasswordMisMatch && basicInfo.rePassword.$touched">Password doesn't match</span>            
+                        <span class="plain-text row" ng-show="regstrCtrl.showPasswordMisMatch && basicInfo.rePassword.$touched">Password doesn't match</span>  
+
+                       <span class="row">
+                        <ion-checkbox class="col col-20" ng-model="userAcceptance">  </ion-checkbox> <a class="term-check col-80" ui-sref="term-condition">I agree to the Terms and Conditions</a>     
+                       </span>  
                 </div>
                 <a href="" class="otp-resend" ui-sref="login" >I am already registered</a>
-                <button class="button button-block button-positive" type="submit" ng-disabled="basicInfo.$invalid || regstrCtrl.showPasswordMisMatch" ng-click="regstrCtrl.register()">Register</button>
+                <button class="button button-block button-positive" type="submit" ng-disabled="basicInfo.$invalid || regstrCtrl.showPasswordMisMatch || !userAcceptance" ng-click="regstrCtrl.register()">Register</button>
             </form>
         </div>
     </div>   

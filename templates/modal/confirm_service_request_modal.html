@@ -18,13 +18,18 @@
             <p class="heading" ng-show="srvcCtrl.selectedServicesArr.length == 0">{{srvcCtrl.selectedServicesArr.length == 0 ? "No Services Choosen" : " "}}</p>
         </div>
         <div class="popular-query" ng-hide="srvcCtrl.vehicleList.length == 0">
-            <h3 class="popular-city">Choose Your Vehicle</h3>
+            <h3 class="popular-city">Select Your Vehicle Below</h3>
         </div>
         <div class="list list-plan m-b-0" ng-init="srvcCtrl.getVehicleList()">
 
             <ion-radio name="vehicle_radio" ng-model="srvcCtrl.reqTktDataObj.usrVehicle" ng-value="vehicles" ng-repeat="vehicles in srvcCtrl.vehicleList track by $index" 
                 ng-change="srvcCtrl.getUserScheme(vehicles.vehicle.subType)">
-                <h2>{{vehicles.vehicle.make}} {{vehicles.vehicle.models}} {{vehicles.registrationNumber}}</h2>
+               
+                <h2> 
+                <i ng-hide="srvcCtrl.reqTktDataObj.usrVehicle == vehicles" class="icon ion-ios-circle-outline"></i>
+                <i ng-show="srvcCtrl.reqTktDataObj.usrVehicle == vehicles" class="icon ion-ios-circle-filled"></i>
+                &nbsp;&nbsp;&nbsp;{{vehicles.vehicle.make}} {{vehicles.vehicle.models}} {{vehicles.registrationNumber}}
+               </h2>
             </ion-radio>
 
             <p class="heading" ng-show="srvcCtrl.vehicleList.length == 0">{{srvcCtrl.vehicleList.length == 0 ? "NO VEHICLE ADDED TO YOUR VEHICLE LIST YET" : " "}}</p>

@@ -18,19 +18,22 @@
                             <h3 class="popular-city">Order({{$index+1}})</h3>
                             <hr class="m-r-25 m-t-10" ng-hide="services.length == 0"><br>
                             <span class="span-text row" ng-show="reqCtrl.requestDetails.produtType == 'EMERGENCY' && orders.product.services.length == 0" ><strong><p> This is an EMERGENCY order.</p></strong></span>                                   
-                            <span class="span-text row" ng-show="reqCtrl.requestDetails.produtType == 'EMERGENCY' && !reqCtrl.requestDetails.orderDtls[1]" ><strong><p> Please contact your service engineer to add new services into your request</p></strong></span>                                   
-                            <span class="span-text row" ng-show="reqCtrl.requestDetails.produtType == 'EMERGENCY' && reqCtrl.requestDetails.orderDtls[1]" ><strong><p> New Services added to this request by service engineer</p></strong></span>                                   
+                            <span class="span-text row" ng-show="reqCtrl.requestDetails.produtType == 'EMERGENCY' && !reqCtrl.requestDetails.orderDtls[1]" ><strong><p> Please contact your service engineer to add new services if require</p></strong></span>                                   
+                            <span class="span-text row" ng-show="reqCtrl.requestDetails.produtType == 'EMERGENCY' && reqCtrl.requestDetails.orderDtls[1] && $index == 0" ><strong><p> New Services added to this request by service engineer</p></strong></span>                                   
                         
                             <span class="span-text row" ng-hide="orders.product.services.length == 0"  ng-repeat="services in orders.product.services">
-                                <p class="w-s-i col col-70"> {{services.subCategory}}&nbsp;{{services.freeApplied ? "(Free Applied)" : " "}}</p> <p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <strike class="strike" ng-show="services.freeApplied"> {{services.price[ orders.product.usrVehicle.vehicle.type] }}</strike> <strong ng-hide="services.freeApplied">{{services.price[ orders.product.usrVehicle.vehicle.type] }}</strong></p>
+                                <p class="w-s-i col col-70"> {{services.subCategory}}&nbsp;{{services.freeApplied ? "(Free Applied)" : " "}}{{services.quantity > 1 ? "("+services.quantity+" Items)" : ""}}</p> <p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <strike class="strike" ng-show="services.freeApplied"> {{services.totalPrice}}</strike> <strong ng-hide="services.freeApplied">{{services.effectivePrice}}</strong></p>
                        
                         </span><hr class="m-r-25" ng-hide="orders.product.services.length == 0">
                         <span class="span-text">
-                                <span class="span-text row" ng-hide="orders.product.services.length == 0" ><p class="w-s-i col col-70"> <b> Calculated price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{orders.calculatedPrice}}</b> </p></span>    
-                                <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"> GST </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.igst}} </b></p></span>
+                                <span class="span-text row" ng-hide="orders.product.services.length == 0" ><p class="w-s-i col col-70"> <b> Total price</b> </p><p class="col-30">  <i class="fa fa-inr" aria-hidden="true"></i>&nbsp; <b>{{orders.calculatedPrice}}</b> </p></span>    
+                                <!-- <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"> CGST </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.totalGst/2 | number}} </b></p></span>
+                                <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"> SGST </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.totalGst/2 | number}} </b></p></span>
                         <hr ng-hide="orders.product.services.length == 0">
-                        <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"><strong>  Total </strong> </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.payableAmount}} </b></p></span>
-
+                        <span class="span-text row" ng-hide="orders.product.services.length == 0"><p class="col col-70"><strong>  Total </strong> </p><p class="col-30"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;<b>{{orders.payableAmount}} </b></p></span> -->
+                        <!-- <span class="span-text w-s-i m-b-5">
+                                (NB : Price inclusive of all taxes)
+                        </span> -->
                             <span class="span-text row" ng-hide="!orders.transactionMode || orders.transactionMode == 'NA'"><p class="w-s-i col col-70"> Payment Mode </p><p class="col-30"> {{orders.transactionMode}}</p></span>    
                             <span class="span-text row"  ng-hide="!orders.transactionStatus || orders.transactionStatus == 'NA' || orders.transactionMode == 'NA'"><p class="w-s-i col col-70"> Payment Status </p><p class="col-30">{{orders.transactionStatus}}</p></span>    
                             <span class="span-text row"  ng-show="orders.transactionStatus == 'COMPLETED' && orders.transactionDate"><p class="w-s-i col col-70">  Payment Date </p><p class="col-30">{{orders.transactionDate}}</p></span>    
@@ -40,10 +43,11 @@
                     </div>
                 </ion-item>                     
         </ion-content>
-        <ion-footer-bar class="map-footer" >
+        <ion-footer-bar class="map-footer req-modal-ftr-btn" ng-show="reqCtrl.requestDetails.requestStatus == 'CLOSED'">
             <div class="button-bar">
-                <a class="button req-modal-ftr-btn" ng-click="reqCtrl.openRatingModal()"> <i class="icon ion-android-favorite red"></i> Rate us</a>
-                <a class="button req-modal-ftr-btn" ng-click="reqCtrl.changeTicketStatus('RESOLVED')"> <i class="icon ion-android-mail"></i> Mail Invoice</a>
+                <a class="button req-modal-ftr-btn" ng-click="reqCtrl.openRatingModal(reqCtrl.requestDetails.orderId)"> <i class="icon ion-android-favorite red"></i> Rate us</a>
+                <a class="button req-modal-ftr-btn" ng-click="reqCtrl.mailToInbox(reqCtrl.requestDetails.orderId)"> <i class="icon ion-android-mail"></i> Mail Invoice</a>
            </div>
+           
         </ion-footer-bar>
     </ion-modal-view>

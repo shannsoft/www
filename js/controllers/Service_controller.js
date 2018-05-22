@@ -1,4 +1,4 @@
-app.controller('ServiceController',function($scope,$state,$http,$stateParams,$ionicModal,ionicDatePicker,PaymentService,ServicesService,$localStorage,TicketService,$ionicLoading,$timeout,LocationModel){
+app.controller('ServiceController',function($scope,$cordovaToast,$state,$http,$stateParams,$ionicModal,ionicDatePicker,PaymentService,ServicesService,$localStorage,TicketService,$ionicLoading,$timeout,LocationModel){
     var vm = this;
     vm.reqTktDataObj = {};
     var ipObj1 = {
@@ -128,6 +128,11 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
             controller : 'ServiceController'
           }).then(function(confirmModal){
             vm.reqTktDataObj = {};
+            var latlngObj = LocationModel.getCurrentLocation();
+            vm.reqTktDataObj.location={
+                lat : latlngObj.lat,
+                lng : latlngObj.lng,
+              };
             vm.confirmModal = confirmModal;
             vm.confirmModal.show();
             
@@ -143,7 +148,10 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
         //     vm.reqTktDataObj.schemeId = vm.schemeId;
         // }
         var latlngObj = LocationModel.getCurrentLocation();
-        vm.reqTktDataObj.location=[latlngObj.lat,latlngObj.lng];
+        vm.reqTktDataObj.location={
+            lat : latlngObj.lat,
+            lng : latlngObj.lng,
+          };
         vm.reqTktDataObj.serviceType = "SERVICE"; 
         vm.reqTktDataObj.services = [];
         angular.forEach(vm.selectedServicesArr,function(service){
@@ -172,12 +180,27 @@ app.controller('ServiceController',function($scope,$state,$http,$stateParams,$io
                 }
             },function(error){
                 $ionicLoading.hide();
+                if(error.status == 417){
+                    $scope.alertPop("Error" , error.data.message);
+                }
+                else{
+                    $scope.alertPop("Error" , "Something wrong occured");
+                }
+                
                 console.log(error);
             });
         }
         else{
             $ionicLoading.hide();
-            $scope.alertPop('Error', 'please choose atleast one service and vehicle'); 
+            $scope.alertPop('Error', 'Please Choose Atleast One Service and Vehicle To Request'); 
+            $cordovaToast.show('Please click on the vehicle name for which you want get service. If the vehicle is not the list just add the same vehicle from Menu >> My Vehicles >> Add New Vehicle','4000','bottom').then(function(success) {
+                // success
+          
+                console.log(success);
+              }, function (error) {
+                // error
+                console.log(success);
+              });
         }
     };
     

@@ -8,9 +8,9 @@
     <ion-content>
         <div class="rate-icon">
             <ionic-ratings ratingsobj='ratingsObject' index='0'></ionic-ratings>
-            <textarea type="text" class="review-box col col-100" name="description" placeholder="Share your experience with us..." ng-model="tlCtrl.addOnSvcCapture.desc" rows="3"></textarea>
+            <textarea type="text" class="review-box col col-100" name="description" placeholder="Share your experience with us..." ng-model="reqCtrl.comments" rows="3"></textarea>
             
-             <button class="button button-positive change-pwd-btn" type="submit" ng-click="profileCtrl.changePassword()">Rate</button>
+             <button class="button button-positive change-pwd-btn" type="submit" ng-click="reqCtrl.rateOrder()">Rate</button>
         </div>
         
     </ion-content>

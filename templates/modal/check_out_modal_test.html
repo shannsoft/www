@@ -27,15 +27,27 @@
                             <p class="w-s-i"> <strong><i class="fa fa-inr" aria-hidden="true"></i>{{paymentDatas.amount}}</strong></p>                        
                         </li>
                     </ul>
-                    <ul class="row" >
+                    
+                    <span ng-hide="paymentDatas.productType == 'SCHEME'" class="span-text w-s-i m-l-30 m-t-5">
+                        (NB : Price inclusive of all taxes)
+                    </span>
+                    <ul class="row" ng-show="paymentDatas.productType == 'SCHEME'">
                         <li class="col col-70">               
-                            <p class="w-s-i"><b>IGST</b></p>                        
+                            <p class="w-s-i"><b>CGST</b></p>                        
                         </li>
                         <li class="col col-30 text-right">               
-                            <p class="w-s-i"> <strong><i class="fa fa-inr" aria-hidden="true"></i>{{paymentDatas.igst}}</strong></p>                        
+                            <p class="w-s-i"> <strong><i class="fa fa-inr" aria-hidden="true"></i>{{(paymentDatas.payableAmount-paymentDatas.amount)/2 | number}}</strong></p>                        
                         </li>
-                    </ul><hr>
-                    <ul class="row" >
+                    </ul>
+                    <ul class="row" ng-show="paymentDatas.productType == 'SCHEME'">
+                            <li class="col col-70">               
+                                <p class="w-s-i"><b>SGST</b></p>                        
+                            </li>
+                            <li class="col col-30 text-right">               
+                                <p class="w-s-i"> <strong><i class="fa fa-inr" aria-hidden="true"></i>{{(paymentDatas.payableAmount-paymentDatas.amount)/2 }}</strong></p>                        
+                            </li>
+                        </ul><hr>
+                    <ul class="row" ng-show="paymentDatas.productType == 'SCHEME'">
                         <li class="col col-70 cart-price">               
                             <p class="w-s-i"><b>AMOUNT PAYABLE</b></p>                        
                         </li>
