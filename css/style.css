@@ -907,6 +907,7 @@ font-size: 12px;
   border-right:none
 }
 .b-b-n{
+
   border-bottom:none !important;
 }
 input:focus+ .has-input{
@@ -1182,7 +1183,6 @@ cart page style */
 .radio-teal .radio-icon:before {
   border-color: #009688 !important;
 } */
-
 /* referral  */
 
 
@@ -1199,6 +1199,7 @@ cart page style */
   cursor: pointer;
   margin-top: 10px;
 }
+
 #referralList .fa-arrow-circle-left{
   float: right;
   cursor: pointer;
@@ -1211,3 +1212,10 @@ cart page style */
     margin-top: 3%;
     font-size: 40px;
 }
+
+.ref-search ion-icon{
+  position: absolute;
+    margin-top: 3%;
+}
+
+

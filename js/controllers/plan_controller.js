@@ -18,12 +18,12 @@ vm.isGroupShown = function(list){
            template: 'Loading...'
        })
         PlanService.getSchemes().get(function(response){
-            console.log(response);           
+            console.log(response);
             $timeout(function(){
                 $ionicLoading.hide();
                 vm.shemelist = response.data;
             },400)
-           
+
         },function(error){
             console.log(error);
             $ionicLoading.hide();
@@ -243,7 +243,7 @@ vm.isGroupShown = function(list){
             var sbscrptnDate = moment(item.subscriptionDt);
             var validtyLeft = moment().diff(sbscrptnDate, 'days');
             item.validityLeft = item.durationInDays-validtyLeft;
-            
+
         });
        },function(error){
         console.log(error);
@@ -253,5 +253,5 @@ vm.isGroupShown = function(list){
         vm.subscrpModal.hide();
         vm.subscrpModal.remove();
     }
-    
+
 });

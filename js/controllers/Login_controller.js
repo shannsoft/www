@@ -1,4 +1,5 @@
 app.controller('LoginController', function($ionicModal,$stateParams,$ionicHistory, OtpService,loginService,registrationService, $timeout,$state,$scope,$ionicLoading,UserModel,$localStorage,$resource,CONFIG, $http, $httpParamSerializer, $cookies,$rootScope,UserService) {
+	
     var vm = this;
     var map;
     var marker;

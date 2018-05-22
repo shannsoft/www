@@ -356,8 +356,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,$ht
 }
 });
 app.constant('CONFIG', {
-   'HTTP_HOST_APP':'http://101.53.136.166:8090',
-   // 'HTTP_HOST_APP':'http://101.53.136.166:8091'
+   //'HTTP_HOST_APP':'http://101.53.136.166:8090',
+    'HTTP_HOST_APP':'http://101.53.136.166:8091'
 });
 app.config(function (ionicDatePickerProvider) {
   var datePickerObj = {

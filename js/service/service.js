@@ -36,7 +36,7 @@ angular.module('serviceModule', ['ngResource'])
                 get : {method : "GET"}
             })
         },
-      
+
     }
 })
 .factory('registrationService', function ($resource,CONFIG) {
@@ -67,7 +67,7 @@ angular.module('serviceModule', ['ngResource'])
             })
         }
 
-       
+
     }
 })
 .factory('VehicleService', function ($resource,CONFIG,$http,$localStorage) {
@@ -108,8 +108,8 @@ angular.module('serviceModule', ['ngResource'])
                 header:{'Authorization':'bearer '+$localStorage.user_token},
                 isArray : true
             })
-        }  
-       
+        }
+
     }
 })
 
@@ -128,7 +128,7 @@ angular.module('serviceModule', ['ngResource'])
                     method:'PUT',
                     headers: {'Authorization':'bearer '+$localStorage.user_token}
                 }
-                
+
             })
         },
         changePassword : function(){
@@ -137,7 +137,7 @@ angular.module('serviceModule', ['ngResource'])
                     method:'PUT',
                     headers: {'Authorization':'bearer '+$localStorage.user_token}
                 }
-                
+
             })
         }
 
