@@ -94,7 +94,7 @@ app.controller("ProfileController",function($scope,$rootScope,$jrCrop,$ionicPlat
             if(error.status == 401){
                 $scope.alertPop('Error', error.data.error); 
             }
-            if(error.status == 406){
+            if(error.status == 406 || error.status == 417){
                 $scope.alertPop('Error', error.data.message); 
             }
         });
